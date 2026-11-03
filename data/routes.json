@@ -1,0 +1,2255 @@
+{
+  "origin": "PDX",
+  "generated_at": "2026-11-03T20:05:49+00:00",
+  "destination_count": 91,
+  "service_count": 129,
+  "unresolved_articles": [],
+  "overrides": {
+    "added": [
+      "MSY Alaska Airlines"
+    ],
+    "removed": [],
+    "warnings": []
+  },
+  "destinations": [
+    {
+      "iata": "EUG",
+      "label": "Eugene",
+      "airport_name": "Eugene Airport",
+      "city": "Eugene",
+      "region": "US-OR",
+      "country": "US",
+      "lat": 44.124599,
+      "lon": -123.211998,
+      "distance_mi": 106,
+      "wikipedia_article": "Eugene Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "RDM",
+      "label": "Redmond/Bend",
+      "airport_name": "Roberts Field",
+      "city": "Redmond",
+      "region": "US-OR",
+      "country": "US",
+      "lat": 44.254101,
+      "lon": -121.150002,
+      "distance_mi": 116,
+      "wikipedia_article": "Roberts Field",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "SeaPort Airlines",
+          "airline_article": "SeaPort Airlines",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "SEA",
+      "label": "Seattle/Tacoma",
+      "airport_name": "Seattle–Tacoma International Airport",
+      "city": "Seattle",
+      "region": "US-WA",
+      "country": "US",
+      "lat": 47.447943,
+      "lon": -122.310276,
+      "distance_mi": 129,
+      "wikipedia_article": "Seattle–Tacoma International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Delta Air Lines",
+          "airline_article": "Delta Air Lines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Delta Connection",
+          "airline_article": "Delta Connection",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "BFI",
+      "label": "Seattle–Boeing",
+      "airport_name": "King County International Airport - Boeing Field",
+      "city": "Seattle",
+      "region": "US-WA",
+      "country": "US",
+      "lat": 47.527042,
+      "lon": -122.29995,
+      "distance_mi": 135,
+      "wikipedia_article": "Boeing Field",
+      "services": [
+        {
+          "airline": "SeaPort Airlines",
+          "airline_article": "SeaPort Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "PAE",
+      "label": "Everett",
+      "airport_name": "Seattle Paine Field International Airport",
+      "city": "Everett",
+      "region": "US-WA",
+      "country": "US",
+      "lat": 47.9063,
+      "lon": -122.281998,
+      "distance_mi": 161,
+      "wikipedia_article": "Paine Field",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "EAT",
+      "label": "Wenatchee",
+      "airport_name": "Pangborn Memorial Airport",
+      "city": "Wenatchee",
+      "region": "US-WA",
+      "country": "US",
+      "lat": 47.398899,
+      "lon": -120.207001,
+      "distance_mi": 169,
+      "wikipedia_article": "Pangborn Memorial Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "PSC",
+      "label": "Tri-Cities (WA)",
+      "airport_name": "Tri Cities Airport",
+      "city": "Pasco",
+      "region": "US-WA",
+      "country": "US",
+      "lat": 46.264702,
+      "lon": -119.119003,
+      "distance_mi": 174,
+      "wikipedia_article": "Tri-Cities Airport (Washington)",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "PDT",
+      "label": "Pendleton",
+      "airport_name": "Eastern Oregon Regional Airport at Pendleton",
+      "city": "Pendleton",
+      "region": "US-OR",
+      "country": "US",
+      "lat": 45.695099,
+      "lon": -118.841003,
+      "distance_mi": 182,
+      "wikipedia_article": "Eastern Oregon Regional Airport",
+      "services": [
+        {
+          "airline": "Boutique Air",
+          "airline_article": "Boutique Air",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "BLI",
+      "label": "Bellingham",
+      "airport_name": "Bellingham International Airport",
+      "city": "Bellingham",
+      "region": "US-WA",
+      "country": "US",
+      "lat": 48.79280090332031,
+      "lon": -122.53800201416016,
+      "distance_mi": 221,
+      "wikipedia_article": "Bellingham International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "MFR",
+      "label": "Medford",
+      "airport_name": "Rogue Valley International-Medford Airport",
+      "city": "Medford",
+      "region": "US-OR",
+      "country": "US",
+      "lat": 42.374199,
+      "lon": -122.873001,
+      "distance_mi": 223,
+      "wikipedia_article": "Rogue Valley International–Medford Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "YVR",
+      "label": "Vancouver",
+      "airport_name": "Vancouver International Airport",
+      "city": "Vancouver",
+      "region": "CA-BC",
+      "country": "CA",
+      "lat": 49.193901,
+      "lon": -123.183998,
+      "distance_mi": 251,
+      "wikipedia_article": "Vancouver International Airport",
+      "services": [
+        {
+          "airline": "Air Canada Express",
+          "airline_article": "Air Canada Express",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": true
+    },
+    {
+      "iata": "GEG",
+      "label": "Spokane",
+      "airport_name": "Spokane International Airport",
+      "city": "Spokane",
+      "region": "US-WA",
+      "country": "US",
+      "lat": 47.6199,
+      "lon": -117.533997,
+      "distance_mi": 278,
+      "wikipedia_article": "Spokane International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "BOI",
+      "label": "Boise",
+      "airport_name": "Boise Air Terminal/Gowen Field",
+      "city": "Boise",
+      "region": "US-ID",
+      "country": "US",
+      "lat": 43.5644,
+      "lon": -116.223,
+      "distance_mi": 343,
+      "wikipedia_article": "Boise Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "MSO",
+      "label": "Missoula",
+      "airport_name": "Missoula Montana Airport",
+      "city": "Missoula",
+      "region": "US-MT",
+      "country": "US",
+      "lat": 46.915816,
+      "lon": -114.091107,
+      "distance_mi": 416,
+      "wikipedia_article": "Missoula Montana Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "FCA",
+      "label": "Glacier Park/Kalispell",
+      "airport_name": "Glacier Park International Airport",
+      "city": "Kalispell",
+      "region": "US-MT",
+      "country": "US",
+      "lat": 48.310501,
+      "lon": -114.255997,
+      "distance_mi": 436,
+      "wikipedia_article": "Glacier Park International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "RNO",
+      "label": "Reno/Tahoe",
+      "airport_name": "Reno Tahoe International Airport",
+      "city": "Reno",
+      "region": "US-NV",
+      "country": "US",
+      "lat": 39.4991,
+      "lon": -119.767998,
+      "distance_mi": 445,
+      "wikipedia_article": "Reno-Tahoe International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "SMF",
+      "label": "Sacramento",
+      "airport_name": "Sacramento International Airport",
+      "city": "Sacramento",
+      "region": "US-CA",
+      "country": "US",
+      "lat": 38.6954,
+      "lon": -121.591003,
+      "distance_mi": 479,
+      "wikipedia_article": "Sacramento International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Southwest Airlines",
+          "airline_article": "Southwest Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "STS",
+      "label": "Santa Rosa",
+      "airport_name": "Charles M. Schulz Sonoma County Airport",
+      "city": "Santa Rosa",
+      "region": "US-CA",
+      "country": "US",
+      "lat": 38.50899887,
+      "lon": -122.8130035,
+      "distance_mi": 489,
+      "wikipedia_article": "Charles M. Schulz–Sonoma County Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "IDA",
+      "label": "Idaho Falls",
+      "airport_name": "Idaho Falls Regional Airport",
+      "city": "Idaho Falls",
+      "region": "US-ID",
+      "country": "US",
+      "lat": 43.514599,
+      "lon": -112.070999,
+      "distance_mi": 537,
+      "wikipedia_article": "Idaho Falls Regional Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Allegiant Air",
+          "airline_article": "Allegiant Air",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "OAK",
+      "label": "Oakland",
+      "airport_name": "Oakland San Francisco Bay Airport",
+      "city": "Oakland",
+      "region": "US-CA",
+      "country": "US",
+      "lat": 37.720085,
+      "lon": -122.221184,
+      "distance_mi": 544,
+      "wikipedia_article": "Oakland San Francisco Bay Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Southwest Airlines",
+          "airline_article": "Southwest Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "YYC",
+      "label": "Calgary",
+      "airport_name": "Calgary International Airport",
+      "city": "Calgary",
+      "region": "CA-AB",
+      "country": "CA",
+      "lat": 51.118822,
+      "lon": -114.009933,
+      "distance_mi": 548,
+      "wikipedia_article": "Calgary International Airport",
+      "services": [
+        {
+          "airline": "WestJet Encore",
+          "airline_article": "WestJet Encore",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": false,
+      "international": true
+    },
+    {
+      "iata": "SFO",
+      "label": "San Francisco",
+      "airport_name": "San Francisco International Airport",
+      "city": "San Francisco",
+      "region": "US-CA",
+      "country": "US",
+      "lat": 37.619806,
+      "lon": -122.374821,
+      "distance_mi": 551,
+      "wikipedia_article": "San Francisco International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "United Airlines",
+          "airline_article": "United Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "United Express",
+          "airline_article": "United Express",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "BZN",
+      "label": "Bozeman",
+      "airport_name": "Bozeman Yellowstone International Airport",
+      "city": "Bozeman",
+      "region": "US-MT",
+      "country": "US",
+      "lat": 45.778853,
+      "lon": -111.153711,
+      "distance_mi": 552,
+      "wikipedia_article": "Bozeman Yellowstone International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "SJC",
+      "label": "San Jose (CA)",
+      "airport_name": "Mineta San Jose International Airport",
+      "city": "San Jose",
+      "region": "US-CA",
+      "country": "US",
+      "lat": 37.362452,
+      "lon": -121.929188,
+      "distance_mi": 569,
+      "wikipedia_article": "San Jose International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Southwest Airlines",
+          "airline_article": "Southwest Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "JAC",
+      "label": "Jackson Hole",
+      "airport_name": "Jackson Hole Airport",
+      "city": "Jackson",
+      "region": "US-WY",
+      "country": "US",
+      "lat": 43.6073,
+      "lon": -110.737999,
+      "distance_mi": 599,
+      "wikipedia_article": "Jackson Hole Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": false,
+      "international": false
+    },
+    {
+      "iata": "FAT",
+      "label": "Fresno",
+      "airport_name": "Fresno Yosemite International Airport",
+      "city": "Fresno",
+      "region": "US-CA",
+      "country": "US",
+      "lat": 36.775767,
+      "lon": -119.718018,
+      "distance_mi": 627,
+      "wikipedia_article": "Fresno Yosemite International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "SLC",
+      "label": "Salt Lake City",
+      "airport_name": "Salt Lake City International Airport",
+      "city": "Salt Lake City",
+      "region": "US-UT",
+      "country": "US",
+      "lat": 40.78886,
+      "lon": -111.979866,
+      "distance_mi": 629,
+      "wikipedia_article": "Salt Lake City International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Delta Air Lines",
+          "airline_article": "Delta Air Lines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "PVU",
+      "label": "Provo",
+      "airport_name": "Provo Municipal Airport",
+      "city": "Provo",
+      "region": "US-UT",
+      "country": "US",
+      "lat": 40.218894,
+      "lon": -111.722445,
+      "distance_mi": 663,
+      "wikipedia_article": "Provo Municipal Airport",
+      "services": [
+        {
+          "airline": "Allegiant Air",
+          "airline_article": "Allegiant Air",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "BIL",
+      "label": "Billings",
+      "airport_name": "Billings Logan International Airport",
+      "city": "Billings",
+      "region": "US-MT",
+      "country": "US",
+      "lat": 45.808932,
+      "lon": -108.541242,
+      "distance_mi": 678,
+      "wikipedia_article": "Billings Logan International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "SBP",
+      "label": "San Luis Obispo",
+      "airport_name": "San Luis County Regional Airport",
+      "city": "San Luis Obispo",
+      "region": "US-CA",
+      "country": "US",
+      "lat": 35.236801147499996,
+      "lon": -120.641998291,
+      "distance_mi": 723,
+      "wikipedia_article": "San Luis Obispo County Regional Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "LAS",
+      "label": "Las Vegas",
+      "airport_name": "Harry Reid International Airport",
+      "city": "Las Vegas",
+      "region": "US-NV",
+      "country": "US",
+      "lat": 36.083361,
+      "lon": -115.151817,
+      "distance_mi": 763,
+      "wikipedia_article": "Harry Reid International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Frontier Airlines",
+          "airline_article": "Frontier Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Southwest Airlines",
+          "airline_article": "Southwest Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "SBA",
+      "label": "Santa Barbara",
+      "airport_name": "Santa Barbara Municipal Airport",
+      "city": "Santa Barbara",
+      "region": "US-CA",
+      "country": "US",
+      "lat": 34.426201,
+      "lon": -119.839996,
+      "distance_mi": 785,
+      "wikipedia_article": "Santa Barbara Municipal Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "BUR",
+      "label": "Burbank",
+      "airport_name": "Hollywood Burbank/Bob Hope Airport",
+      "city": "Burbank",
+      "region": "US-CA",
+      "country": "US",
+      "lat": 34.202834,
+      "lon": -118.35805,
+      "distance_mi": 818,
+      "wikipedia_article": "Hollywood Burbank Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Southwest Airlines",
+          "airline_article": "Southwest Airlines",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "LAX",
+      "label": "Los Angeles",
+      "airport_name": "Los Angeles International Airport",
+      "city": "Los Angeles",
+      "region": "US-CA",
+      "country": "US",
+      "lat": 33.942501,
+      "lon": -118.407997,
+      "distance_mi": 835,
+      "wikipedia_article": "Los Angeles International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "American Eagle",
+          "airline_article": "American Eagle (airline brand)",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Delta Air Lines",
+          "airline_article": "Delta Air Lines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Frontier Airlines",
+          "airline_article": "Frontier Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "ONT",
+      "label": "Ontario",
+      "airport_name": "Ontario International Airport",
+      "city": "Ontario",
+      "region": "US-CA",
+      "country": "US",
+      "lat": 34.056,
+      "lon": -117.600998,
+      "distance_mi": 839,
+      "wikipedia_article": "Ontario International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "LGB",
+      "label": "Long Beach",
+      "airport_name": "Long Beach International Airport",
+      "city": "Long Beach",
+      "region": "US-CA",
+      "country": "US",
+      "lat": 33.816523,
+      "lon": -118.149891,
+      "distance_mi": 847,
+      "wikipedia_article": "Long Beach Airport",
+      "services": [
+        {
+          "airline": "Southwest Airlines",
+          "airline_article": "Southwest Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "HDN",
+      "label": "Hayden/Steamboat Springs",
+      "airport_name": "Yampa Valley Airport",
+      "city": "Hayden",
+      "region": "US-CO",
+      "country": "US",
+      "lat": 40.481201,
+      "lon": -107.218002,
+      "distance_mi": 851,
+      "wikipedia_article": "Yampa Valley Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "seasonal",
+          "begins": "February 11, 2027",
+          "note": "begins February 11, 2027",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": false,
+      "international": false
+    },
+    {
+      "iata": "SNA",
+      "label": "Orange County",
+      "airport_name": "John Wayne Orange County International Airport",
+      "city": "Santa Ana",
+      "region": "US-CA",
+      "country": "US",
+      "lat": 33.675063,
+      "lon": -117.869281,
+      "distance_mi": 860,
+      "wikipedia_article": "John Wayne Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "PSP",
+      "label": "Palm Springs",
+      "airport_name": "Palm Springs International Airport",
+      "city": "Palm Springs",
+      "region": "US-CA",
+      "country": "US",
+      "lat": 33.8297,
+      "lon": -116.507004,
+      "distance_mi": 874,
+      "wikipedia_article": "Palm Springs International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "SAN",
+      "label": "San Diego",
+      "airport_name": "San Diego International Airport",
+      "city": "San Diego",
+      "region": "US-CA",
+      "country": "US",
+      "lat": 32.733601,
+      "lon": -117.190002,
+      "distance_mi": 934,
+      "wikipedia_article": "San Diego International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Southwest Airlines",
+          "airline_article": "Southwest Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "DEN",
+      "label": "Denver",
+      "airport_name": "Denver International Airport",
+      "city": "Denver",
+      "region": "US-CO",
+      "country": "US",
+      "lat": 39.860027,
+      "lon": -104.673792,
+      "distance_mi": 989,
+      "wikipedia_article": "Denver International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Frontier Airlines",
+          "airline_article": "Frontier Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Southwest Airlines",
+          "airline_article": "Southwest Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "United Airlines",
+          "airline_article": "United Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "PHX",
+      "label": "Phoenix–Sky Harbor",
+      "airport_name": "Phoenix Sky Harbor International Airport",
+      "city": "Phoenix",
+      "region": "US-AZ",
+      "country": "US",
+      "lat": 33.435302,
+      "lon": -112.005905,
+      "distance_mi": 1010,
+      "wikipedia_article": "Phoenix Sky Harbor International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "American Airlines",
+          "airline_article": "American Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Frontier Airlines",
+          "airline_article": "Frontier Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Southwest Airlines",
+          "airline_article": "Southwest Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "AZA",
+      "label": "Phoenix/Mesa",
+      "airport_name": "Mesa Gateway Airport",
+      "city": "Mesa",
+      "region": "US-AZ",
+      "country": "US",
+      "lat": 33.3078,
+      "lon": -111.654999,
+      "distance_mi": 1028,
+      "wikipedia_article": "Mesa Gateway Airport",
+      "services": [
+        {
+          "airline": "Allegiant Air",
+          "airline_article": "Allegiant Air",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "ABQ",
+      "label": "Albuquerque",
+      "airport_name": "Albuquerque International Sunport",
+      "city": "Albuquerque",
+      "region": "US-NM",
+      "country": "US",
+      "lat": 35.039976,
+      "lon": -106.608925,
+      "distance_mi": 1110,
+      "wikipedia_article": "Albuquerque International Sunport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "TUS",
+      "label": "Tucson",
+      "airport_name": "Tucson International Airport",
+      "city": "Tucson",
+      "region": "US-AZ",
+      "country": "US",
+      "lat": 32.115004,
+      "lon": -110.938053,
+      "distance_mi": 1120,
+      "wikipedia_article": "Tucson International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "MSP",
+      "label": "Minneapolis/St. Paul",
+      "airport_name": "Minneapolis–Saint Paul International Airport / Wold–Chamberlain Field",
+      "city": "Minneapolis",
+      "region": "US-MN",
+      "country": "US",
+      "lat": 44.880081,
+      "lon": -93.221741,
+      "distance_mi": 1422,
+      "wikipedia_article": "Minneapolis-St. Paul International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Delta Air Lines",
+          "airline_article": "Delta Air Lines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Sun Country Airlines",
+          "airline_article": "Sun Country Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "DSM",
+      "label": "Des Moines",
+      "airport_name": "Des Moines International Airport",
+      "city": "Des Moines",
+      "region": "US-IA",
+      "country": "US",
+      "lat": 41.534027,
+      "lon": -93.656719,
+      "distance_mi": 1467,
+      "wikipedia_article": "Des Moines International Airport",
+      "services": [
+        {
+          "airline": "Allegiant Air",
+          "airline_article": "Allegiant Air",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": false,
+      "international": false
+    },
+    {
+      "iata": "MCI",
+      "label": "Kansas City",
+      "airport_name": "Kansas City International Airport",
+      "city": "Kansas City",
+      "region": "US-MO",
+      "country": "US",
+      "lat": 39.301699,
+      "lon": -94.713893,
+      "distance_mi": 1478,
+      "wikipedia_article": "Kansas City International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Southwest Airlines",
+          "airline_article": "Southwest Airlines",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "ANC",
+      "label": "Anchorage",
+      "airport_name": "Ted Stevens Anchorage International Airport",
+      "city": "Anchorage",
+      "region": "US-AK",
+      "country": "US",
+      "lat": 61.179004,
+      "lon": -149.992561,
+      "distance_mi": 1539,
+      "wikipedia_article": "Ted Stevens Anchorage International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "DFW",
+      "label": "Dallas/Fort Worth",
+      "airport_name": "Dallas Fort Worth International Airport",
+      "city": "Dallas-Fort Worth",
+      "region": "US-TX",
+      "country": "US",
+      "lat": 32.896801,
+      "lon": -97.038002,
+      "distance_mi": 1614,
+      "wikipedia_article": "Dallas Fort Worth International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "American Airlines",
+          "airline_article": "American Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "DAL",
+      "label": "Dallas–Love",
+      "airport_name": "Dallas Love Field",
+      "city": "Dallas",
+      "region": "US-TX",
+      "country": "US",
+      "lat": 32.844776,
+      "lon": -96.847653,
+      "distance_mi": 1624,
+      "wikipedia_article": "Dallas Love Field",
+      "services": [
+        {
+          "airline": "Southwest Airlines",
+          "airline_article": "Southwest Airlines",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": false,
+      "international": false
+    },
+    {
+      "iata": "FAI",
+      "label": "Fairbanks",
+      "airport_name": "Fairbanks International Airport",
+      "city": "Fairbanks",
+      "region": "US-AK",
+      "country": "US",
+      "lat": 64.815102,
+      "lon": -147.856003,
+      "distance_mi": 1637,
+      "wikipedia_article": "Fairbanks International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": false,
+      "international": false
+    },
+    {
+      "iata": "ATW",
+      "label": "Appleton",
+      "airport_name": "Appleton International Airport",
+      "city": "Appleton",
+      "region": "US-WI",
+      "country": "US",
+      "lat": 44.258515,
+      "lon": -88.519,
+      "distance_mi": 1657,
+      "wikipedia_article": "Appleton International Airport",
+      "services": [
+        {
+          "airline": "Allegiant Air",
+          "airline_article": "Allegiant Air",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": false,
+      "international": false
+    },
+    {
+      "iata": "STL",
+      "label": "St. Louis",
+      "airport_name": "St. Louis Lambert International Airport",
+      "city": "St Louis",
+      "region": "US-MO",
+      "country": "US",
+      "lat": 38.748697,
+      "lon": -90.370003,
+      "distance_mi": 1704,
+      "wikipedia_article": "St. Louis Lambert International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Southwest Airlines",
+          "airline_article": "Southwest Airlines",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": false,
+      "international": false
+    },
+    {
+      "iata": "SJD",
+      "label": "San José del Cabo",
+      "airport_name": "Los Cabos International Airport",
+      "city": "San José del Cabo",
+      "region": "MX-BCS",
+      "country": "MX",
+      "lat": 23.151919,
+      "lon": -109.720731,
+      "distance_mi": 1710,
+      "wikipedia_article": "Los Cabos International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": false,
+      "international": true
+    },
+    {
+      "iata": "AUS",
+      "label": "Austin",
+      "airport_name": "Austin Bergstrom International Airport",
+      "city": "Austin",
+      "region": "US-TX",
+      "country": "US",
+      "lat": 30.197535,
+      "lon": -97.662015,
+      "distance_mi": 1714,
+      "wikipedia_article": "Austin–Bergstrom International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "ORD",
+      "label": "Chicago–O'Hare",
+      "airport_name": "Chicago O'Hare International Airport",
+      "city": "Chicago",
+      "region": "US-IL",
+      "country": "US",
+      "lat": 41.9786,
+      "lon": -87.9048,
+      "distance_mi": 1735,
+      "wikipedia_article": "O'Hare International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "American Airlines",
+          "airline_article": "American Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "United Airlines",
+          "airline_article": "United Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "MDW",
+      "label": "Chicago–Midway",
+      "airport_name": "Chicago Midway International Airport",
+      "city": "Chicago",
+      "region": "US-IL",
+      "country": "US",
+      "lat": 41.785999,
+      "lon": -87.752403,
+      "distance_mi": 1747,
+      "wikipedia_article": "Midway International Airport",
+      "services": [
+        {
+          "airline": "Southwest Airlines",
+          "airline_article": "Southwest Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "IAH",
+      "label": "Houston–Intercontinental",
+      "airport_name": "George Bush Intercontinental Airport",
+      "city": "Houston",
+      "region": "US-TX",
+      "country": "US",
+      "lat": 29.9844,
+      "lon": -95.3414,
+      "distance_mi": 1823,
+      "wikipedia_article": "Houston–Intercontinental",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "United Airlines",
+          "airline_article": "United Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "GRR",
+      "label": "Grand Rapids",
+      "airport_name": "Gerald R. Ford International Airport",
+      "city": "Grand Rapids",
+      "region": "US-MI",
+      "country": "US",
+      "lat": 42.880798,
+      "lon": -85.522797,
+      "distance_mi": 1828,
+      "wikipedia_article": "Gerald R. Ford International Airport",
+      "services": [
+        {
+          "airline": "Allegiant Air",
+          "airline_article": "Allegiant Air",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": false,
+      "international": false
+    },
+    {
+      "iata": "IND",
+      "label": "Indianapolis",
+      "airport_name": "Indianapolis International Airport",
+      "city": "Indianapolis",
+      "region": "US-IN",
+      "country": "US",
+      "lat": 39.7173,
+      "lon": -86.294403,
+      "distance_mi": 1872,
+      "wikipedia_article": "Indianapolis International Airport",
+      "services": [
+        {
+          "airline": "Allegiant Air",
+          "airline_article": "Allegiant Air",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": false,
+      "international": false
+    },
+    {
+      "iata": "FNT",
+      "label": "Flint",
+      "airport_name": "Bishop International Airport",
+      "city": "Flint",
+      "region": "US-MI",
+      "country": "US",
+      "lat": 42.969294,
+      "lon": -83.743355,
+      "distance_mi": 1912,
+      "wikipedia_article": "Bishop International Airport",
+      "services": [
+        {
+          "airline": "Allegiant Air",
+          "airline_article": "Allegiant Air",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": false,
+      "international": false
+    },
+    {
+      "iata": "DTW",
+      "label": "Detroit",
+      "airport_name": "Detroit Metropolitan Wayne County Airport",
+      "city": "Detroit",
+      "region": "US-MI",
+      "country": "US",
+      "lat": 42.21377,
+      "lon": -83.353786,
+      "distance_mi": 1948,
+      "wikipedia_article": "Detroit Metropolitan Airport",
+      "services": [
+        {
+          "airline": "Delta Air Lines",
+          "airline_article": "Delta Air Lines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "BNA",
+      "label": "Nashville",
+      "airport_name": "Nashville International Airport",
+      "city": "Nashville",
+      "region": "US-TN",
+      "country": "US",
+      "lat": 36.1245,
+      "lon": -86.6782,
+      "distance_mi": 1969,
+      "wikipedia_article": "Nashville International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "CVG",
+      "label": "Cincinnati",
+      "airport_name": "Cincinnati Northern Kentucky International Airport",
+      "city": "Cincinnati / Covington",
+      "region": "US-KY",
+      "country": "US",
+      "lat": 39.048801,
+      "lon": -84.667801,
+      "distance_mi": 1970,
+      "wikipedia_article": "Cincinnati/Northern Kentucky International Airport",
+      "services": [
+        {
+          "airline": "Allegiant Air",
+          "airline_article": "Allegiant Air",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": false,
+      "international": false
+    },
+    {
+      "iata": "PVR",
+      "label": "Puerto Vallarta",
+      "airport_name": "Puerto Vallarta International Airport",
+      "city": "Puerto Vallarta",
+      "region": "MX-JAL",
+      "country": "MX",
+      "lat": 20.679913,
+      "lon": -105.254391,
+      "distance_mi": 1982,
+      "wikipedia_article": "Licenciado Gustavo Díaz Ordaz International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": false,
+      "international": true
+    },
+    {
+      "iata": "MSY",
+      "label": "New Orleans",
+      "airport_name": "Louis Armstrong New Orleans International Airport",
+      "city": "New Orleans",
+      "region": "US-LA",
+      "country": "US",
+      "lat": 29.993401,
+      "lon": -90.264673,
+      "distance_mi": 2047,
+      "wikipedia_article": "iata:MSY",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "seasonal",
+          "source": "manual"
+        }
+      ],
+      "year_round": false,
+      "international": false
+    },
+    {
+      "iata": "GDL",
+      "label": "Guadalajara",
+      "airport_name": "Guadalajara International Airport",
+      "city": "Guadalajara",
+      "region": "MX-JAL",
+      "country": "MX",
+      "lat": 20.523342,
+      "lon": -103.310108,
+      "distance_mi": 2049,
+      "wikipedia_article": "Guadalajara International Airport",
+      "services": [
+        {
+          "airline": "Volaris",
+          "airline_article": "Volaris",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": true
+    },
+    {
+      "iata": "ATL",
+      "label": "Atlanta",
+      "airport_name": "Hartsfield Jackson Atlanta International Airport",
+      "city": "Atlanta",
+      "region": "US-GA",
+      "country": "US",
+      "lat": 33.6367,
+      "lon": -84.428101,
+      "distance_mi": 2168,
+      "wikipedia_article": "Hartsfield–Jackson Atlanta International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Delta Air Lines",
+          "airline_article": "Delta Air Lines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "MEX",
+      "label": "Mexico City",
+      "airport_name": "Mexico City Benito Juárez International Airport",
+      "city": "Mexico City",
+      "region": "MX-DIF",
+      "country": "MX",
+      "lat": 19.435822,
+      "lon": -99.07033,
+      "distance_mi": 2250,
+      "wikipedia_article": "Mexico City International Airport",
+      "services": [
+        {
+          "airline": "Aeroméxico",
+          "airline_article": "Aeroméxico",
+          "kind": "year-round",
+          "resumes": "January 21, 2027",
+          "note": "resumes January 21, 2027",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": true
+    },
+    {
+      "iata": "CLT",
+      "label": "Charlotte",
+      "airport_name": "Charlotte Douglas International Airport",
+      "city": "Charlotte",
+      "region": "US-NC",
+      "country": "US",
+      "lat": 35.2140007019043,
+      "lon": -80.94309997558594,
+      "distance_mi": 2277,
+      "wikipedia_article": "Charlotte Douglas International Airport",
+      "services": [
+        {
+          "airline": "American Airlines",
+          "airline_article": "American Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "IAD",
+      "label": "Washington–Dulles",
+      "airport_name": "Washington Dulles International Airport",
+      "city": "Dulles",
+      "region": "US-VA",
+      "country": "US",
+      "lat": 38.9445,
+      "lon": -77.455803,
+      "distance_mi": 2322,
+      "wikipedia_article": "Dulles International Airport",
+      "services": [
+        {
+          "airline": "United Airlines",
+          "airline_article": "United Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "DCA",
+      "label": "Washington–National",
+      "airport_name": "Ronald Reagan Washington National Airport",
+      "city": "Washington",
+      "region": "US-DC",
+      "country": "US",
+      "lat": 38.8521,
+      "lon": -77.037697,
+      "distance_mi": 2345,
+      "wikipedia_article": "Ronald Reagan Washington National Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "BWI",
+      "label": "Baltimore",
+      "airport_name": "Baltimore/Washington International Thurgood Marshall Airport",
+      "city": "Baltimore",
+      "region": "US-MD",
+      "country": "US",
+      "lat": 39.1754,
+      "lon": -76.668297,
+      "distance_mi": 2352,
+      "wikipedia_article": "Baltimore/Washington International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Southwest Airlines",
+          "airline_article": "Southwest Airlines",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": false,
+      "international": false
+    },
+    {
+      "iata": "PHL",
+      "label": "Philadelphia",
+      "airport_name": "Philadelphia International Airport",
+      "city": "Philadelphia",
+      "region": "US-PA",
+      "country": "US",
+      "lat": 39.871899,
+      "lon": -75.241096,
+      "distance_mi": 2400,
+      "wikipedia_article": "Philadelphia International Airport",
+      "services": [
+        {
+          "airline": "American Airlines",
+          "airline_article": "American Airlines",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": false,
+      "international": false
+    },
+    {
+      "iata": "EWR",
+      "label": "Newark",
+      "airport_name": "Newark Liberty International Airport",
+      "city": "Newark",
+      "region": "US-NJ",
+      "country": "US",
+      "lat": 40.6894,
+      "lon": -74.170545,
+      "distance_mi": 2427,
+      "wikipedia_article": "Newark Liberty International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "United Airlines",
+          "airline_article": "United Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "JFK",
+      "label": "New York–JFK",
+      "airport_name": "John F. Kennedy International Airport",
+      "city": "New York",
+      "region": "US-NY",
+      "country": "US",
+      "lat": 40.639447,
+      "lon": -73.779317,
+      "distance_mi": 2448,
+      "wikipedia_article": "John F. Kennedy International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "Delta Air Lines",
+          "airline_article": "Delta Air Lines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "TPA",
+      "label": "Tampa",
+      "airport_name": "Tampa International Airport",
+      "city": "Tampa",
+      "region": "US-FL",
+      "country": "US",
+      "lat": 27.9755,
+      "lon": -82.533203,
+      "distance_mi": 2494,
+      "wikipedia_article": "Tampa International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": false,
+      "international": false
+    },
+    {
+      "iata": "BOS",
+      "label": "Boston",
+      "airport_name": "Boston Logan International Airport",
+      "city": "Boston",
+      "region": "US-MA",
+      "country": "US",
+      "lat": 42.36197,
+      "lon": -71.0079,
+      "distance_mi": 2530,
+      "wikipedia_article": "Logan International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "JetBlue",
+          "airline_article": "JetBlue",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "MCO",
+      "label": "Orlando",
+      "airport_name": "Orlando International Airport",
+      "city": "Orlando",
+      "region": "US-FL",
+      "country": "US",
+      "lat": 28.429399490356445,
+      "lon": -81.30899810791016,
+      "distance_mi": 2531,
+      "wikipedia_article": "Orlando International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "OGG",
+      "label": "Kahului",
+      "airport_name": "Kahului International Airport",
+      "city": "Kahului",
+      "region": "US-HI",
+      "country": "US",
+      "lat": 20.896263,
+      "lon": -156.431837,
+      "distance_mi": 2562,
+      "wikipedia_article": "Kahului Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "HNL",
+      "label": "Honolulu",
+      "airport_name": "Daniel K. Inouye International Airport",
+      "city": "Honolulu, Oahu",
+      "region": "US-HI",
+      "country": "US",
+      "lat": 21.318387,
+      "lon": -157.92567,
+      "distance_mi": 2603,
+      "wikipedia_article": "Daniel K. Inouye International Airport",
+      "services": [
+        {
+          "airline": "Hawaiian Airlines",
+          "airline_article": "Hawaiian Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "KOA",
+      "label": "Kailua-Kona",
+      "airport_name": "Ellison Onizuka Kona International Airport at Keāhole",
+      "city": "Kailua-Kona",
+      "region": "US-HI",
+      "country": "US",
+      "lat": 19.738783,
+      "lon": -156.045603,
+      "distance_mi": 2607,
+      "wikipedia_article": "Kona International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "LIH",
+      "label": "Lihue",
+      "airport_name": "Lihue Airport",
+      "city": "Lihue, Kauai",
+      "region": "US-HI",
+      "country": "US",
+      "lat": 21.974393,
+      "lon": -159.337146,
+      "distance_mi": 2630,
+      "wikipedia_article": "Lihue Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": false
+    },
+    {
+      "iata": "CUN",
+      "label": "Cancún",
+      "airport_name": "Cancún International Airport",
+      "city": "Cancún",
+      "region": "MX-ROO",
+      "country": "MX",
+      "lat": 21.040817,
+      "lon": -86.87347,
+      "distance_mi": 2634,
+      "wikipedia_article": "Cancún International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": false,
+      "international": true
+    },
+    {
+      "iata": "FLL",
+      "label": "Fort Lauderdale",
+      "airport_name": "Fort Lauderdale Hollywood International Airport",
+      "city": "Fort Lauderdale",
+      "region": "US-FL",
+      "country": "US",
+      "lat": 26.072599,
+      "lon": -80.152702,
+      "distance_mi": 2691,
+      "wikipedia_article": "Fort Lauderdale–Hollywood International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": false,
+      "international": false
+    },
+    {
+      "iata": "MIA",
+      "label": "Miami",
+      "airport_name": "Miami International Airport",
+      "city": "Miami",
+      "region": "US-FL",
+      "country": "US",
+      "lat": 25.796011,
+      "lon": -80.289751,
+      "distance_mi": 2697,
+      "wikipedia_article": "Miami International Airport",
+      "services": [
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        },
+        {
+          "airline": "American Airlines",
+          "airline_article": "American Airlines",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": false,
+      "international": false
+    },
+    {
+      "iata": "KEF",
+      "label": "Reykjavík–Keflavík",
+      "airport_name": "Keflavik International Airport",
+      "city": "Reykjavík",
+      "region": "IS-2",
+      "country": "IS",
+      "lat": 63.985001,
+      "lon": -22.6056,
+      "distance_mi": 3727,
+      "wikipedia_article": "Keflavík International Airport",
+      "services": [
+        {
+          "airline": "Icelandair",
+          "airline_article": "Icelandair",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": false,
+      "international": true
+    },
+    {
+      "iata": "LHR",
+      "label": "London–Heathrow",
+      "airport_name": "London Heathrow Airport",
+      "city": "London",
+      "region": "GB-ENG",
+      "country": "GB",
+      "lat": 51.470748,
+      "lon": -0.459909,
+      "distance_mi": 4900,
+      "wikipedia_article": "Heathrow Airport",
+      "services": [
+        {
+          "airline": "British Airways",
+          "airline_article": "British Airways",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": true
+    },
+    {
+      "iata": "AMS",
+      "label": "Amsterdam",
+      "airport_name": "Amsterdam Airport Schiphol",
+      "city": "Amsterdam",
+      "region": "NL-NH",
+      "country": "NL",
+      "lat": 52.308601,
+      "lon": 4.76389,
+      "distance_mi": 4989,
+      "wikipedia_article": "Amsterdam Airport Schiphol",
+      "services": [
+        {
+          "airline": "KLM",
+          "airline_article": "KLM",
+          "kind": "year-round",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": true,
+      "international": true
+    },
+    {
+      "iata": "FRA",
+      "label": "Frankfurt",
+      "airport_name": "Frankfurt Main Airport",
+      "city": "Frankfurt am Main",
+      "region": "DE-HE",
+      "country": "DE",
+      "lat": 50.026706,
+      "lon": 8.55835,
+      "distance_mi": 5212,
+      "wikipedia_article": "Frankfurt Airport",
+      "services": [
+        {
+          "airline": "Condor",
+          "airline_article": "Condor (airline)",
+          "kind": "seasonal",
+          "source": "wikipedia"
+        }
+      ],
+      "year_round": false,
+      "international": true
+    }
+  ],
+  "source": {
+    "routes": "https://en.wikipedia.org/wiki/Portland_International_Airport",
+    "routes_revision": 1382252995,
+    "airports": "https://ourairports.com/data/"
+  }
+}

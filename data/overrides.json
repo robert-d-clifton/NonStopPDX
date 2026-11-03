@@ -1,0 +1,15 @@
+{
+  "_help": "Hand edited fixes for data lag. action is add or remove. iata and reason are required, and an add also needs airline. A remove without airline drops every airline on that route. review_by flags the entry once that date passes.",
+  "overrides": [
+    {
+      "action": "add",
+      "iata": "MSY",
+      "city": "New Orleans",
+      "airline": "Alaska Airlines",
+      "kind": "seasonal",
+      "reason": "Seasonal route, paused right now, so Wikipedia dropped it. FlyPDX still lists it.",
+      "added": "2026-11-03",
+      "review_by": "2027-02-01"
+    }
+  ]
+}

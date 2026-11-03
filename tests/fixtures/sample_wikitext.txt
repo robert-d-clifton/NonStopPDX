@@ -1,0 +1,23 @@
+== Airlines and destinations ==
+=== Passenger ===
+{{Airport destination list
+| 3rdcoltitle = Refs
+| [[Alaska Airlines]]
+| [[Ted Stevens Anchorage International Airport|Anchorage]], [[Austin–Bergstrom International Airport|Austin]], [[Boise Airport|Boise]], [[Daniel K. Inouye International Airport|Honolulu]], [[Seattle–Tacoma International Airport|Seattle/Tacoma]] <br>'''Seasonal:''' [[Bozeman Yellowstone International Airport|Bozeman]], [[Puerto Vallarta International Airport|Puerto Vallarta]] (begins December 18, 2026)
+| <ref name="AlaskaRoutes">{{cite web |url=https://www.alaskaair.com/ |title=Flight Timetable |publisher=Alaska Airlines}}</ref>
+| [[Condor (airline)|Condor]]
+| '''Seasonal:''' [[Frankfurt Airport|Frankfurt]]<!-- resumes in spring -->
+| <ref>{{cite web|url=https://www.condor.com|title=Condor}}</ref>
+| [[Delta Air Lines]]
+| [[Hartsfield–Jackson Atlanta International Airport|Atlanta]], [[Minneapolis–Saint Paul International Airport|Minneapolis/St. Paul]], [[Tokyo International Airport|Tokyo–Haneda]] (ends March 28, 2027) <br>'''Seasonal:''' [[Amsterdam Airport Schiphol|Amsterdam]]
+| <ref>{{cite web |url=https://www.delta.com/ |title=Delta}}</ref>
+| [[Sun Country Airlines]]
+| '''Seasonal:''' [[Minneapolis–Saint Paul International Airport|Minneapolis/St. Paul]] <br>'''Seasonal charter:''' [[Laughlin/Bullhead International Airport|Bullhead City]]
+| <ref>Sun Country</ref>
+}}
+
+=== Cargo ===
+{{Airport destination list
+| [[FedEx Express]]
+| [[Memphis International Airport|Memphis]]
+}}

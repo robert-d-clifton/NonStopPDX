@@ -1,0 +1,130 @@
+iata,city,country,distance_mi,airline,kind,begins,ends,resumes,note,source
+EUG,Eugene,US,106,Alaska Airlines,year-round,,,,,wikipedia
+RDM,Redmond,US,116,Alaska Airlines,year-round,,,,,wikipedia
+RDM,Redmond,US,116,SeaPort Airlines,seasonal,,,,,wikipedia
+SEA,Seattle,US,129,Alaska Airlines,year-round,,,,,wikipedia
+SEA,Seattle,US,129,Delta Air Lines,year-round,,,,,wikipedia
+SEA,Seattle,US,129,Delta Connection,year-round,,,,,wikipedia
+BFI,Seattle,US,135,SeaPort Airlines,year-round,,,,,wikipedia
+PAE,Everett,US,161,Alaska Airlines,year-round,,,,,wikipedia
+EAT,Wenatchee,US,169,Alaska Airlines,year-round,,,,,wikipedia
+PSC,Pasco,US,174,Alaska Airlines,year-round,,,,,wikipedia
+PDT,Pendleton,US,182,Boutique Air,year-round,,,,,wikipedia
+BLI,Bellingham,US,221,Alaska Airlines,year-round,,,,,wikipedia
+MFR,Medford,US,223,Alaska Airlines,year-round,,,,,wikipedia
+YVR,Vancouver,CA,251,Air Canada Express,year-round,,,,,wikipedia
+YVR,Vancouver,CA,251,Alaska Airlines,year-round,,,,,wikipedia
+GEG,Spokane,US,278,Alaska Airlines,year-round,,,,,wikipedia
+BOI,Boise,US,343,Alaska Airlines,year-round,,,,,wikipedia
+MSO,Missoula,US,416,Alaska Airlines,year-round,,,,,wikipedia
+FCA,Kalispell,US,436,Alaska Airlines,year-round,,,,,wikipedia
+RNO,Reno,US,445,Alaska Airlines,year-round,,,,,wikipedia
+SMF,Sacramento,US,479,Alaska Airlines,year-round,,,,,wikipedia
+SMF,Sacramento,US,479,Southwest Airlines,year-round,,,,,wikipedia
+STS,Santa Rosa,US,489,Alaska Airlines,year-round,,,,,wikipedia
+IDA,Idaho Falls,US,537,Alaska Airlines,year-round,,,,,wikipedia
+IDA,Idaho Falls,US,537,Allegiant Air,seasonal,,,,,wikipedia
+OAK,Oakland,US,544,Alaska Airlines,year-round,,,,,wikipedia
+OAK,Oakland,US,544,Southwest Airlines,year-round,,,,,wikipedia
+YYC,Calgary,CA,548,WestJet Encore,seasonal,,,,,wikipedia
+SFO,San Francisco,US,551,Alaska Airlines,year-round,,,,,wikipedia
+SFO,San Francisco,US,551,United Airlines,year-round,,,,,wikipedia
+SFO,San Francisco,US,551,United Express,year-round,,,,,wikipedia
+BZN,Bozeman,US,552,Alaska Airlines,year-round,,,,,wikipedia
+SJC,San Jose,US,569,Alaska Airlines,year-round,,,,,wikipedia
+SJC,San Jose,US,569,Southwest Airlines,year-round,,,,,wikipedia
+JAC,Jackson,US,599,Alaska Airlines,seasonal,,,,,wikipedia
+FAT,Fresno,US,627,Alaska Airlines,year-round,,,,,wikipedia
+SLC,Salt Lake City,US,629,Alaska Airlines,year-round,,,,,wikipedia
+SLC,Salt Lake City,US,629,Delta Air Lines,year-round,,,,,wikipedia
+PVU,Provo,US,663,Allegiant Air,year-round,,,,,wikipedia
+BIL,Billings,US,678,Alaska Airlines,year-round,,,,,wikipedia
+SBP,San Luis Obispo,US,723,Alaska Airlines,year-round,,,,,wikipedia
+LAS,Las Vegas,US,763,Alaska Airlines,year-round,,,,,wikipedia
+LAS,Las Vegas,US,763,Frontier Airlines,year-round,,,,,wikipedia
+LAS,Las Vegas,US,763,Southwest Airlines,year-round,,,,,wikipedia
+SBA,Santa Barbara,US,785,Alaska Airlines,year-round,,,,,wikipedia
+BUR,Burbank,US,818,Alaska Airlines,year-round,,,,,wikipedia
+BUR,Burbank,US,818,Southwest Airlines,seasonal,,,,,wikipedia
+LAX,Los Angeles,US,835,Alaska Airlines,year-round,,,,,wikipedia
+LAX,Los Angeles,US,835,American Eagle,year-round,,,,,wikipedia
+LAX,Los Angeles,US,835,Delta Air Lines,year-round,,,,,wikipedia
+LAX,Los Angeles,US,835,Frontier Airlines,year-round,,,,,wikipedia
+ONT,Ontario,US,839,Alaska Airlines,year-round,,,,,wikipedia
+LGB,Long Beach,US,847,Southwest Airlines,year-round,,,,,wikipedia
+HDN,Hayden,US,851,Alaska Airlines,seasonal,"February 11, 2027",,,"begins February 11, 2027",wikipedia
+SNA,Santa Ana,US,860,Alaska Airlines,year-round,,,,,wikipedia
+PSP,Palm Springs,US,874,Alaska Airlines,year-round,,,,,wikipedia
+SAN,San Diego,US,934,Alaska Airlines,year-round,,,,,wikipedia
+SAN,San Diego,US,934,Southwest Airlines,year-round,,,,,wikipedia
+DEN,Denver,US,989,Alaska Airlines,year-round,,,,,wikipedia
+DEN,Denver,US,989,Frontier Airlines,year-round,,,,,wikipedia
+DEN,Denver,US,989,Southwest Airlines,year-round,,,,,wikipedia
+DEN,Denver,US,989,United Airlines,year-round,,,,,wikipedia
+PHX,Phoenix,US,1010,Alaska Airlines,year-round,,,,,wikipedia
+PHX,Phoenix,US,1010,American Airlines,year-round,,,,,wikipedia
+PHX,Phoenix,US,1010,Frontier Airlines,year-round,,,,,wikipedia
+PHX,Phoenix,US,1010,Southwest Airlines,year-round,,,,,wikipedia
+AZA,Mesa,US,1028,Allegiant Air,year-round,,,,,wikipedia
+ABQ,Albuquerque,US,1110,Alaska Airlines,year-round,,,,,wikipedia
+TUS,Tucson,US,1120,Alaska Airlines,year-round,,,,,wikipedia
+MSP,Minneapolis,US,1422,Alaska Airlines,seasonal,,,,,wikipedia
+MSP,Minneapolis,US,1422,Delta Air Lines,year-round,,,,,wikipedia
+MSP,Minneapolis,US,1422,Sun Country Airlines,year-round,,,,,wikipedia
+DSM,Des Moines,US,1467,Allegiant Air,seasonal,,,,,wikipedia
+MCI,Kansas City,US,1478,Alaska Airlines,year-round,,,,,wikipedia
+MCI,Kansas City,US,1478,Southwest Airlines,seasonal,,,,,wikipedia
+ANC,Anchorage,US,1539,Alaska Airlines,year-round,,,,,wikipedia
+DFW,Dallas-Fort Worth,US,1614,Alaska Airlines,year-round,,,,,wikipedia
+DFW,Dallas-Fort Worth,US,1614,American Airlines,year-round,,,,,wikipedia
+DAL,Dallas,US,1624,Southwest Airlines,seasonal,,,,,wikipedia
+FAI,Fairbanks,US,1637,Alaska Airlines,seasonal,,,,,wikipedia
+ATW,Appleton,US,1657,Allegiant Air,seasonal,,,,,wikipedia
+STL,St Louis,US,1704,Alaska Airlines,seasonal,,,,,wikipedia
+STL,St Louis,US,1704,Southwest Airlines,seasonal,,,,,wikipedia
+SJD,San José del Cabo,MX,1710,Alaska Airlines,seasonal,,,,,wikipedia
+AUS,Austin,US,1714,Alaska Airlines,year-round,,,,,wikipedia
+ORD,Chicago,US,1735,Alaska Airlines,year-round,,,,,wikipedia
+ORD,Chicago,US,1735,American Airlines,year-round,,,,,wikipedia
+ORD,Chicago,US,1735,United Airlines,year-round,,,,,wikipedia
+MDW,Chicago,US,1747,Southwest Airlines,year-round,,,,,wikipedia
+IAH,Houston,US,1823,Alaska Airlines,year-round,,,,,wikipedia
+IAH,Houston,US,1823,United Airlines,year-round,,,,,wikipedia
+GRR,Grand Rapids,US,1828,Allegiant Air,seasonal,,,,,wikipedia
+IND,Indianapolis,US,1872,Allegiant Air,seasonal,,,,,wikipedia
+FNT,Flint,US,1912,Allegiant Air,seasonal,,,,,wikipedia
+DTW,Detroit,US,1948,Delta Air Lines,year-round,,,,,wikipedia
+BNA,Nashville,US,1969,Alaska Airlines,year-round,,,,,wikipedia
+CVG,Cincinnati / Covington,US,1970,Allegiant Air,seasonal,,,,,wikipedia
+PVR,Puerto Vallarta,MX,1982,Alaska Airlines,seasonal,,,,,wikipedia
+MSY,New Orleans,US,2047,Alaska Airlines,seasonal,,,,,manual
+GDL,Guadalajara,MX,2049,Volaris,year-round,,,,,wikipedia
+ATL,Atlanta,US,2168,Alaska Airlines,year-round,,,,,wikipedia
+ATL,Atlanta,US,2168,Delta Air Lines,year-round,,,,,wikipedia
+MEX,Mexico City,MX,2250,Aeroméxico,year-round,,,"January 21, 2027","resumes January 21, 2027",wikipedia
+CLT,Charlotte,US,2277,American Airlines,year-round,,,,,wikipedia
+IAD,Dulles,US,2322,United Airlines,year-round,,,,,wikipedia
+DCA,Washington,US,2345,Alaska Airlines,year-round,,,,,wikipedia
+BWI,Baltimore,US,2352,Alaska Airlines,seasonal,,,,,wikipedia
+BWI,Baltimore,US,2352,Southwest Airlines,seasonal,,,,,wikipedia
+PHL,Philadelphia,US,2400,American Airlines,seasonal,,,,,wikipedia
+EWR,Newark,US,2427,Alaska Airlines,year-round,,,,,wikipedia
+EWR,Newark,US,2427,United Airlines,year-round,,,,,wikipedia
+JFK,New York,US,2448,Alaska Airlines,year-round,,,,,wikipedia
+JFK,New York,US,2448,Delta Air Lines,year-round,,,,,wikipedia
+TPA,Tampa,US,2494,Alaska Airlines,seasonal,,,,,wikipedia
+BOS,Boston,US,2530,Alaska Airlines,year-round,,,,,wikipedia
+BOS,Boston,US,2530,JetBlue,seasonal,,,,,wikipedia
+MCO,Orlando,US,2531,Alaska Airlines,year-round,,,,,wikipedia
+OGG,Kahului,US,2562,Alaska Airlines,year-round,,,,,wikipedia
+HNL,"Honolulu, Oahu",US,2603,Hawaiian Airlines,year-round,,,,,wikipedia
+KOA,Kailua-Kona,US,2607,Alaska Airlines,year-round,,,,,wikipedia
+LIH,"Lihue, Kauai",US,2630,Alaska Airlines,year-round,,,,,wikipedia
+CUN,Cancún,MX,2634,Alaska Airlines,seasonal,,,,,wikipedia
+FLL,Fort Lauderdale,US,2691,Alaska Airlines,seasonal,,,,,wikipedia
+MIA,Miami,US,2697,Alaska Airlines,seasonal,,,,,wikipedia
+MIA,Miami,US,2697,American Airlines,seasonal,,,,,wikipedia
+KEF,Reykjavík,IS,3727,Icelandair,seasonal,,,,,wikipedia
+LHR,London,GB,4900,British Airways,year-round,,,,,wikipedia
+AMS,Amsterdam,NL,4989,KLM,year-round,,,,,wikipedia
+FRA,Frankfurt am Main,DE,5212,Condor,seasonal,,,,,wikipedia
