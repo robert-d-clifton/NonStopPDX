@@ -54,6 +54,18 @@ Sources lag reality now and then, like a seasonal route Wikipedia drops while it
 * Wikipedia is crowd edited, so a bad edit can slip through. The output records the revision it came from.
 * No schedules or frequencies yet. The free BTS T-100 data could add monthly flight counts later.
 
+### OpenSky departures check
+
+`sync/opensky_departures.py` pulls the last seven complete UTC days of real PDX departures from the [OpenSky Network](https://opensky-network.org/) API and compares them to `data/routes.json`. It needs a free OpenSky API client, with `OPENSKY_CLIENT_ID` and `OPENSKY_CLIENT_SECRET` in a `.env` file at the project root.
+
+```sh
+python3 -m sync.opensky_departures   # needs data/routes.json, writes to data/raw/opensky/
+```
+
+Raw flights and the comparison stay in `data/raw/`, which git ignores.
+
+OpenSky's arrival airports are estimates, and flights often get logged at a small airfield near the real destination. So the check only flags routes for a manual look against FlyPDX, and never adds or removes a route. It compares airports, not airlines. OpenSky's terms are noncommercial.
+
 ## Hosting (planned)
 
 Nothing is hosted yet. Test hosting will be one Docker Compose project on a home server, with its own Cloudflare Tunnel and a Cloudflare Access login in front of it. That opens no router ports and keeps the site private while it's in testing. The site reads only from our own store, so it can move to another host later. Before going public, the data licenses need another look, especially OpenSky's noncommercial terms.
