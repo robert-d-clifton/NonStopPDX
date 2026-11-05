@@ -53,3 +53,15 @@ Sources lag reality now and then, like a seasonal route Wikipedia drops while it
 
 * Wikipedia is crowd edited, so a bad edit can slip through. The output records the revision it came from.
 * No schedules or frequencies yet. The free BTS T-100 data could add monthly flight counts later.
+
+## Hosting (planned)
+
+Nothing is hosted yet. Test hosting will be one Docker Compose project on a home server, with its own Cloudflare Tunnel and a Cloudflare Access login in front of it. That opens no router ports and keeps the site private while it's in testing. The site reads only from our own store, so it can move to another host later. Before going public, the data licenses need another look, especially OpenSky's noncommercial terms.
+
+## License and data credits
+
+The code is under the [MIT License](LICENSE). That license doesn't cover the source data in `data/routes.json` and `data/routes.csv`, which keeps its own terms:
+
+* **Route data** comes from the [Portland International Airport](https://en.wikipedia.org/wiki/Portland_International_Airport) article by Wikipedia contributors, under [CC BY SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). It has been parsed and reformatted, and combined with the airport data below. `data/routes.json` records the revision it came from. Changes we share to this data stay under the same license.
+* **Airport data** comes from [OurAirports](https://ourairports.com/data/), which is public domain.
+* **IATA fallback codes** come from [Wikidata](https://www.wikidata.org/), under [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
