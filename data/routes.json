@@ -1,6 +1,6 @@
 {
   "origin": "PDX",
-  "generated_at": "2026-11-03T20:05:49+00:00",
+  "generated_at": "2026-11-06T14:10:17+00:00",
   "destination_count": 91,
   "service_count": 129,
   "unresolved_articles": [],
@@ -9,6 +9,9 @@
       "MSY Alaska Airlines"
     ],
     "removed": [],
+    "changed": [
+      "AZA Allegiant Air year-round to seasonal"
+    ],
     "warnings": []
   },
   "destinations": [
@@ -1097,11 +1100,12 @@
         {
           "airline": "Allegiant Air",
           "airline_article": "Allegiant Air",
-          "kind": "year-round",
-          "source": "wikipedia"
+          "kind": "seasonal",
+          "source": "wikipedia",
+          "kind_source": "manual"
         }
       ],
-      "year_round": true,
+      "year_round": false,
       "international": false
     },
     {

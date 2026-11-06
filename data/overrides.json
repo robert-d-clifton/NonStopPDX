@@ -1,5 +1,5 @@
 {
-  "_help": "Hand edited fixes for data lag. action is add or remove. iata and reason are required, and an add also needs airline. A remove without airline drops every airline on that route. review_by flags the entry once that date passes.",
+  "_help": "Hand edited fixes for data lag. action is add, remove or set. iata and reason are required. An add needs airline. A remove without airline drops every airline on that route. A set needs airline and kind, and changes the kind of a route Wikipedia already lists. review_by flags the entry once that date passes.",
   "overrides": [
     {
       "action": "add",
@@ -10,6 +10,16 @@
       "reason": "Seasonal route, paused right now, so Wikipedia dropped it. FlyPDX still lists it.",
       "added": "2026-11-03",
       "review_by": "2027-02-01"
+    },
+    {
+      "action": "set",
+      "iata": "AZA",
+      "city": "Mesa",
+      "airline": "Allegiant Air",
+      "kind": "seasonal",
+      "reason": "Wikipedia says year round, but BTS on time data shows flights only from about February to August in 2024, 2025 and 2026. See docs/exceptions.md.",
+      "added": "2026-11-06",
+      "review_by": "2027-09-01"
     }
   ]
 }

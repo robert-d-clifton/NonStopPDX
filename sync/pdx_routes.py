@@ -138,6 +138,7 @@ class Service:
     resumes: str | None = None
     note: str | None = None
     source: str = "wikipedia"       # wikipedia | manual
+    kind_source: str | None = None  # "manual" when a set override changed kind
 
 
 def parse_note(note: str) -> dict:
@@ -225,9 +226,13 @@ def parse_routes(wikitext: str) -> list[Service]:
 #
 # data/overrides.json is hand edited and committed. It fixes data lag in
 # either direction: "add" a route Wikipedia is missing (say a seasonal route
-# that's paused right now), or "remove" one that's listed but not really
-# flying. Every entry needs a reason, and a review_by date so stale
-# overrides get flagged instead of quietly living forever.
+# that's paused right now), "remove" one that's listed but not really
+# flying, or "set" the kind of a route Wikipedia labels wrong (say a seasonal
+# route listed as year round). Every entry needs a reason, and a review_by
+# date so stale overrides get flagged instead of quietly living forever.
+
+KINDS = ("year-round", "seasonal", "charter", "seasonal charter")
+
 
 def load_overrides(path: Path = OVERRIDES_FILE) -> list[dict]:
     if not path.exists():
@@ -235,12 +240,14 @@ def load_overrides(path: Path = OVERRIDES_FILE) -> list[dict]:
     data = json.loads(path.read_text(encoding="utf-8"))
     entries = data.get("overrides", []) if isinstance(data, dict) else data
     for i, e in enumerate(entries):
-        if e.get("action") not in ("add", "remove"):
-            raise ValueError(f"Override #{i}: action must be 'add' or 'remove'")
+        if e.get("action") not in ("add", "remove", "set"):
+            raise ValueError(f"Override #{i}: action must be 'add', 'remove' or 'set'")
         if not e.get("iata") or not e.get("reason"):
             raise ValueError(f"Override #{i}: iata and reason are required")
-        if e["action"] == "add" and not e.get("airline"):
-            raise ValueError(f"Override #{i}: an add needs an airline")
+        if e["action"] in ("add", "set") and not e.get("airline"):
+            raise ValueError(f"Override #{i}: an {e['action']} needs an airline")
+        if e["action"] == "set" and e.get("kind") not in KINDS:
+            raise ValueError(f"Override #{i}: a set needs a kind, one of {', '.join(KINDS)}")
         e["iata"] = e["iata"].upper()
     return entries
 
@@ -268,8 +275,12 @@ def _matches(e: dict, code: str, airline: str) -> bool:
     return e["iata"] == code and (not e.get("airline") or e["airline"].lower() == airline.lower())
 
 
-def review_overrides(overrides: list[dict], wiki_pairs: set[tuple[str, str]], today: str) -> list[str]:
-    """Warnings for overrides that look stale: Wikipedia caught up, or review_by has passed."""
+def review_overrides(overrides: list[dict], wiki_pairs: set[tuple[str, str]], today: str,
+                     wiki_kinds: dict[tuple[str, str], set[str]] | None = None) -> list[str]:
+    """Warnings for overrides that look stale: Wikipedia caught up, or review_by has passed.
+
+    wiki_kinds maps (iata, airline lowercased) to the kinds Wikipedia gives that route.
+    """
     warnings = []
     for e in overrides:
         label = f"{e['action']} {e['iata']}" + (f" ({e['airline']})" if e.get("airline") else "")
@@ -278,6 +289,12 @@ def review_overrides(overrides: list[dict], wiki_pairs: set[tuple[str, str]], to
             warnings.append(f"{label}: Wikipedia lists this now, the override can probably go")
         if e["action"] == "remove" and not listed:
             warnings.append(f"{label}: Wikipedia no longer lists this, the override can probably go")
+        if e["action"] == "set":
+            kinds = (wiki_kinds or {}).get((e["iata"], e["airline"].lower()))
+            if not kinds:
+                warnings.append(f"{label}: Wikipedia doesn't list this route, so there's nothing to change")
+            elif kinds == {e["kind"]}:
+                warnings.append(f"{label}: Wikipedia says {e['kind']} now, the override can probably go")
         if e.get("review_by") and e["review_by"] < today:
             warnings.append(f"{label}: past its review_by date ({e['review_by']})")
     return warnings
@@ -396,6 +413,11 @@ def build_dataset(services: list[Service], offline: bool = False,
     # Apply removals, and note which Wikipedia routes exist for the staleness check.
     wiki_pairs = {(article_iata.get(s.destination_article, ""), s.airline)
                   for s in services if s.source == "wikipedia"}
+    wiki_kinds: dict[tuple[str, str], set[str]] = {}
+    for s in services:
+        if s.source == "wikipedia":
+            key = (article_iata.get(s.destination_article, ""), s.airline.lower())
+            wiki_kinds.setdefault(key, set()).add(s.kind)
     removes = [e for e in overrides if e["action"] == "remove"]
     removed = []
     kept = []
@@ -406,6 +428,16 @@ def build_dataset(services: list[Service], offline: bool = False,
         else:
             kept.append(s)
     services = kept
+
+    # Apply kind changes from "set" overrides.
+    sets = [e for e in overrides if e["action"] == "set"]
+    changed = []
+    for s in services:
+        code = article_iata.get(s.destination_article, "")
+        for e in sets:
+            if s.source == "wikipedia" and _matches(e, code, s.airline) and s.kind != e["kind"]:
+                changed.append(f"{code} {s.airline} {s.kind} to {e['kind']}")
+                s.kind, s.kind_source = e["kind"], "manual"
 
     origin = by_iata.get(ORIGIN_IATA)
     destinations: dict[str, dict] = {}
@@ -447,7 +479,8 @@ def build_dataset(services: list[Service], offline: bool = False,
         "overrides": {
             "added": [f"{s.destination_article[5:]} {s.airline}" for s in services if s.source == "manual"],
             "removed": removed,
-            "warnings": review_overrides(overrides, wiki_pairs, datetime.now().date().isoformat()),
+            "changed": changed,
+            "warnings": review_overrides(overrides, wiki_pairs, datetime.now().date().isoformat(), wiki_kinds),
         },
         "destinations": ordered,
     }
@@ -463,11 +496,13 @@ def write_outputs(dataset: dict, revid: int | None) -> None:
     (DATA_DIR / "routes.json").write_text(json.dumps(dataset, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     with (DATA_DIR / "routes.csv").open("w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        w.writerow(["iata", "city", "country", "distance_mi", "airline", "kind", "begins", "ends", "resumes", "note", "source"])
+        w.writerow(["iata", "city", "country", "distance_mi", "airline", "kind", "begins", "ends", "resumes", "note",
+                    "source", "kind_source"])
         for d in dataset["destinations"]:
             for s in d["services"]:
                 w.writerow([d["iata"], d["city"], d["country"], d["distance_mi"], s["airline"], s["kind"],
-                            s.get("begins"), s.get("ends"), s.get("resumes"), s.get("note"), s.get("source")])
+                            s.get("begins"), s.get("ends"), s.get("resumes"), s.get("note"), s.get("source"),
+                            s.get("kind_source")])
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -490,8 +525,9 @@ def main(argv: list[str] | None = None) -> int:
     print(f"{dataset['destination_count']} nonstop destinations ({intl} international), "
           f"{dataset['service_count']} airline routes, from Wikipedia revision {revid}")
     ov = dataset["overrides"]
-    if ov["added"] or ov["removed"]:
-        print(f"Manual overrides: added {', '.join(ov['added']) or 'none'}; removed {', '.join(ov['removed']) or 'none'}")
+    if ov["added"] or ov["removed"] or ov["changed"]:
+        print(f"Manual overrides: added {', '.join(ov['added']) or 'none'}; "
+              f"removed {', '.join(ov['removed']) or 'none'}; changed {', '.join(ov['changed']) or 'none'}")
     for w in ov["warnings"]:
         print("Check override:", w, file=sys.stderr)
     if dataset["unresolved_articles"]:

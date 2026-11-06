@@ -45,9 +45,16 @@ Sources lag reality now and then, like a seasonal route Wikipedia drops while it
 ```
 
 * `add` puts in a route the sources are missing. `remove` takes one out, for one airline or, with no `airline`, the whole destination.
+* `set` changes the `kind` of a route Wikipedia already lists, for one airline. Use it when Wikipedia's label is wrong, like a seasonal route listed as year round:
+
+  ```json
+  { "action": "set", "iata": "AZA", "airline": "Allegiant Air", "kind": "seasonal",
+    "reason": "BTS shows February to August flights only", "review_by": "2027-09-01" }
+  ```
+
 * `reason` is required, so future you knows why it's there.
-* Each run warns when an override looks stale: Wikipedia caught up, or `review_by` has passed.
-* Manual rows are marked `"source": "manual"` in the output, so the app can tell them apart.
+* Each run warns when an override looks stale: Wikipedia caught up, the route it changes is gone, or `review_by` has passed.
+* Manual rows are marked `"source": "manual"` in the output, and a changed kind is marked `"kind_source": "manual"`, so the app can tell them apart.
 
 ### Known limits
 
