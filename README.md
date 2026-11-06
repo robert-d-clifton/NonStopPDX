@@ -73,6 +73,14 @@ Raw flights and the comparison stay in `data/raw/`, which git ignores.
 
 OpenSky's arrival airports are estimates, and flights often get logged at a small airfield near the real destination. So the check only flags routes for a manual look against FlyPDX, and never adds or removes a route. It compares airports, not airlines. OpenSky's terms are noncommercial.
 
+### Destination stories
+
+Each destination has a story file in `stories/`, named by airport code. They start as placeholders and get written by hand over time. `stories/README.md` explains the fields.
+
+```sh
+python3 -m sync.seed_stories   # adds placeholders for new destinations, never overwrites
+```
+
 ## Hosting (planned)
 
 Nothing is hosted yet. Test hosting will be one Docker Compose project on a home server, with its own Cloudflare Tunnel and a Cloudflare Access login in front of it. That opens no router ports and keeps the site private while it's in testing. The site reads only from our own store, so it can move to another host later. Before going public, the data licenses need another look, especially OpenSky's noncommercial terms.
