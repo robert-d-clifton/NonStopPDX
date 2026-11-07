@@ -7,7 +7,7 @@
       "city": "New Orleans",
       "airline": "Alaska Airlines",
       "kind": "seasonal",
-      "reason": "Seasonal route, paused right now, so Wikipedia dropped it. FlyPDX still lists it.",
+      "reason": "Seasonal route, paused right now, so Wikipedia dropped it. BTS shows flights from January to May in 2025 and 2026.",
       "added": "2026-11-03",
       "review_by": "2027-02-01"
     },
@@ -20,6 +20,34 @@
       "reason": "Wikipedia says year round, but BTS on time data shows flights only from about February to August in 2024, 2025 and 2026. See docs/exceptions.md.",
       "added": "2026-11-06",
       "review_by": "2027-09-01"
+    },
+    {
+      "action": "add",
+      "iata": "HNL",
+      "city": "Honolulu",
+      "airline": "Alaska Airlines",
+      "kind": "year-round",
+      "reason": "Wikipedia lists only Hawaiian Airlines. FlyPDX lists Alaska too, and BTS shows about 80 Alaska flights a month since January 2026, when Hawaiian's reported flights stopped.",
+      "added": "2026-11-07",
+      "review_by": "2027-05-01"
+    },
+    {
+      "action": "add",
+      "iata": "PHL",
+      "city": "Philadelphia",
+      "airline": "Alaska Airlines",
+      "kind": "seasonal",
+      "reason": "Missing from Wikipedia. FlyPDX lists it as seasonal, and BTS shows daily flights since May 2026.",
+      "added": "2026-11-07",
+      "review_by": "2027-06-01"
+    },
+    {
+      "action": "remove",
+      "iata": "PHX",
+      "airline": "Frontier Airlines",
+      "reason": "Wikipedia still lists it, but FlyPDX doesn't, and BTS shows no flights since March 2026.",
+      "added": "2026-11-07",
+      "review_by": "2027-03-01"
     }
   ]
 }

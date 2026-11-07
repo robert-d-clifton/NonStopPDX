@@ -1,14 +1,18 @@
 {
   "origin": "PDX",
-  "generated_at": "2026-11-06T14:10:17+00:00",
+  "generated_at": "2026-11-07T14:40:16+00:00",
   "destination_count": 91,
-  "service_count": 129,
+  "service_count": 130,
   "unresolved_articles": [],
   "overrides": {
     "added": [
-      "MSY Alaska Airlines"
+      "MSY Alaska Airlines",
+      "HNL Alaska Airlines",
+      "PHL Alaska Airlines"
     ],
-    "removed": [],
+    "removed": [
+      "PHX Frontier Airlines"
+    ],
     "changed": [
       "AZA Allegiant Air year-round to seasonal"
     ],
@@ -1070,12 +1074,6 @@
           "source": "wikipedia"
         },
         {
-          "airline": "Frontier Airlines",
-          "airline_article": "Frontier Airlines",
-          "kind": "year-round",
-          "source": "wikipedia"
-        },
-        {
           "airline": "Southwest Airlines",
           "airline_article": "Southwest Airlines",
           "kind": "year-round",
@@ -1869,6 +1867,12 @@
           "airline_article": "American Airlines",
           "kind": "seasonal",
           "source": "wikipedia"
+        },
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "seasonal",
+          "source": "manual"
         }
       ],
       "year_round": false,
@@ -2041,6 +2045,12 @@
           "airline_article": "Hawaiian Airlines",
           "kind": "year-round",
           "source": "wikipedia"
+        },
+        {
+          "airline": "Alaska Airlines",
+          "airline_article": "Alaska Airlines",
+          "kind": "year-round",
+          "source": "manual"
         }
       ],
       "year_round": true,

@@ -1,14 +1,74 @@
 # Known differences from FlyPDX
 
-Checked 2026-11-03 against https://www.flypdx.com/NonstopDestinations
-using Wikipedia revision 1382252995. Both lists have 90 destinations.
+FlyPDX's [nonstop page](https://www.flypdx.com/NonstopDestinations) is our validation
+source, checked by hand. Where we have real evidence that it's wrong or behind, like
+BTS flight counts, the evidence wins and the difference is written down here.
 
-| Code | City | Where it shows up | Why |
-|------|------|-------------------|-----|
-| HDN | Hayden | Wikipedia only | Future route, Alaska begins February 11, 2027. Expected. |
-| MSY | New Orleans | FlyPDX only | Alaska seasonal route, paused right now. Added through data/overrides.json, review by 2027-02-01. |
+For the Phase 0 gate, differences in destinations and airlines count. Differences in
+season labels are recorded but don't block it.
 
-SeaPort Airlines (RDM, BFI) is confirmed by FlyPDX, so it's not an exception.
+BTS means the on time flight data from the Bureau of Transportation Statistics, which
+covers US airlines' domestic flights only, January 2024 to August 2026 as of this check.
+
+## Airline check, 2026-11-07
+
+Compared against Wikipedia revision 1382252995 plus overrides.
+
+### Fixed with overrides
+
+| Code | City | Airline | Change | Evidence |
+|------|------|---------|--------|----------|
+| HNL | Honolulu | Alaska Airlines | Added | FlyPDX lists it. BTS shows about 80 flights a month since January 2026. |
+| PHL | Philadelphia | Alaska Airlines | Added, seasonal | FlyPDX lists it. BTS shows daily flights since May 2026. |
+| PHX | Phoenix | Frontier Airlines | Removed | FlyPDX doesn't list it. No BTS flights since March 2026. |
+
+### Off season, so FlyPDX doesn't list them right now
+
+FlyPDX appears to drop seasonal routes while they're off season. We keep them, since
+the app should show seasonal routes year round.
+
+| Code | City | Airline | When BTS shows flights |
+|------|------|---------|------------------------|
+| ATW | Appleton | Allegiant Air | About May to October |
+| CVG | Cincinnati | Allegiant Air | About May to October |
+| DSM | Des Moines | Allegiant Air | About May to October |
+| FNT | Flint | Allegiant Air | About June to September |
+| GRR | Grand Rapids | Allegiant Air | About May to August |
+| IND | Indianapolis | Allegiant Air | About June to September |
+| IDA | Idaho Falls | Allegiant Air | Winter and summer, off in spring and fall |
+| MSY | New Orleans | Alaska Airlines | January to May, added through an override |
+
+### Still open
+
+| Code | City | Airline | Difference | What we know |
+|------|------|---------|------------|--------------|
+| AUS | Austin | Southwest Airlines | FlyPDX only | No BTS flights at all, so possibly a new route. |
+| BNA | Nashville | Southwest Airlines | FlyPDX only | 9 BTS flights in summer 2025, none since. |
+| BUR | Burbank | Southwest Airlines | Wikipedia only | Last BTS flights November 2025 to January 2026, so it may return for the holidays. |
+| RDM | Redmond | SeaPort Airlines | Wikipedia only | FlyPDX listed it on 2026-11-03 but not on 2026-11-07. Not in BTS. |
+| HDN | Hayden | Alaska Airlines | Listed by both | Future route, begins February 11, 2027. |
+
+### Season labels that disagree
+
+Recorded only, not overridden. BTS checks the domestic ones.
+
+| Code | City | Airline | Ours | FlyPDX | BTS |
+|------|------|---------|------|--------|-----|
+| ATL | Atlanta | Alaska Airlines | Year round | Seasonal | Gap in January and February each year |
+| IAD | Washington Dulles | United Airlines | Year round | Seasonal | Gap in January and February each year |
+| EWR | Newark | United Airlines | Year round | Seasonal | Daily all year, twice daily in summer |
+| MCI | Kansas City | Alaska Airlines | Year round | Seasonal | Every month since starting in August 2025 |
+| LIH | Lihue | Alaska Airlines | Year round | Seasonal | Off June to October 2025, daily all of 2026 so far |
+| PVU | Provo | Allegiant Air | Year round | Seasonal | Almost every month, gap in March and April 2026 |
+| MSP | Minneapolis | Sun Country Airlines | Year round | Seasonal | Not in BTS |
+| YVR | Vancouver | Alaska Airlines | Year round | Seasonal | Not in BTS |
+| KEF | Reykjavík | Icelandair | Seasonal | Year round | Not in BTS |
+| BFI | Seattle Boeing Field | SeaPort Airlines | Year round | Seasonal | Not in BTS |
+
+## Destination check, 2026-11-03
+
+Both lists had 90 destinations. Hayden (future route) was on Wikipedia only, and New
+Orleans (paused seasonal route) was on FlyPDX only, so it was added through an override.
 
 # OpenSky hand check
 
