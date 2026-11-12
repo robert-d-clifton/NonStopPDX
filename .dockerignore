@@ -1,0 +1,9 @@
+.git
+.venv
+.cache
+.env
+data/raw
+design
+staticfiles
+**/__pycache__
+*.pyc

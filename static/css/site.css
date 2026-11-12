@@ -1,0 +1,87 @@
+/* NonStopPDX. Settled in design study 4: glass, steel and concrete as the base, carpet teal as the
+   signature, fir, moss and timber as nature accents, signal orange on maps only. */
+:root {
+  --bg: #F3F5F5; --surface: #FFFFFF; --ink: #17242B; --muted: #56656D; --line: #D5DCDF;
+  --teal: #0E7C80; --aqua: #5CC3CC; --violet: #6E58A3; --lime: #B3C63F;
+  --glass: #2D6FA8; --steel: #7D8A91; --fir: #2F5E4F; --moss: #7AA65A; --timber: #B98B5E; --signal: #E0582F;
+  --lagoon: #2E9FB0;
+  --row-a: #E6F2EC; --row-b: #E4EEF6; --board-ink: #17242B;
+  --tile: #1E2C33; --tile-ink: #F2F6F7;
+  --band: #0B5F63; --band-ink: #F2F7F7; --band-muted: #BCDADA;
+  --display: "Jost", "Futura", "Century Gothic", "Avenir Next", sans-serif;
+  --body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --cond: "IBM Plex Sans Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --mono: "IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0F181D; --surface: #162329; --ink: #E7EEF0; --muted: #9AABB2; --line: #2A3A42;
+    --teal: #3FB2B6; --aqua: #6FD0D8; --violet: #9C86D4; --lime: #C3D45A;
+    --glass: #6EA6D8; --steel: #8E9BA2; --fir: #6FA68E; --moss: #93BE72; --timber: #D0A577; --signal: #F07548;
+    --lagoon: #5CC3CC;
+    --row-a: #17302A; --row-b: #172A38; --board-ink: #E7EEF0;
+    --tile: #0A1115; --tile-ink: #F2F6F7;
+    --band: #0B3A3D; --band-ink: #F2F7F7; --band-muted: #A9CACA;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.55; }
+a { color: var(--teal); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.08; text-wrap: balance; margin: 0; }
+h2 { font-size: clamp(30px, 4.6vw, 42px); letter-spacing: 0.01em; }
+p { margin: 0; }
+.eyebrow { font-family: var(--mono); font-weight: 500; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+:focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; }
+
+/* logo A: wide capitals with the carpet crisscross as the hyphen */
+.logo { font-family: var(--display); font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); text-decoration: none; white-space: nowrap; }
+.logo b { font-weight: 600; color: var(--teal); }
+.x { display: inline-block; width: 0.62em; height: 0.62em; vertical-align: 0.06em; margin-inline: 0.06em; --x1: var(--teal); --x2: var(--violet); }
+
+.top { padding-block: 18px; display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
+.top .logo { font-size: 21px; }
+.top nav { display: flex; gap: 18px; font-size: 15px; }
+.top nav a { color: var(--muted); text-decoration: none; }
+.top nav a:hover, .top nav a[aria-current="page"] { color: var(--ink); }
+
+.intro { padding-block: 40px 8px; display: grid; gap: 12px; }
+.intro p { font-size: clamp(18px, 2.2vw, 21px); color: var(--muted); max-width: 52ch; }
+
+/* full width teal band, edged with carpet */
+.band { background: var(--band); color: var(--band-ink); margin-top: 40px; }
+.band .edge { display: block; width: 100%; height: 14px; }
+.band-inner { padding-block: 40px 56px; display: grid; gap: 20px; }
+.band h2 { color: var(--band-ink); }
+.band .eyebrow, .band .lede { color: var(--band-muted); }
+
+/* departures board, after the PDX flight boards */
+.fids { border-radius: 10px; overflow: hidden; border: 1px solid var(--line); background: var(--surface); }
+.fids .bar { background: var(--tile); color: #FFFFFF; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 12px 18px; }
+.fids .bar h3 { font-family: var(--display); font-weight: 500; font-size: 26px; letter-spacing: 0.04em; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.tabs a { color: #FFFFFF; text-decoration: none; border: 1px solid rgba(255,255,255,0.55); border-radius: 999px; padding: 5px 12px; font-size: 14px; font-weight: 500; }
+.tabs a[aria-current="true"] { background: #FFFFFF; color: var(--tile); border-color: #FFFFFF; }
+.fids-scroll { overflow-x: auto; }
+.fids table { width: 100%; border-collapse: collapse; font-family: var(--cond); font-size: 17px; min-width: 640px; color: var(--board-ink); }
+.fids th { text-align: left; font-family: var(--mono); font-weight: 500; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding: 10px 14px; background: var(--surface); }
+.fids td { padding: 9px 14px; white-space: nowrap; }
+.fids tbody tr:nth-child(odd) { background: var(--row-a); }
+.fids tbody tr:nth-child(even) { background: var(--row-b); }
+.fids td.rg { width: 26px; padding-right: 0; }
+.rowdot { display: block; width: 12px; height: 12px; border-radius: 50%; }
+.fids td.code { font-family: var(--mono); font-weight: 600; letter-spacing: 0.04em; }
+.fids td.city { font-weight: 600; }
+.fids td.num, .fids th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.st { font-family: var(--mono); font-weight: 600; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }
+.st.yr { color: var(--fir); } .st.se { color: var(--glass); } .st.soon { color: var(--violet); }
+.fids .foot { background: var(--tile); color: var(--tile-ink); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 10px 18px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+.empty { padding: 28px 18px; color: var(--muted); }
+
+footer { padding-block: 28px 56px; color: var(--muted); font-size: 14px; display: grid; gap: 6px; }
+footer a { color: inherit; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }

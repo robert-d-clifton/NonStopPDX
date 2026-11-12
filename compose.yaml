@@ -1,0 +1,47 @@
+# NonStopPDX, one Compose project: the Django site, PostgreSQL and the weekly sync.
+# Settings come from .env (copy .env.example to start). The code folder is mounted
+# into the containers, so code changes show up without a rebuild while developing.
+
+name: nonstoppdx
+
+x-app: &app
+  build: .
+  env_file: .env
+  environment:
+    POSTGRES_HOST: db
+  user: "${UID:-1000}:${GID:-1000}"
+  volumes:
+    - .:/app
+  depends_on:
+    db:
+      condition: service_healthy
+  restart: unless-stopped
+
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-nonstoppdx}
+      POSTGRES_USER: ${POSTGRES_USER:-nonstoppdx}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  web:
+    <<: *app
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2 --reload
+    ports:
+      - "${WEB_BIND:-127.0.0.1:8000}:8000"
+
+  scheduler:
+    <<: *app
+    command: python manage.py run_scheduler
+
+volumes:
+  pgdata:

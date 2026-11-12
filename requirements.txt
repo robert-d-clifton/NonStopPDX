@@ -1,0 +1,10 @@
+# Pinned versions, resolved in a python:3.12-slim container on 2026-11-12.
+Django==5.2.19
+asgiref==3.13.0
+sqlparse==0.6.1
+psycopg==3.2.13
+psycopg-binary==3.2.13
+typing_extensions==4.16.0
+gunicorn==23.0.0
+packaging==26.3
+whitenoise==6.8.2

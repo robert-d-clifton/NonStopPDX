@@ -1,0 +1,47 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{% block title %}NonStopPDX{% endblock %}</title>
+  <meta name="description" content="Every place you can fly nonstop from Portland International Airport.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+</head>
+<body>
+  <header class="wrap top">
+    <a class="logo" href="{% url 'routes:departures' %}" aria-label="NonStopPDX home">Non<svg class="x" viewBox="0 0 24 24" aria-hidden="true"><use href="#xmark"/></svg>Stop <b>PDX</b></a>
+    <nav aria-label="Main">
+      <a href="{% url 'routes:departures' %}" {% if request.resolver_match.url_name == 'departures' %}aria-current="page"{% endif %}>Departures</a>
+      {% if user.is_staff %}<a href="{% url 'admin:index' %}">Admin</a>{% endif %}
+    </nav>
+  </header>
+
+  {% block content %}{% endblock %}
+
+  <footer class="wrap">
+    <div>Routes from <a href="https://en.wikipedia.org/wiki/Portland_International_Airport">Wikipedia</a> (CC BY SA) with our own fixes, and airports from <a href="https://ourairports.com/data/">OurAirports</a>. Flight times are estimates.</div>
+    <div>A personal project, not affiliated with the Port of Portland.</div>
+  </footer>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="xmark" viewBox="0 0 24 24">
+        <rect x="1" y="9.4" width="22" height="5.2" rx="1.2" style="fill:var(--x1)" transform="rotate(-22 12 12)"/>
+        <rect x="4.5" y="9.8" width="15" height="4.4" rx="1.2" style="fill:var(--x2)" transform="rotate(38 12 12)"/>
+      </symbol>
+      <pattern id="carpet" width="64" height="14" patternUnits="userSpaceOnUse">
+        <rect width="64" height="14" style="fill:var(--teal)"/>
+        <rect x="4" y="6" width="20" height="2" style="fill:var(--aqua)" transform="rotate(-22 14 7)"/>
+        <rect x="9" y="6.2" width="12" height="1.6" style="fill:var(--lime)" transform="rotate(38 15 7)"/>
+        <rect x="36" y="6" width="18" height="2" style="fill:var(--aqua)" transform="rotate(-22 45 7)"/>
+        <rect x="41" y="6.2" width="10" height="1.6" style="fill:var(--violet)" transform="rotate(38 46 7)"/>
+        <rect x="28" y="2" width="2.4" height="2.4" style="fill:var(--violet)"/>
+        <rect x="58" y="9" width="2.4" height="2.4" style="fill:var(--lime)"/>
+      </pattern>
+    </defs>
+  </svg>
+</body>
+</html>

@@ -2,6 +2,40 @@
 
 Explore every nonstop destination from Portland International Airport (PDX).
 
+## Running the site
+
+NonStopPDX is a Django site backed by PostgreSQL, run with Docker Compose. Everything runs in containers, so the host only needs Docker.
+
+```sh
+cp .env.example .env            # then fill in a secret key and a database password
+docker compose up -d db
+docker compose run --rm web python manage.py migrate
+docker compose run --rm web python manage.py createsuperuser
+docker compose run --rm web python manage.py sync_routes       # routes from Wikipedia into the database
+docker compose run --rm web python manage.py import_stories    # stories/*.md into the database
+docker compose up -d                                           # the site, plus the weekly scheduler
+docker compose run --rm web python manage.py test              # all tests, against PostgreSQL
+```
+
+The site listens on `WEB_BIND` from `.env` (127.0.0.1:8000 unless you change it). The admin site is at `/admin/`.
+
+| Service | What it does |
+|---------|--------------|
+| `db` | PostgreSQL 17, with its data in the `pgdata` volume |
+| `web` | Django under gunicorn. The code folder is mounted, so changes show up without a rebuild. |
+| `scheduler` | Runs `sync_routes`, then `sync_opensky`, whenever the last good run is older than `SYNC_INTERVAL_HOURS` |
+
+### Management commands
+
+| Command | What it does |
+|---------|--------------|
+| `sync_routes` | Pulls Wikipedia and OurAirports into the database, applying overrides. Routes that disappear are turned off, not deleted. `--write-files` also refreshes `data/routes.json` and `data/routes.csv`. |
+| `sync_opensky` | Stores a week of observed departures per destination. Needs the OpenSky settings in `.env`. |
+| `import_overrides` / `export_overrides` | `data/overrides.json` is the source of truth. Import loads it into the database; export writes admin site changes back so they can be committed. |
+| `import_stories` / `export_stories` | The same, for `stories/*.md`. |
+
+Every sync run is recorded in the admin site under Sync runs, with its warnings.
+
 ## Data sync (proof of concept)
 
 `sync/pdx_routes.py` builds the route dataset from free sources:
@@ -14,7 +48,7 @@ It uses only the Python standard library, so there's nothing to install.
 
 ```sh
 python3 -m sync.pdx_routes        # writes data/routes.json and data/routes.csv
-python3 -m unittest               # parser tests, no network needed
+python3 -m unittest discover -s tests -t .   # parser tests, no Django or network needed
 ```
 
 ### Output
