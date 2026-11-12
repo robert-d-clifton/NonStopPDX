@@ -1,0 +1,586 @@
+<title>NonStopPDX Design Study</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@300;400;900&family=Jost:wght@400;500;600&family=JetBrains+Mono:wght@700&display=swap">
+<style>
+/* Layout: a column of terminal "boards", each a design question, separated by thin carpet bands.
+   Two palettes: Terminal (wood, forest, steel) and Poster (map blue, pink, mustard). */
+:root {
+  --bg: #ECEFE8; --surface: #FAFAF5; --ink: #1E2A25; --muted: #5A6962; --line: #CBD2C8;
+  --accent: #2E5C45; --accent-2: #C0864E; --warm: #DC7438;
+  --ocean: #C6DCD8; --land: #E3D7C2; --lake: #C6DCD8; --ring: #9DB6B1;
+  --spoke: #2E5C45; --dot: #1E2A25; --tree-a: #2E5C45; --tree-b: #86A35A; --tree-c: #C0864E;
+  --board: #1D2521; --flap: #F1ECDD; --flap-dim: #8F9A92;
+  --carpet: #136B6B; --carpet-a: #6B4E9B; --carpet-b: #B9C93A; --carpet-c: #79C2D0;
+  --display: "Londrina Solid", "Arial Rounded MT Bold", "Trebuchet MS", sans-serif;
+  --body: "Jost", "Futura", "Century Gothic", "Avenir Next", sans-serif;
+  --mono: "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+}
+:root[data-palette="poster"] {
+  --bg: #F2F3F0; --surface: #FFFFFF; --ink: #1B2A33; --muted: #566771; --line: #D3D8D6;
+  --accent: #3C6A80; --accent-2: #E85D92; --warm: #EB7A2F;
+  --ocean: #3C6A80; --land: #DAD2CA; --lake: #3C6A80; --ring: #6F94A6;
+  --spoke: #E85D92; --dot: #1B2A33; --tree-a: #4AA3A6; --tree-b: #7FA33A; --tree-c: #EB7A2F;
+  --board: #2F5568; --flap: #F6F1E4; --flap-dim: #A9C2CE;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #131A17; --surface: #1B2420; --ink: #E7ECE5; --muted: #9AA9A1; --line: #2F3B35;
+    --accent: #86C2A0; --accent-2: #D9A46D; --warm: #F08A4B;
+    --ocean: #1C3231; --land: #39392F; --lake: #1C3231; --ring: #355452;
+    --spoke: #9AD6B4; --dot: #E7ECE5; --tree-a: #5E9C7C; --tree-b: #9DBB6E; --tree-c: #D9A46D;
+    --board: #0C110F; --flap: #F1ECDD; --flap-dim: #6E7A73;
+    color-scheme: dark;
+  }
+  :root[data-palette="poster"]:not([data-theme="light"]) {
+    --bg: #122028; --surface: #192C36; --ink: #EDF2F3; --muted: #9EB3BC; --line: #2B4250;
+    --accent: #8CC6DE; --accent-2: #F07AA8; --warm: #F28C45;
+    --ocean: #213F4F; --land: #4A5A61; --lake: #213F4F; --ring: #36596B;
+    --spoke: #F07AA8; --dot: #EDF2F3; --tree-a: #4FB3B6; --tree-b: #93B84C; --tree-c: #F28C45;
+    --board: #0E1C24; --flap: #F6F1E4; --flap-dim: #6F8C99;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #131A17; --surface: #1B2420; --ink: #E7ECE5; --muted: #9AA9A1; --line: #2F3B35;
+  --accent: #86C2A0; --accent-2: #D9A46D; --warm: #F08A4B;
+  --ocean: #1C3231; --land: #39392F; --lake: #1C3231; --ring: #355452;
+  --spoke: #9AD6B4; --dot: #E7ECE5; --tree-a: #5E9C7C; --tree-b: #9DBB6E; --tree-c: #D9A46D;
+  --board: #0C110F; --flap: #F1ECDD; --flap-dim: #6E7A73;
+  color-scheme: dark;
+}
+:root[data-theme="dark"][data-palette="poster"] {
+  --bg: #122028; --surface: #192C36; --ink: #EDF2F3; --muted: #9EB3BC; --line: #2B4250;
+  --accent: #8CC6DE; --accent-2: #F07AA8; --warm: #F28C45;
+  --ocean: #213F4F; --land: #4A5A61; --lake: #213F4F; --ring: #36596B;
+  --spoke: #F07AA8; --dot: #EDF2F3; --tree-a: #4FB3B6; --tree-b: #93B84C; --tree-c: #F28C45;
+  --board: #0E1C24; --flap: #F6F1E4; --flap-dim: #6F8C99;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.55; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--display); font-weight: 900; letter-spacing: 0.01em; line-height: 1.02; text-wrap: balance; margin: 0; }
+h2 { font-size: clamp(30px, 5vw, 44px); text-transform: uppercase; }
+h3 { font-size: 28px; text-transform: uppercase; }
+p { margin: 0; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--warm); outline-offset: 2px; }
+
+/* top bar */
+.top { padding-block: 18px; display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--display); font-weight: 900; font-size: 22px; letter-spacing: 0.02em; }
+.brand span { color: var(--accent-2); }
+.switch { display: inline-flex; gap: 4px; padding: 4px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); }
+.switch button { border: 0; background: transparent; padding: 7px 14px; border-radius: 999px; cursor: pointer; font-weight: 500; font-size: 15px; }
+.switch button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.switch-label { font-size: 14px; color: var(--muted); margin-right: 6px; }
+
+/* carpet band, a nod to the 1987 PDX carpet */
+.carpet { height: 16px; margin-block: 56px; border-radius: 3px; overflow: hidden; }
+.carpet svg { display: block; width: 100%; height: 16px; }
+
+/* hero */
+.hero { display: grid; gap: 22px; padding-block: 28px 8px; }
+.hero p.lede { font-size: clamp(18px, 2.4vw, 22px); max-width: 38ch; color: var(--ink); }
+.hero .row { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+
+/* split flap */
+.board { background: var(--board); border-radius: 10px; padding: 14px; display: inline-grid; gap: 8px; max-width: 100%; overflow-x: auto; }
+.flaps { display: flex; gap: 4px; }
+.flap { position: relative; display: inline-grid; place-items: center; width: 1.05em; height: 1.45em; background: color-mix(in srgb, var(--board) 82%, #ffffff); border-radius: 0.12em; color: var(--flap); font-family: var(--mono); font-weight: 700; line-height: 1; }
+.flap::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: var(--board); opacity: 0.85; }
+.flap.dim { color: var(--flap-dim); }
+.hero .board { font-size: clamp(30px, 7.4vw, 66px); }
+.hero .board .small { font-size: 0.34em; }
+.ghost { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 8px 16px; cursor: pointer; font-weight: 500; font-size: 15px; }
+.ghost:hover { border-color: var(--ink); }
+
+/* sections */
+section { display: grid; gap: 22px; }
+.head { display: grid; gap: 10px; max-width: 64ch; }
+.head p { color: var(--muted); }
+.react { background: var(--surface); border: 1px dashed var(--line); border-radius: 12px; padding: 16px 18px; display: grid; gap: 8px; font-size: 16px; }
+.react strong { font-family: var(--display); font-weight: 400; font-size: 20px; text-transform: uppercase; letter-spacing: 0.02em; color: var(--accent); }
+.react ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+
+/* overview map */
+.overview { display: grid; gap: 24px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+@media (min-width: 900px) { .overview { grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr); } }
+.disc { width: 100%; max-width: 760px; aspect-ratio: 1 / 1; display: block; margin-inline: auto; }
+.side { display: grid; gap: 18px; }
+.tabs { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+.tabs button { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 7px 14px; cursor: pointer; font-weight: 500; font-size: 15px; }
+.tabs button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.legend { display: grid; gap: 8px; font-size: 15px; color: var(--muted); }
+.legend div { display: flex; gap: 10px; align-items: center; }
+.legend svg { flex: none; }
+.readout { background: var(--board); color: var(--flap); border-radius: 12px; padding: 16px; display: grid; gap: 10px; }
+.readout .board { padding: 0; font-size: 30px; background: transparent; }
+.readout .meta { font-family: var(--mono); font-size: 13px; letter-spacing: 0.06em; color: var(--flap-dim); text-transform: uppercase; }
+.readout .name { font-family: var(--display); font-size: 26px; text-transform: uppercase; line-height: 1.05; }
+
+svg text.label { font-family: var(--display); font-weight: 400; text-transform: uppercase; fill: var(--ink); paint-order: stroke; stroke: var(--ocean); stroke-width: 4px; stroke-linejoin: round; letter-spacing: 0.03em; }
+svg text.ringlabel { font-family: var(--mono); font-size: 11px; fill: var(--ring); letter-spacing: 0.1em; }
+.ocean { fill: var(--ocean); }
+.land { fill: var(--land); }
+.lake { fill: var(--lake); }
+.ring { fill: none; stroke: var(--ring); stroke-width: 1; stroke-dasharray: 2 5; }
+.spoke { fill: none; stroke: var(--spoke); stroke-width: 1.6; stroke-linecap: round; opacity: 0.9; }
+.spoke.seasonal { stroke-dasharray: 5 5; opacity: 0.75; }
+.spoke.on { stroke: var(--warm); stroke-width: 3.2; opacity: 1; }
+.dest { fill: var(--dot); cursor: pointer; }
+.dest.on { fill: var(--warm); }
+.hit { fill: transparent; cursor: pointer; }
+.pdx-dot { fill: var(--warm); stroke: var(--bg); stroke-width: 3; }
+.t-a { fill: var(--tree-a); } .t-b { fill: var(--tree-b); } .t-c { fill: var(--tree-c); }
+.trunk { fill: var(--accent-2); }
+
+/* destination cards */
+.cards { display: grid; gap: 24px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 820px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.card { background: var(--surface); border-radius: 18px; overflow: hidden; border: 1px solid var(--line); display: grid; }
+.card .map { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; background: var(--ocean); }
+.card .body { padding: 20px 22px 24px; display: grid; gap: 14px; }
+.card .titleline { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.card .titleline .board { font-size: 26px; padding: 8px; }
+.card h3 { font-size: clamp(30px, 4vw, 38px); }
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding-block: 12px; }
+.facts div { display: grid; gap: 2px; min-width: 0; }
+.facts .v { font-family: var(--display); font-size: 24px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.facts .k { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; gap: 8px; align-items: center; padding: 5px 12px; border-radius: 999px; background: var(--bg); font-size: 15px; font-weight: 500; }
+.chip i { font-style: normal; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.story { color: var(--muted); }
+.story em { font-style: normal; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-2); display: block; margin-bottom: 4px; }
+.routeline { fill: none; stroke: var(--spoke); stroke-width: 3.5; stroke-linecap: round; }
+.routeline.seasonal { stroke-dasharray: 8 7; }
+
+/* departures board */
+.departures { background: var(--board); border-radius: 14px; padding: 18px; display: grid; gap: 14px; overflow: hidden; }
+.departures .tabs button { background: transparent; color: var(--flap); border-color: color-mix(in srgb, var(--flap) 30%, transparent); }
+.departures .tabs button[aria-pressed="true"] { background: var(--flap); color: var(--board); border-color: var(--flap); }
+.dep-scroll { overflow-x: auto; }
+.dep { display: grid; gap: 6px; font-size: 19px; width: max-content; }
+.dep .hdr, .dep .row { display: grid; grid-template-columns: repeat(4, max-content); gap: 18px; align-items: center; }
+.dep .hdr { grid-template-columns: 64px 313px 294px 245px; }
+.dep .hdr { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--flap-dim); }
+.dep .flap { width: 0.98em; height: 1.4em; }
+.dep .status-seasonal .flap { color: var(--accent-2); }
+.dep .status-soon .flap { color: var(--warm); }
+.dep-note { font-size: 14px; color: var(--flap-dim); }
+
+footer { padding-block: 8px 56px; color: var(--muted); font-size: 14px; display: grid; gap: 6px; }
+footer a { color: inherit; }
+
+@media (max-width: 520px) {
+  .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .carpet { margin-block: 40px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<header class="wrap top">
+  <div class="brand">NonStop<span>PDX</span></div>
+  <div class="row" style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+    <span class="switch-label">Palette</span>
+    <div class="switch" role="group" aria-label="Palette">
+      <button type="button" id="pal-terminal" data-pal="terminal" aria-pressed="true">Terminal</button>
+      <button type="button" id="pal-poster" data-pal="poster" aria-pressed="false">Poster</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero" aria-labelledby="hero-title">
+    <span class="eyebrow">Design study 1 · Hand drawn Northwest, jet age details</span>
+    <h1 id="hero-title" class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">NonStopPDX</h1>
+    <div class="board" id="hero-board" aria-hidden="true"></div>
+    <p class="lede">Every place you can fly from Portland without a connection, and a little about each one.</p>
+    <div class="row">
+      <button type="button" class="ghost" id="flip-hero">Flip the board</button>
+      <span class="eyebrow" id="hero-count"></span>
+    </div>
+  </section>
+
+  <div class="carpet" aria-hidden="true"><svg><rect width="100%" height="100%" fill="url(#carpet)"/></svg></div>
+
+  <section aria-labelledby="map-title">
+    <div class="head">
+      <span class="eyebrow">1 · The overview map</span>
+      <h2 id="map-title">Spokes from PDX</h2>
+      <p>Centered on PDX, so every route is a straight spoke and the rings show true distance. Solid spokes fly year round, dashed ones are seasonal. Tap a dot to read it on the board.</p>
+    </div>
+    <div class="overview">
+      <svg class="disc" id="overview" viewBox="0 0 900 900" role="img" aria-label="Map centered on PDX with a spoke to each of its nonstop destinations"></svg>
+      <div class="side">
+        <div class="tabs" role="group" aria-label="Map zoom">
+          <button type="button" id="zoom-world" data-zoom="world" aria-pressed="true">Everywhere</button>
+          <button type="button" id="zoom-west" data-zoom="west" aria-pressed="false">The West, up close</button>
+        </div>
+        <div class="readout" aria-live="polite">
+          <div class="meta">Selected destination</div>
+          <div class="board" id="readout-code" aria-hidden="true"></div>
+          <div class="name" id="readout-name"></div>
+          <div class="meta" id="readout-meta"></div>
+        </div>
+        <div class="legend">
+          <div><svg width="44" height="10" aria-hidden="true"><line x1="2" y1="5" x2="42" y2="5" class="spoke"/></svg>Year round</div>
+          <div><svg width="44" height="10" aria-hidden="true"><line x1="2" y1="5" x2="42" y2="5" class="spoke seasonal"/></svg>Seasonal</div>
+          <div><svg width="44" height="10" aria-hidden="true"><line x1="2" y1="5" x2="42" y2="5" class="ring"/></svg>Every 1,000 miles from PDX</div>
+        </div>
+        <div class="react">
+          <strong>React to this</strong>
+          <ul>
+            <li>Round map centered on PDX, or a familiar flat map with curved routes?</li>
+            <li>Does the zoom solve the crowding in the West, or should it be one map?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="carpet" aria-hidden="true"><svg><rect width="100%" height="100%" fill="url(#carpet)"/></svg></div>
+
+  <section aria-labelledby="cards-title">
+    <div class="head">
+      <span class="eyebrow">2 · Destination pages</span>
+      <h2 id="cards-title">One route, one story</h2>
+      <p>The top of a destination page: its own route map, the quick facts, and the start of its story. A short hop and a long haul, to show how the map frames itself.</p>
+    </div>
+    <div class="cards" id="cards"></div>
+    <div class="react">
+      <strong>React to this</strong>
+      <ul>
+        <li>Should the little drawing at the end of the route be a bigger star of the page?</li>
+        <li>Is this the right amount of facts up top, or should the story lead?</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="carpet" aria-hidden="true"><svg><rect width="100%" height="100%" fill="url(#carpet)"/></svg></div>
+
+  <section aria-labelledby="dep-title">
+    <div class="head">
+      <span class="eyebrow">3 · The list view</span>
+      <h2 id="dep-title">Departures board</h2>
+      <p>The destination list as a split flap board. Filters flip the letters, the way the old boards did.</p>
+    </div>
+    <div class="departures">
+      <div class="tabs" role="group" aria-label="Filter destinations">
+        <button type="button" id="f-far" data-f="far" aria-pressed="true">Farthest</button>
+        <button type="button" id="f-seasonal" data-f="seasonal" aria-pressed="false">Seasonal</button>
+        <button type="button" id="f-intl" data-f="intl" aria-pressed="false">International</button>
+        <button type="button" id="f-soon" data-f="soon" aria-pressed="false">Starting soon</button>
+      </div>
+      <div class="dep-scroll">
+        <div class="dep" id="dep" aria-hidden="true">
+          <div class="hdr"><span>CODE</span><span>DESTINATION</span><span>AIRLINE</span><span>SERVICE</span></div>
+        </div>
+      </div>
+      <p class="dep-note" id="dep-note"></p>
+    </div>
+    <div class="react">
+      <strong>React to this</strong>
+      <ul>
+        <li>Fun, or too much motion? The flip could happen only once, when the page loads.</li>
+        <li>Terminal or Poster? Try the switch at the top with this board in view.</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="carpet" aria-hidden="true"><svg><rect width="100%" height="100%" fill="url(#carpet)"/></svg></div>
+</main>
+
+<footer class="wrap">
+  <div>Design study 1. Nothing here is final, and the stack is still to be chosen.</div>
+  <div id="asof"></div>
+  <div>Routes from Wikipedia (CC BY SA) with our own fixes, airports from OurAirports, coastlines from Natural Earth. The carpet band is a loose nod to the 1987 PDX carpet, not a copy of it.</div>
+</footer>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <pattern id="carpet" width="64" height="16" patternUnits="userSpaceOnUse">
+      <rect width="64" height="16" style="fill:var(--carpet)"/>
+      <rect x="4" y="7" width="22" height="2" style="fill:var(--carpet-c)"/>
+      <rect x="14" y="2" width="2" height="12" style="fill:var(--carpet-c)" transform="rotate(30 15 8)"/>
+      <rect x="34" y="3" width="10" height="2" style="fill:var(--carpet-b)"/>
+      <rect x="40" y="11" width="16" height="2" style="fill:var(--carpet-a)"/>
+      <rect x="50" y="2" width="2" height="9" style="fill:var(--carpet-b)" transform="rotate(-30 51 6)"/>
+      <rect x="30" y="10" width="3" height="3" style="fill:var(--carpet-a)"/>
+      <rect x="58" y="5" width="3" height="3" style="fill:var(--carpet-c)"/>
+    </pattern>
+    <filter id="wobble" x="-2%" y="-2%" width="104%" height="104%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="../shared/data.js"></script>
+<script>
+(function () {
+  const D = window.NSP;
+  const PDX = [-122.5975, 45.5887];
+  const EARTH_MI = 3958.8;
+  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const byCode = Object.fromEntries(D.dests.map(d => [d.c, d]));
+  const SHORT = { HNL: "Honolulu", LIH: "Lihue", FRA: "Frankfurt", CVG: "Cincinnati", IAD: "Dulles", DCA: "Washington", BFI: "Boeing Field", DFW: "Dallas Fort Worth", MDW: "Chicago Midway", ORD: "Chicago O'Hare", SJD: "Los Cabos" };
+  const nameOf = d => (SHORT[d.c] || d.n.split(",")[0]);
+  const plain = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "");
+
+  /* palette switch */
+  function setPalette(p) {
+    document.documentElement.dataset.palette = p;
+    document.querySelectorAll("[data-pal]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.pal === p)));
+    try { localStorage.setItem("nsp-palette", p); } catch (e) {}
+  }
+  let saved = null;
+  try { saved = localStorage.getItem("nsp-palette"); } catch (e) {}
+  setPalette(saved === "poster" ? "poster" : "terminal");
+  document.querySelectorAll("[data-pal]").forEach(b => b.addEventListener("click", () => setPalette(b.dataset.pal)));
+
+  /* split flap */
+  const CHARS = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  function flapRow(el, text, width, cls) {
+    let row = el;
+    text = plain(text.toUpperCase());
+    if (width) text = text.slice(0, width).padEnd(width, " ");
+    if (row.children.length !== text.length) {
+      row.innerHTML = "";
+      for (let i = 0; i < text.length; i++) {
+        const s = document.createElement("span");
+        s.className = "flap" + (cls ? " " + cls : "");
+        s.textContent = text[i] === " " ? " " : text[i];
+        row.appendChild(s);
+      }
+      return;
+    }
+    [...row.children].forEach((s, i) => {
+      const target = text[i];
+      const shown = target === " " ? " " : target;
+      if (reduce) { s.textContent = shown; return; }
+      let steps = 3 + ((i * 7) % 7);
+      const t = setInterval(() => {
+        if (--steps <= 0) { clearInterval(t); s.textContent = shown; return; }
+        s.textContent = CHARS[1 + Math.floor(Math.random() * (CHARS.length - 1))];
+      }, 45);
+    });
+  }
+  function makeRow(parent, cls) { const r = document.createElement("div"); r.className = "flaps" + (cls ? " " + cls : ""); parent.appendChild(r); return r; }
+
+  /* hero */
+  const hero = document.getElementById("hero-board");
+  const h1 = makeRow(hero), h2 = makeRow(hero), h3 = makeRow(hero, "small");
+  const intl = D.dests.filter(d => d.i).length;
+  const heroLines = [["NONSTOP", " PDX   ", `${D.dests.length} DESTINATIONS`], ["HELLO  ", "FROM PDX", `${intl} INTERNATIONAL`]];
+  let heroState = 0;
+  function drawHero(first) {
+    const [a, b, c] = heroLines[heroState];
+    flapRow(h1, a, 8); flapRow(h2, b, 8); flapRow(h3, c, 18, first ? "" : "");
+  }
+  drawHero(true);
+  document.getElementById("flip-hero").addEventListener("click", () => { heroState = 1 - heroState; drawHero(false); });
+  document.getElementById("hero-count").textContent = `${D.dests.length} destinations · ${intl} international`;
+  document.getElementById("asof").textContent = `Route data as of ${new Date(D.generated + "T12:00:00").toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}.`;
+
+  /* helpers */
+  const svgNS = "http://www.w3.org/2000/svg";
+  function tree(g, x, y, s, cls) {
+    const t = g.append("g").attr("transform", `translate(${x},${y}) scale(${s})`);
+    t.append("rect").attr("class", "trunk").attr("x", -1.6).attr("y", 0).attr("width", 3.2).attr("height", 7);
+    t.append("path").attr("class", cls).attr("d", "M0 -22 L9 0 L-9 0 Z");
+    t.append("path").attr("class", cls).attr("d", "M0 -30 L7 -12 L-7 -12 Z");
+  }
+  function minutes(mi) { return Math.round((mi / 8 + 30) / 5) * 5; }
+  function hm(m) { const h = Math.floor(m / 60), r = m % 60; return h ? `${h}h ${String(r).padStart(2, "0")}m` : `${r}m`; }
+
+  /* overview map */
+  const svg = d3.select("#overview");
+  const R = 430, C = 450;
+  const LABELS = {
+    world: ["LHR", "FRA", "AMS", "KEF", "HNL", "ANC", "FAI", "MEX", "GDL", "BOS", "MIA", "JFK", "CUN", "LIH", "ATL", "YYC"],
+    west: ["SEA", "PDT", "BOI", "SFO", "LAX", "LAS", "PHX", "SLC", "DEN", "YVR", "RNO", "SAN", "BZN", "MFR", "PSC", "SBA", "MSO"]
+  };
+  let selected = "KEF";
+  let zoom = "world";
+  function drawOverview() {
+    svg.selectAll("*").remove();
+    const maxDeg = zoom === "world" ? 74 : 16;
+    const proj = d3.geoAzimuthalEquidistant().rotate([-PDX[0], -PDX[1]]).translate([C, C])
+      .scale(R / (maxDeg * Math.PI / 180)).clipAngle(Math.min(179, maxDeg * 1.6)).precision(0.3);
+    const path = d3.geoPath(proj);
+    const defs = svg.append("defs");
+    defs.append("clipPath").attr("id", "disc-clip").append("circle").attr("cx", C).attr("cy", C).attr("r", R);
+    svg.append("circle").attr("class", "ocean").attr("cx", C).attr("cy", C).attr("r", R);
+    const g = svg.append("g").attr("clip-path", "url(#disc-clip)");
+    const landG = g.append("g").attr("filter", "url(#wobble)");
+    landG.selectAll("path.land").data(D.land.features).join("path").attr("class", "land").attr("d", path);
+    landG.selectAll("path.lake").data(D.lakes.features).join("path").attr("class", "lake").attr("d", path);
+    // distance rings
+    const step = zoom === "world" ? 1000 : 250;
+    const scale = proj.scale();
+    for (let mi = step; mi * (scale / EARTH_MI) < R; mi += step) {
+      const r = scale * (mi / EARTH_MI);
+      g.append("circle").attr("class", "ring").attr("cx", C).attr("cy", C).attr("r", r);
+      g.append("text").attr("class", "ringlabel").attr("x", C + 6).attr("y", C - r - 5).text(`${mi.toLocaleString("en-US")} MI`);
+    }
+    // spokes
+    const vis = D.dests.filter(d => { const p = proj([d.lon, d.lat]); return p && Math.hypot(p[0] - C, p[1] - C) < R - 4; });
+    g.selectAll("path.spoke").data(vis).join("path")
+      .attr("class", d => "spoke" + (d.y ? "" : " seasonal") + (d.c === selected ? " on" : ""))
+      .attr("d", d => path({ type: "LineString", coordinates: [PDX, [d.lon, d.lat]] }));
+    // trees around PDX
+    const tg = g.append("g");
+    [[-34, -14, 1.0, "t-a"], [-18, -34, 0.8, "t-b"], [26, -26, 0.9, "t-c"], [36, 6, 0.75, "t-a"], [-30, 26, 0.7, "t-b"]]
+      .forEach(([x, y, s, c]) => tree(tg, C + x, C + y, s, c));
+    // dots and labels
+    const dg = g.append("g");
+    vis.forEach(d => {
+      const [x, y] = proj([d.lon, d.lat]);
+      const node = dg.append("g").attr("tabindex", 0).attr("role", "button").attr("aria-label", `${nameOf(d)}, ${d.mi.toLocaleString("en-US")} miles`)
+        .on("click", () => select(d.c)).on("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(d.c); } });
+      node.append("circle").attr("class", "hit").attr("cx", x).attr("cy", y).attr("r", 11);
+      node.append("circle").attr("class", "dest" + (d.c === selected ? " on" : "")).attr("cx", x).attr("cy", y).attr("r", d.c === selected ? 6 : 3.6);
+      if (LABELS[zoom].includes(d.c) || d.c === selected) {
+        const right = x >= C;
+        dg.append("text").attr("class", "label").attr("x", x + (right ? 8 : -8)).attr("y", y + 5)
+          .attr("text-anchor", right ? "start" : "end").attr("font-size", d.c === selected ? 22 : 17).text(nameOf(d));
+      }
+    });
+    svg.append("circle").attr("class", "pdx-dot").attr("cx", C).attr("cy", C).attr("r", 8);
+    svg.append("text").attr("class", "label").attr("x", C + 12).attr("y", C + 26).attr("font-size", 26).text("PDX");
+  }
+  const roCode = document.getElementById("readout-code");
+  const roRow = makeRow(roCode);
+  function select(code) {
+    selected = code;
+    const d = byCode[code];
+    flapRow(roRow, code, 3);
+    document.getElementById("readout-name").textContent = nameOf(d);
+    const kinds = [...new Set(d.s.map(s => s.k.replace("-", " ")))].join(", ");
+    document.getElementById("readout-meta").textContent = `${d.mi.toLocaleString("en-US")} mi · about ${hm(minutes(d.mi))} · ${d.s.map(s => s.a).join(", ")} · ${kinds}`;
+    drawOverview();
+  }
+  document.querySelectorAll("[data-zoom]").forEach(b => b.addEventListener("click", () => {
+    zoom = b.dataset.zoom;
+    document.querySelectorAll("[data-zoom]").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    if (zoom === "west" && byCode[selected].mi > 1150) selected = "PDT";
+    if (zoom === "world" && byCode[selected].mi < 400) selected = "KEF";
+    select(selected);
+  }));
+  select(selected);
+
+  /* destination cards */
+  const ICONS = {
+    PDT: g => { // rolling wheat hills and a big sun
+      g.append("circle").attr("r", 16).attr("cx", 8).attr("cy", -26).style("fill", "var(--warm)");
+      g.append("path").attr("d", "M-34 6 Q-14 -14 6 2 T44 0 L44 14 L-34 14 Z").style("fill", "var(--tree-b)");
+      g.append("path").attr("d", "M-40 12 Q-16 -4 8 10 T48 8 L48 20 L-40 20 Z").style("fill", "var(--accent-2)");
+      [-18, -10, -2].forEach(x => g.append("path").attr("d", `M${x} 4 l0 -18 m0 2 l-4 -5 m4 9 l-4 -5 m4 9 l4 -5 m-4 -3 l4 -5`)
+        .style("stroke", "var(--ink)").attr("stroke-width", 1.6).attr("fill", "none").attr("stroke-linecap", "round"));
+    },
+    KEF: g => { // volcano peak and northern lights
+      g.append("path").attr("d", "M-40 -22 Q-20 -40 0 -26 T40 -30").style("stroke", "var(--tree-a)").attr("stroke-width", 6).attr("fill", "none").attr("stroke-linecap", "round");
+      g.append("path").attr("d", "M-36 -12 Q-16 -28 4 -16 T42 -20").style("stroke", "var(--accent-2)").attr("stroke-width", 4).attr("fill", "none").attr("stroke-linecap", "round");
+      g.append("path").attr("d", "M-38 16 L-8 -8 L2 0 L14 -12 L40 16 Z").style("fill", "var(--accent)");
+      g.append("path").attr("d", "M-8 -8 L-2 -3 L4 -5 L2 0 Z").style("fill", "var(--surface)");
+    }
+  };
+  const STORY = {
+    PDT: "Home of the Pendleton Round Up and the Pendleton woolen mills. The shortest hop on the board, on a small Boutique Air plane.",
+    KEF: "Icelandair's link to Reykjavík, and from there to the rest of Europe. One of only a handful of PDX routes across the Atlantic."
+  };
+  const cards = document.getElementById("cards");
+  ["PDT", "KEF"].forEach(code => {
+    const d = byCode[code];
+    const seasonal = !d.y;
+    const card = document.createElement("article");
+    card.className = "card";
+    card.innerHTML = `
+      <svg class="map" viewBox="0 0 640 400" role="img" aria-label="Route map from PDX to ${nameOf(d)}"></svg>
+      <div class="body">
+        <div class="titleline"><div class="board" aria-hidden="true"></div><h3>${nameOf(d)}</h3></div>
+        <div class="facts">
+          <div><span class="v">${d.mi.toLocaleString("en-US")} mi</span><span class="k">From PDX</span></div>
+          <div><span class="v">${hm(minutes(d.mi))}</span><span class="k">Estimated flight</span></div>
+          <div><span class="v">${seasonal ? "Seasonal" : "Year round"}</span><span class="k">Service</span></div>
+        </div>
+        <div class="chips">${d.s.map(s => `<span class="chip">${s.a}<i>${s.k.replace("-", " ")}</i></span>`).join("")}</div>
+        <p class="story"><em>Sample copy</em>${STORY[code]}</p>
+      </div>`;
+    cards.appendChild(card);
+    flapRow(makeRow(card.querySelector(".board")), code, 3);
+    const m = d3.select(card.querySelector("svg.map"));
+    const W = 640, H = 400;
+    const line = { type: "LineString", coordinates: [PDX, [d.lon, d.lat]] };
+    const midLon = (PDX[0] + d.lon) / 2;
+    const proj = d3.geoMercator().rotate([-midLon, 0]);
+    const pad = Math.max(60, 120 - d.mi / 60);
+    proj.fitExtent([[pad + 40, pad], [W - pad - 40, H - pad]], line);
+    const path = d3.geoPath(proj);
+    m.append("rect").attr("class", "ocean").attr("width", W).attr("height", H);
+    const lg = m.append("g").attr("filter", "url(#wobble)");
+    lg.selectAll("path.land").data(D.land.features).join("path").attr("class", "land").attr("d", path);
+    lg.selectAll("path.lake").data(D.lakes.features).join("path").attr("class", "lake").attr("d", path);
+    m.append("path").attr("class", "routeline" + (seasonal ? " seasonal" : "")).attr("d", path(line));
+    const a = proj(PDX), b = proj([d.lon, d.lat]);
+    const tg = m.append("g");
+    [[-30, -8, 0.9, "t-a"], [-16, -24, 0.7, "t-b"], [-42, 12, 0.65, "t-c"]].forEach(([x, y, s, c]) => tree(tg, a[0] + x, a[1] + y, s, c));
+    m.append("circle").attr("class", "pdx-dot").attr("cx", a[0]).attr("cy", a[1]).attr("r", 8);
+    m.append("text").attr("class", "label").attr("x", a[0]).attr("y", a[1] + 32).attr("text-anchor", "middle").attr("font-size", 24).text("PDX");
+    const ig = m.append("g").attr("transform", `translate(${b[0]},${b[1] - 34}) scale(1.35)`);
+    ICONS[code](ig);
+    m.append("circle").attr("cx", b[0]).attr("cy", b[1]).attr("r", 7).style("fill", "var(--warm)").style("stroke", "var(--bg)").attr("stroke-width", 3);
+    m.append("text").attr("class", "label").attr("x", b[0]).attr("y", b[1] + 32).attr("text-anchor", "middle").attr("font-size", 24).text(code);
+  });
+
+  /* departures board */
+  const dep = document.getElementById("dep");
+  const ROWS = 8;
+  const rows = [];
+  for (let i = 0; i < ROWS; i++) {
+    const r = document.createElement("div"); r.className = "row";
+    const cells = [0, 1, 2, 3].map(() => { const c = document.createElement("div"); c.className = "flaps"; r.appendChild(c); return c; });
+    dep.appendChild(r); rows.push({ r, cells });
+  }
+  function service(d) {
+    const soon = d.s.find(s => s.b);
+    if (soon) { const parts = soon.b.split(" "); return { t: (soon.r ? "BACK " : "FROM ") + parts[0].slice(0, 3) + " " + (parts[1] || "").replace(",", ""), cls: "status-soon" }; }
+    return d.y ? { t: "YEAR ROUND", cls: "" } : { t: "SEASONAL", cls: "status-seasonal" };
+  }
+  function airline(d) {
+    const names = d.s.map(s => s.a.replace(" Airlines", "").replace(" Air Lines", "").replace(" Air", ""));
+    return names[0] + (names.length > 1 ? " +" + (names.length - 1) : "");
+  }
+  const FILTERS = {
+    far: { pick: ds => [...ds].sort((a, b) => b.mi - a.mi), note: "The eight farthest nonstops from PDX." },
+    seasonal: { pick: ds => ds.filter(d => !d.y).sort((a, b) => b.mi - a.mi), note: "Seasonal routes, farthest first." },
+    intl: { pick: ds => ds.filter(d => d.i).sort((a, b) => b.mi - a.mi), note: "International destinations, farthest first." },
+    soon: { pick: ds => ds.filter(d => d.s.some(s => s.b)), note: "Routes that start or come back soon, with dates from Wikipedia." }
+  };
+  function drawBoard(f) {
+    const list = FILTERS[f].pick(D.dests);
+    const shown = list.slice(0, ROWS);
+    rows.forEach((row, i) => {
+      const d = shown[i];
+      const sv = d ? service(d) : { t: "", cls: "" };
+      row.r.className = "row " + sv.cls;
+      flapRow(row.cells[0], d ? d.c : "", 3);
+      flapRow(row.cells[1], d ? nameOf(d) : "", 14);
+      flapRow(row.cells[2], d ? airline(d) : "", 13);
+      flapRow(row.cells[3], sv.t, 11);
+    });
+    const more = list.length > ROWS ? ` Showing ${ROWS} of ${list.length}.` : "";
+    document.getElementById("dep-note").textContent = FILTERS[f].note + more;
+  }
+  document.querySelectorAll("[data-f]").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll("[data-f]").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    drawBoard(b.dataset.f);
+  }));
+  drawBoard("far");
+})();
+</script>
