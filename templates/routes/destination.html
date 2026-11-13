@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static humanize_miles %}
+{% block title %}{{ name }} ({{ airport.iata }}) · NonStopPDX{% endblock %}
+{% block content %}
+<main class="wrap dest-page">
+  <a class="back" href="{% url 'routes:home' %}#departures">All destinations</a>
+
+  <article class="dest" style="--region: {{ region.color }}">
+    {% if route_point %}
+    <div class="dest-map">
+      <svg id="route-map" viewBox="0 0 1000 560" role="img"
+           aria-label="Route map from PDX to {{ name }}{% if airport.distance_mi %}, {{ airport.distance_mi|miles }} miles{% endif %}"></svg>
+      <noscript><p class="map-fallback">The route map needs JavaScript.</p></noscript>
+    </div>
+    {% endif %}
+
+    <div class="dest-body">
+      <div class="main-col">
+      <span class="region-tag"><span class="dotkey"></span>{{ region.name }}</span>
+      <div class="titleline">
+        <div class="codes"><div class="flaps" id="dest-code" aria-hidden="true">{% for ch in airport.iata %}<span class="flap">{{ ch }}</span>{% endfor %}</div></div>
+        <h1>{{ name }}</h1>
+      </div>
+      {% if airport.name %}<p class="airport-name">{{ airport.name }}</p>{% endif %}
+
+      {% if not active %}
+      <p class="notice">PDX has no nonstop to {{ name }} right now.{% if last_flown %} Our sources last listed it on {{ last_flown|date:"F j, Y" }}.{% endif %}</p>
+      {% endif %}
+
+      <div class="facts">
+        <div><span class="v">{% if airport.distance_mi %}{{ airport.distance_mi|miles }} mi{% else %}Unknown{% endif %}</span><span class="k">From PDX</span></div>
+        <div><span class="v">{{ flight|default:"Unknown" }}</span><span class="k">Estimated flight</span></div>
+        <div><span class="v">{% if service %}{{ service.label }}{% else %}Not flying{% endif %}</span><span class="k">Service</span></div>
+      </div>
+      </div>
+
+      <div class="side-col">
+      {% if active %}
+      <div class="chips">
+        {% for r in active %}<span class="chip">{{ r.airline }}<i>{{ r.note }}</i></span>{% endfor %}
+      </div>
+      <a class="fares" href="{{ fares_url }}" target="_blank" rel="noopener">Check fares on Google Flights</a>
+      {% endif %}
+
+      {% if snapshot and snapshot.departures %}
+      <p class="observed">OpenSky saw {{ snapshot.departures }} departure{{ snapshot.departures|pluralize }} to {{ airport.iata }} the week of {{ snapshot.week_start|date:"F j" }}. Its arrival airports are estimates, so treat this as a rough count.</p>
+      {% endif %}
+      </div>
+    </div>
+  </article>
+
+  <section class="story" aria-labelledby="story-title">
+    <span class="eyebrow">The story</span>
+    {% if story and story.status != "placeholder" %}
+      <h2 id="story-title">{{ story.headline|default:name }}</h2>
+      <div class="story-body">{{ story.body|linebreaks }}</div>
+      {% if story.credits %}<p class="credits">{{ story.credits }}</p>{% endif %}
+    {% else %}
+      <h2 id="story-title" class="visually-hidden">The story</h2>
+      <p class="story-soon">{{ name }}'s story is still to be written.</p>
+    {% endif %}
+  </section>
+</main>
+
+{% if route_point %}
+{{ route_point|json_script:"route-point" }}
+<script src="{% static 'vendor/d3-7.8.5.min.js' %}" defer></script>
+<script src="{% static 'js/map-common.js' %}" defer></script>
+<script src="{% static 'js/route-map.js' %}" defer
+        data-world="{% static 'geo/world-110m.json' %}" data-detail="{% static 'geo/north-america-50m.json' %}"></script>
+{% endif %}
+{% endblock %}

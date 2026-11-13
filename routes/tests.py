@@ -147,5 +147,57 @@ class MapFilesTests(TestCase):
         world = json.loads((geo / "world-110m.json").read_text())
         detail = json.loads((geo / "north-america-50m.json").read_text())
         self.assertGreater(len(world["land"]["features"]), 50)
-        self.assertEqual(set(detail), {"land", "lakes", "rivers", "states"})
-        self.assertIn("Columbia", {f["properties"]["n"] for f in detail["rivers"]["features"]})
+        self.assertEqual(set(world), {"land", "lakes", "countries", "states"})
+        self.assertEqual(set(detail), {"land", "lakes", "countries", "states"})
+        self.assertGreater(len(detail["countries"]["features"]), 5)
+
+
+class DestinationPageTests(TestCase):
+    def setUp(self):
+        apply_dataset(dataset(
+            dest("SEA", "Seattle", ("Alaska Airlines", "year-round"), ("Delta Air Lines", "year-round")),
+            dest("HDN", "Hayden", ("Alaska Airlines", "seasonal", {"begins": "February 11, 2027"}), region="US-CO", miles=851),
+        ))
+
+    def test_page_shows_the_route(self):
+        page = self.client.get("/to/sea/")
+        self.assertEqual(page.status_code, 200)
+        for text in ("Seattle", "Pacific Northwest", "130 mi", "Year round", "Alaska Airlines", "Delta Air Lines",
+                     "https://www.google.com/travel/flights?q=Nonstop%20flights%20from%20PDX%20to%20SEA",
+                     '<script id="route-point" type="application/json">', "story is still to be written"):
+            self.assertContains(page, text)
+        self.assertEqual(page.context["route_point"]["code"], "SEA")
+        self.assertTrue(page.context["route_point"]["yearRound"])
+
+    def test_upcoming_route_shows_its_start_date(self):
+        page = self.client.get("/to/hdn/")
+        self.assertContains(page, "Seasonal, starts Feb 11")
+        self.assertFalse(page.context["route_point"]["yearRound"])
+
+    def test_uppercase_code_redirects_to_lowercase(self):
+        self.assertRedirects(self.client.get("/to/SEA/"), "/to/sea/", status_code=301)
+
+    def test_unknown_or_never_served_airport_is_not_found(self):
+        self.assertEqual(self.client.get("/to/zzz/").status_code, 404)
+        Airport.objects.create(iata="LAX", city="Los Angeles")
+        self.assertEqual(self.client.get("/to/lax/").status_code, 404)
+
+    def test_route_no_longer_flown_says_so(self):
+        apply_dataset(dataset(dest("SEA", "Seattle", ("Alaska Airlines", "year-round"))))
+        page = self.client.get("/to/hdn/")
+        self.assertEqual(page.status_code, 200)
+        self.assertContains(page, "PDX has no nonstop to Hayden right now")
+        self.assertNotContains(page, "Check fares")
+
+    def test_written_story_is_shown(self):
+        from stories.models import Story
+        Story.objects.create(airport=Airport.objects.get(iata="SEA"), status="draft", headline="Up the road", body="A short hop north.")
+        page = self.client.get("/to/sea/")
+        self.assertContains(page, "Up the road")
+        self.assertContains(page, "A short hop north.")
+        self.assertNotContains(page, "still to be written")
+
+    def test_board_and_map_link_to_destination_pages(self):
+        home = self.client.get("/")
+        self.assertContains(home, 'href="/to/sea/"')
+        self.assertEqual({p["url"] for p in home.context["map_points"]}, {"/to/sea/", "/to/hdn/"})

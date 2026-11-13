@@ -89,3 +89,21 @@ def board_rows(airports) -> list[BoardRow]:
             seasonal=not any(r.kind == "year-round" for r in routes),
         ))
     return rows
+
+
+KIND_LABELS = {"year-round": "Year round", "seasonal": "Seasonal", "charter": "Charter", "seasonal charter": "Seasonal charter"}
+
+
+def route_note(route) -> str:
+    """The kind of service, plus a start or return date when there is one."""
+    label = KIND_LABELS.get(route.kind, route.kind)
+    if route.begins:
+        return f"{label}, starts {_month_day(route.begins)}"
+    if route.resumes:
+        return f"{label}, back {_month_day(route.resumes)}"
+    return label
+
+
+def google_flights_url(iata: str) -> str:
+    from urllib.parse import quote
+    return "https://www.google.com/travel/flights?q=" + quote(f"Nonstop flights from PDX to {iata}")

@@ -27,6 +27,7 @@
           <div class="codes"><div class="flaps" id="readout-code" aria-hidden="true"></div></div>
           <div class="name" id="readout-name">Tap a dot on the map</div>
           <div class="meta" id="readout-meta">Each one shows its distance, flight time and airlines here.</div>
+          <a class="readout-link" id="readout-link" href="#" hidden></a>
         </div>
         <div class="legend">
           <div><svg width="44" height="10" aria-hidden="true"><line x1="2" y1="5" x2="42" y2="5" class="spoke"/></svg>Year round</div>
@@ -60,7 +61,7 @@
               {% for row in rows %}
               <tr>
                 <td class="rg"><span class="rowdot" style="background:{{ row.region.color }}" title="{{ row.region.name }}"></span></td>
-                <td class="city">{{ row.name }}</td>
+                <td class="city"><a href="{% url 'routes:destination' row.airport.iata|lower %}">{{ row.name }}</a></td>
                 <td class="code">{{ row.airport.iata }}</td>
                 <td>{{ row.airlines }}</td>
                 <td class="num">{{ row.miles|miles }}</td>
@@ -86,6 +87,7 @@
 
 {{ map_points|json_script:"map-points" }}
 <script src="{% static 'vendor/d3-7.8.5.min.js' %}" defer></script>
+<script src="{% static 'js/map-common.js' %}" defer></script>
 <script src="{% static 'js/overview-map.js' %}" defer
         data-world="{% static 'geo/world-110m.json' %}" data-detail="{% static 'geo/north-america-50m.json' %}"></script>
 {% endblock %}

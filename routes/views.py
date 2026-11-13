@@ -1,7 +1,12 @@
 from django.db.models import Prefetch
-from django.shortcuts import render
+from django.http import Http404
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 
-from .display import board_rows, short_airline
+from stories.models import Story
+
+from .display import (board_rows, flight_minutes, google_flights_url, hours_minutes, route_note, service_for,
+                      short_airline, short_name)
 from .models import Airport, Route, SyncRun
 
 FILTERS = {
@@ -30,6 +35,7 @@ def map_points(rows) -> list[dict]:
             "airlines": [short_airline(rt.airline.name) for rt in a.active_routes],
             "service": r.service.label,
             "yearRound": not r.seasonal,
+            "url": reverse("routes:destination", args=[a.iata.lower()]),
         })
     return points
 
@@ -52,4 +58,40 @@ def home(request):
         "current": current,
         "last_sync": last_sync,
         "map_points": map_points(all_rows),
+    })
+
+
+def destination(request, code):
+    if code != code.lower():
+        return redirect("routes:destination", code=code.lower(), permanent=True)
+    airport = get_object_or_404(
+        Airport.objects.prefetch_related(Prefetch("routes", queryset=Route.objects.select_related("airline").order_by("airline__name"))),
+        iata=code.upper(),
+    )
+    routes = list(airport.routes.all())
+    if not routes:  # an airport we know about, but never as a PDX nonstop
+        raise Http404("No nonstop from PDX")
+    active = [r for r in routes if r.active]
+    name = short_name(airport)
+    region = airport.region_group
+    service = service_for(active) if active else None
+    year_round = any(r.kind == "year-round" for r in active)
+    story = Story.objects.filter(airport=airport).first()
+    snapshot = airport.snapshots.filter(source="opensky").order_by("-week_start").first()
+    point = None
+    if airport.latitude is not None and airport.longitude is not None:
+        point = {"code": airport.iata, "name": name, "lat": airport.latitude, "lon": airport.longitude,
+                 "miles": airport.distance_mi, "yearRound": year_round, "regionColor": region.color}
+    return render(request, "routes/destination.html", {
+        "airport": airport,
+        "name": name,
+        "region": region,
+        "active": [{"airline": r.airline.name, "note": route_note(r)} for r in active],
+        "last_flown": max((r.last_seen for r in routes if r.last_seen), default=None),
+        "service": service,
+        "flight": hours_minutes(flight_minutes(airport.distance_mi)),
+        "story": story,
+        "snapshot": snapshot,
+        "fares_url": google_flights_url(airport.iata),
+        "route_point": point,
     })

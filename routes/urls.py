@@ -6,4 +6,5 @@ app_name = "routes"
 
 urlpatterns = [
     path("", views.home, name="home"),
+    path("to/<str:code>/", views.destination, name="destination"),
 ]
