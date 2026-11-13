@@ -12,9 +12,10 @@
 </head>
 <body>
   <header class="wrap top">
-    <a class="logo" href="{% url 'routes:departures' %}" aria-label="NonStopPDX home">Non<svg class="x" viewBox="0 0 24 24" aria-hidden="true"><use href="#xmark"/></svg>Stop <b>PDX</b></a>
+    <a class="logo" href="{% url 'routes:home' %}" aria-label="NonStopPDX home">Non<svg class="x" viewBox="0 0 24 24" aria-hidden="true"><use href="#xmark"/></svg>Stop <b>PDX</b></a>
     <nav aria-label="Main">
-      <a href="{% url 'routes:departures' %}" {% if request.resolver_match.url_name == 'departures' %}aria-current="page"{% endif %}>Departures</a>
+      <a href="{% url 'routes:home' %}#map">Map</a>
+      <a href="{% url 'routes:home' %}#departures">Departures</a>
       {% if user.is_staff %}<a href="{% url 'admin:index' %}">Admin</a>{% endif %}
     </nav>
   </header>

@@ -8,6 +8,7 @@
   --row-a: #E6F2EC; --row-b: #E4EEF6; --board-ink: #17242B;
   --tile: #1E2C33; --tile-ink: #F2F6F7;
   --band: #0B5F63; --band-ink: #F2F7F7; --band-muted: #BCDADA;
+  --ocean: #D3E4EC; --land: #E9ECE8; --lake: #D3E4EC; --grat: #A9C0CB; --spoke: #0E7C80; --river: #7FAFC6;
   --display: "Jost", "Futura", "Century Gothic", "Avenir Next", sans-serif;
   --body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
   --cond: "IBM Plex Sans Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
@@ -23,6 +24,7 @@
     --row-a: #17302A; --row-b: #172A38; --board-ink: #E7EEF0;
     --tile: #0A1115; --tile-ink: #F2F6F7;
     --band: #0B3A3D; --band-ink: #F2F7F7; --band-muted: #A9CACA;
+    --ocean: #14303C; --land: #24343B; --lake: #14303C; --grat: #2F5566; --spoke: #4FC0C4; --river: #3F7891;
     color-scheme: dark;
   }
 }
@@ -80,6 +82,51 @@ p { margin: 0; }
 .st.yr { color: var(--fir); } .st.se { color: var(--glass); } .st.soon { color: var(--violet); }
 .fids .foot { background: var(--tile); color: var(--tile-ink); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 10px 18px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
 .empty { padding: 28px 18px; color: var(--muted); }
+
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* overview map, after design study 4 */
+.map-section { padding-block: 16px 0; }
+.overview { display: grid; gap: 24px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+@media (min-width: 900px) { .overview { grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.5fr); } }
+.map-frame { min-width: 0; }
+.overview-map { display: block; width: 100%; height: auto; aspect-ratio: 1000 / 640; }
+.map-fallback { padding: 18px; color: var(--muted); }
+.side { display: grid; gap: 18px; }
+.maptabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.maptabs button { font: inherit; color: var(--ink); border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 7px 14px; cursor: pointer; font-weight: 500; font-size: 15px; }
+.maptabs button[aria-pressed="true"] { background: var(--teal); border-color: var(--teal); color: #FFFFFF; }
+.readout { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 10px; }
+.readout .name { font-family: var(--display); font-size: 28px; line-height: 1.1; }
+.readout .meta { color: var(--muted); font-size: 15px; }
+.legend { display: grid; gap: 8px; font-size: 15px; color: var(--muted); }
+.legend div { display: flex; gap: 10px; align-items: center; }
+.flaps { display: inline-flex; gap: 4px; }
+.flaps:empty { display: none; }
+.flap { position: relative; display: inline-grid; place-items: center; width: 1.02em; height: 1.36em; background: var(--tile); color: var(--tile-ink); border-radius: 0.1em; font-family: var(--mono); font-weight: 600; line-height: 1; }
+.flap::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: rgba(0,0,0,0.5); }
+.codes { font-size: 34px; }
+
+svg text.label { font-family: var(--display); font-weight: 500; text-transform: uppercase; fill: var(--ink); paint-order: stroke; stroke: var(--ocean); stroke-width: 4px; stroke-linejoin: round; letter-spacing: 0.08em; }
+svg text.rlabel { font-family: var(--display); font-weight: 500; font-style: italic; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; fill: var(--glass); paint-order: stroke; stroke: var(--land); stroke-width: 3px; stroke-linejoin: round; }
+.ocean { fill: var(--ocean); }
+.land { fill: var(--land); }
+.lake { fill: var(--lake); }
+.grat { fill: none; stroke: var(--grat); stroke-width: 0.7; opacity: 0.6; }
+.river { fill: none; stroke: var(--river); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.river.big { stroke-width: 2.6; }
+.stateline { fill: none; stroke: var(--steel); stroke-width: 0.8; stroke-dasharray: 3 4; opacity: 0.55; }
+.spoke { fill: none; stroke: var(--spoke); stroke-width: 1.5; stroke-linecap: round; opacity: 0.85; }
+.spoke.seasonal { stroke-dasharray: 5 5; opacity: 0.7; }
+.spoke.on { stroke: var(--signal); stroke-width: 3.2; opacity: 1; }
+.dest { fill: var(--ink); }
+.dest.on { fill: var(--signal); }
+.hit { fill: transparent; cursor: pointer; }
+.pdx-dot { fill: var(--signal); stroke: var(--bg); stroke-width: 3; }
+.t-a { fill: var(--fir); } .t-b { fill: var(--moss); }
+.trunk { fill: var(--timber); }
+svg [role="button"]:focus-visible { outline: none; }
+svg [role="button"]:focus-visible .dest { stroke: var(--signal); stroke-width: 3; }
 
 footer { padding-block: 28px 56px; color: var(--muted); font-size: 14px; display: grid; gap: 6px; }
 footer a { color: inherit; }

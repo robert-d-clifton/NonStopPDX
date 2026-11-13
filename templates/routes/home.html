@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load static humanize_miles %}
+{% block title %}NonStopPDX · Every nonstop from Portland{% endblock %}
+{% block content %}
+<main>
+  <section class="wrap intro" aria-labelledby="intro-title">
+    <span class="eyebrow">Every nonstop from Portland</span>
+    <h1 id="intro-title" class="visually-hidden">NonStopPDX</h1>
+    <p>{{ total }} places you can fly from PDX without a connection.</p>
+  </section>
+
+  <section class="wrap map-section" id="map" aria-labelledby="map-title">
+    <h2 id="map-title" class="visually-hidden">Map of nonstop routes from PDX</h2>
+    <div class="overview">
+      <div class="map-frame">
+        <svg class="overview-map" id="overview-map" viewBox="0 0 1000 640" role="img"
+             aria-label="Map of the {{ total }} nonstop routes from PDX. The departures list below has every destination."></svg>
+        <noscript><p class="map-fallback">The map needs JavaScript. Every destination is in the departures list below.</p></noscript>
+      </div>
+      <div class="side">
+        <div class="maptabs" role="group" aria-label="Map zoom">
+          <button type="button" id="zoom-world" data-zoom="world" aria-pressed="true">Everywhere</button>
+          <button type="button" id="zoom-west" data-zoom="west" aria-pressed="false">The West, up close</button>
+        </div>
+        <div class="readout" aria-live="polite">
+          <span class="eyebrow">Selected destination</span>
+          <div class="codes"><div class="flaps" id="readout-code" aria-hidden="true"></div></div>
+          <div class="name" id="readout-name">Tap a dot on the map</div>
+          <div class="meta" id="readout-meta">Each one shows its distance, flight time and airlines here.</div>
+        </div>
+        <div class="legend">
+          <div><svg width="44" height="10" aria-hidden="true"><line x1="2" y1="5" x2="42" y2="5" class="spoke"/></svg>Year round</div>
+          <div><svg width="44" height="10" aria-hidden="true"><line x1="2" y1="5" x2="42" y2="5" class="spoke seasonal"/></svg>Seasonal or starting soon</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="band" id="departures">
+    <svg class="edge" aria-hidden="true"><rect width="100%" height="100%" style="fill:url(#carpet)"/></svg>
+    <div class="wrap band-inner">
+      <div>
+        <span class="eyebrow">The list view</span>
+        <h2>Where you can fly</h2>
+      </div>
+      <div class="fids">
+        <div class="bar">
+          <h3>Departures</h3>
+          <nav class="tabs" aria-label="Sort and filter destinations">
+            {% for key, label in filters %}
+              <a href="?f={{ key }}#departures" {% if key == current %}aria-current="true"{% endif %}>{{ label }}</a>
+            {% endfor %}
+          </nav>
+        </div>
+        <div class="fids-scroll">
+          {% if rows %}
+          <table>
+            <thead><tr><th aria-label="Region"></th><th>Destination</th><th>Code</th><th>Airlines</th><th class="num">Miles</th><th class="num">Flight</th><th>Service</th></tr></thead>
+            <tbody>
+              {% for row in rows %}
+              <tr>
+                <td class="rg"><span class="rowdot" style="background:{{ row.region.color }}" title="{{ row.region.name }}"></span></td>
+                <td class="city">{{ row.name }}</td>
+                <td class="code">{{ row.airport.iata }}</td>
+                <td>{{ row.airlines }}</td>
+                <td class="num">{{ row.miles|miles }}</td>
+                <td class="num">{{ row.flight }}</td>
+                <td><span class="st {{ row.service.css }}">{{ row.service.label }}</span></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <p class="empty">No destinations yet. Run <code>python manage.py sync_routes</code> to load them.</p>
+          {% endif %}
+        </div>
+        <div class="foot">
+          <span>Showing {{ rows|length }} of {{ total }}</span>
+          <span>{% if last_sync %}Routes as of {{ last_sync.finished_at|date:"M j, Y" }}{% else %}Not synced yet{% endif %}</span>
+        </div>
+      </div>
+    </div>
+    <svg class="edge" aria-hidden="true"><rect width="100%" height="100%" style="fill:url(#carpet)"/></svg>
+  </div>
+</main>
+
+{{ map_points|json_script:"map-points" }}
+<script src="{% static 'vendor/d3-7.8.5.min.js' %}" defer></script>
+<script src="{% static 'js/overview-map.js' %}" defer
+        data-world="{% static 'geo/world-110m.json' %}" data-detail="{% static 'geo/north-america-50m.json' %}"></script>
+{% endblock %}

@@ -1,7 +1,7 @@
 from django.db.models import Prefetch
 from django.shortcuts import render
 
-from .display import board_rows
+from .display import board_rows, short_airline
 from .models import Airport, Route, SyncRun
 
 FILTERS = {
@@ -13,7 +13,28 @@ FILTERS = {
 }
 
 
-def departures(request):
+def map_points(rows) -> list[dict]:
+    """The small payload the overview map needs, one entry per destination with coordinates."""
+    points = []
+    for r in rows:
+        a = r.airport
+        if a.latitude is None or a.longitude is None:
+            continue
+        points.append({
+            "code": a.iata,
+            "name": r.name,
+            "lat": round(a.latitude, 4),
+            "lon": round(a.longitude, 4),
+            "miles": r.miles,
+            "flight": r.flight,
+            "airlines": [short_airline(rt.airline.name) for rt in a.active_routes],
+            "service": r.service.label,
+            "yearRound": not r.seasonal,
+        })
+    return points
+
+
+def home(request):
     current = request.GET.get("f", "az")
     if current not in FILTERS:
         current = "az"
@@ -24,10 +45,11 @@ def departures(request):
     all_rows = board_rows(airports)
     rows = FILTERS[current][1](all_rows)
     last_sync = SyncRun.objects.filter(kind="routes", ok=True).order_by("-finished_at").first()
-    return render(request, "routes/departures.html", {
+    return render(request, "routes/home.html", {
         "rows": rows,
         "total": len(all_rows),
         "filters": [(key, label) for key, (label, _) in FILTERS.items()],
         "current": current,
         "last_sync": last_sync,
+        "map_points": map_points(all_rows),
     })

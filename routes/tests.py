@@ -102,7 +102,7 @@ class DeparturesPageTests(TestCase):
         self.assertContains(self.client.get("/?f=intl"), "Showing 1 of 4")
         self.assertContains(self.client.get("/?f=soon"), "Hayden")
         seasonal = self.client.get("/?f=seasonal")
-        self.assertNotContains(seasonal, "Seattle")
+        self.assertNotIn("SEA", [r.airport.iata for r in seasonal.context["rows"]])
         self.assertContains(seasonal, "Showing 3 of 4")
 
     def test_unknown_filter_falls_back_to_a_to_z(self):
@@ -111,3 +111,41 @@ class DeparturesPageTests(TestCase):
     def test_farthest_puts_reykjavik_first(self):
         rows = self.client.get("/?f=far").context["rows"]
         self.assertEqual(rows[0].airport.iata, "KEF")
+
+
+class OverviewMapTests(TestCase):
+    def setUp(self):
+        apply_dataset(dataset(
+            dest("SEA", "Seattle", ("Alaska Airlines", "year-round"), ("Delta Air Lines", "year-round")),
+            dest("HDN", "Hayden", ("Alaska Airlines", "seasonal", {"begins": "February 11, 2027"}), region="US-CO", miles=851),
+        ))
+
+    def test_page_carries_one_map_point_per_destination(self):
+        page = self.client.get("/")
+        points = {p["code"]: p for p in page.context["map_points"]}
+        self.assertEqual(set(points), {"SEA", "HDN"})
+        self.assertEqual(points["SEA"]["airlines"], ["Alaska", "Delta"])
+        self.assertTrue(points["SEA"]["yearRound"])
+        self.assertFalse(points["HDN"]["yearRound"])
+        self.assertEqual(points["HDN"]["service"], "Starts Feb 11")
+        self.assertContains(page, '<script id="map-points" type="application/json">')
+        self.assertContains(page, 'id="overview-map"')
+
+    def test_filters_do_not_shrink_the_map(self):
+        page = self.client.get("/?f=intl")
+        self.assertEqual(len(page.context["map_points"]), 2)
+
+    def test_destination_without_coordinates_is_left_off_the_map(self):
+        Airport.objects.filter(iata="HDN").update(latitude=None)
+        page = self.client.get("/")
+        self.assertEqual([p["code"] for p in page.context["map_points"]], ["SEA"])
+
+
+class MapFilesTests(TestCase):
+    def test_geography_files_are_valid(self):
+        geo = settings.BASE_DIR / "static" / "geo"
+        world = json.loads((geo / "world-110m.json").read_text())
+        detail = json.loads((geo / "north-america-50m.json").read_text())
+        self.assertGreater(len(world["land"]["features"]), 50)
+        self.assertEqual(set(detail), {"land", "lakes", "rivers", "states"})
+        self.assertIn("Columbia", {f["properties"]["n"] for f in detail["rivers"]["features"]})

@@ -5,5 +5,5 @@ from . import views
 app_name = "routes"
 
 urlpatterns = [
-    path("", views.departures, name="departures"),
+    path("", views.home, name="home"),
 ]
