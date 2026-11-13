@@ -20,7 +20,13 @@ Compared against Wikipedia revision 1382252995 plus overrides.
 |------|------|---------|--------|----------|
 | HNL | Honolulu | Alaska Airlines | Added | FlyPDX lists it. BTS shows about 80 flights a month since January 2026. |
 | PHL | Philadelphia | Alaska Airlines | Added, seasonal | FlyPDX lists it. BTS shows daily flights since May 2026. |
-| PHX | Phoenix | Frontier Airlines | Removed | FlyPDX doesn't list it. No BTS flights since March 2026. |
+| PHX | Phoenix | Frontier Airlines | Removed | FlyPDX doesn't list it. No BTS flights since March 2026. Wikipedia caught up by 2026-11-12, so the override was deleted. |
+
+### Dropped since
+
+| Code | City | Airline | When | Evidence |
+|------|------|---------|------|----------|
+| JAC | Jackson | Alaska Airlines | Wikipedia dropped it by revision 1385089230 (2026-11-12) | No published nonstop flights between PDX and JAC as of 2026-11-12. Its story file stays in `stories/` in case it returns. |
 
 ### Off season, so FlyPDX doesn't list them right now
 

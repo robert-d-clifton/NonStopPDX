@@ -40,14 +40,6 @@
       "reason": "Missing from Wikipedia. FlyPDX lists it as seasonal, and BTS shows daily flights since May 2026.",
       "added": "2026-11-07",
       "review_by": "2027-06-01"
-    },
-    {
-      "action": "remove",
-      "iata": "PHX",
-      "airline": "Frontier Airlines",
-      "reason": "Wikipedia still lists it, but FlyPDX doesn't, and BTS shows no flights since March 2026.",
-      "added": "2026-11-07",
-      "review_by": "2027-03-01"
     }
   ]
 }

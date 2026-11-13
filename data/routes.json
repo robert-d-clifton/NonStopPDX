@@ -1,8 +1,8 @@
 {
   "origin": "PDX",
-  "generated_at": "2026-11-07T14:40:16+00:00",
-  "destination_count": 91,
-  "service_count": 130,
+  "generated_at": "2026-11-13T00:51:39+00:00",
+  "destination_count": 90,
+  "service_count": 127,
   "unresolved_articles": [],
   "overrides": {
     "added": [
@@ -10,9 +10,7 @@
       "HNL Alaska Airlines",
       "PHL Alaska Airlines"
     ],
-    "removed": [
-      "PHX Frontier Airlines"
-    ],
+    "removed": [],
     "changed": [
       "AZA Allegiant Air year-round to seasonal"
     ],
@@ -605,28 +603,6 @@
         }
       ],
       "year_round": true,
-      "international": false
-    },
-    {
-      "iata": "JAC",
-      "label": "Jackson Hole",
-      "airport_name": "Jackson Hole Airport",
-      "city": "Jackson",
-      "region": "US-WY",
-      "country": "US",
-      "lat": 43.6073,
-      "lon": -110.737999,
-      "distance_mi": 599,
-      "wikipedia_article": "Jackson Hole Airport",
-      "services": [
-        {
-          "airline": "Alaska Airlines",
-          "airline_article": "Alaska Airlines",
-          "kind": "seasonal",
-          "source": "wikipedia"
-        }
-      ],
-      "year_round": false,
       "international": false
     },
     {
@@ -1363,12 +1339,6 @@
       "wikipedia_article": "St. Louis Lambert International Airport",
       "services": [
         {
-          "airline": "Alaska Airlines",
-          "airline_article": "Alaska Airlines",
-          "kind": "seasonal",
-          "source": "wikipedia"
-        },
-        {
           "airline": "Southwest Airlines",
           "airline_article": "Southwest Airlines",
           "kind": "seasonal",
@@ -1835,12 +1805,6 @@
       "wikipedia_article": "Baltimore/Washington International Airport",
       "services": [
         {
-          "airline": "Alaska Airlines",
-          "airline_article": "Alaska Airlines",
-          "kind": "seasonal",
-          "source": "wikipedia"
-        },
-        {
           "airline": "Southwest Airlines",
           "airline_article": "Southwest Airlines",
           "kind": "seasonal",
@@ -2263,7 +2227,7 @@
   ],
   "source": {
     "routes": "https://en.wikipedia.org/wiki/Portland_International_Airport",
-    "routes_revision": 1382252995,
+    "routes_revision": 1385089230,
     "airports": "https://ourairports.com/data/"
   }
 }
