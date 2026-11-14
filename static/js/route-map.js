@@ -25,14 +25,21 @@
     const line = { type: "LineString", coordinates: [M.PDX, [DEST.lon, DEST.lat]] };
     const proj = d3.geoMercator().rotate([-(M.PDX[0] + DEST.lon) / 2, 0]);
     const pad = Math.max(90, 170 - (DEST.miles || 0) / 40);
-    proj.fitExtent([[pad + 60, pad], [W - pad - 60, H - pad]], line);
+    const s = Math.min(k, 1.6);  // drawing and circle size, grown on narrow screens like the labels
+    const lift = DEST.drawing ? 46 * s : 0;  // the drawing sits above the destination's dot
+    // Keep the vertical margins inside the map, so the space for the route never turns inside out on short, wide maps.
+    const padY = Math.min(pad, H * 0.2);
+    const top = padY + (DEST.drawing ? 70 * s : 0);
+    const bottom = Math.max(H - padY, top + 40);
+    proj.fitExtent([[pad + 60, top], [W - pad - 60, bottom]], line);
     const { g, path, labels } = M.drawBase(svg, { proj, W, H, geo: detail || world, id: "route", radius: 0 });
 
     g.append("path").attr("class", "routeline" + (DEST.yearRound ? "" : " seasonal")).attr("d", path(line));
     const a = proj(M.PDX), b = proj([DEST.lon, DEST.lat]);
     M.treesAround(g.append("g"), a, Math.min(k, 1.4));
-    g.append("circle").attr("class", "wash").attr("cx", b[0]).attr("cy", b[1]).attr("r", 54 * Math.min(k, 1.6))
+    g.append("circle").attr("class", "wash").attr("cx", b[0]).attr("cy", b[1] - lift).attr("r", 54 * s)
       .style("fill", DEST.regionColor);
+    if (DEST.drawing) M.drawShapes(g.append("g").attr("class", "drawing").attr("transform", `translate(${b[0]},${b[1] - lift}) scale(${s})`), DEST.drawing);
     svg.append("circle").attr("class", "pdx-dot").attr("cx", a[0]).attr("cy", a[1]).attr("r", 8 * Math.min(k, 1.6));
     svg.append("circle").attr("class", "pdx-dot").attr("cx", b[0]).attr("cy", b[1]).attr("r", 8 * Math.min(k, 1.6));
 

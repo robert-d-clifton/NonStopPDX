@@ -24,3 +24,11 @@ The decisions behind these studies are recorded in the planning doc's design ses
 ## Motif editor
 
 `motif-editor/index.html` is the source of the [NonStopPDX Motif Editor](https://claude.ai/artifact/3pvz3VMi4CTPCASE51MkP8), where destination drawings are edited shape by shape and assigned to destinations. The page holds the starter drawings and default assignments. Edits are saved in the published page's own storage (`drawings` and `assignments/all`), not in this file, so the published copy is the one to use. This copy is for rebuilding or republishing it.
+
+### Putting edits on the site
+
+The site draws from `data/drawings.json`: every drawing, plus which drawing each destination uses. To bring in edits made in the editor:
+
+1. Export the editor's saved documents to a folder, one JSON file each: `drawings/<id>.json` and `assignments/all.json`. In a Claude session, ask to "update the drawings" and Claude reads them from the editor's storage.
+2. Run `python3 tools/merge_drawings.py <folder>`. It replaces edited drawings, adds new ones, applies changed assignments, and refuses a destination that points at a drawing that doesn't exist.
+3. Commit `data/drawings.json`. The site picks up the change without a restart.

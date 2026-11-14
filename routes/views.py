@@ -5,6 +5,7 @@ from django.urls import reverse
 
 from stories.models import Story
 
+from .drawings import drawing_for
 from .display import (board_rows, flight_minutes, google_flights_url, hours_minutes, route_note, service_for,
                       short_airline, short_name)
 from .models import Airline, Airport, Route, SyncRun
@@ -83,7 +84,8 @@ def destination(request, code):
     point = None
     if airport.latitude is not None and airport.longitude is not None:
         point = {"code": airport.iata, "name": name, "lat": airport.latitude, "lon": airport.longitude,
-                 "miles": airport.distance_mi, "yearRound": year_round, "regionColor": region.color}
+                 "miles": airport.distance_mi, "yearRound": year_round, "regionColor": region.color,
+                 "drawing": drawing_for(airport.iata)}
     return render(request, "routes/destination.html", {
         "airport": airport,
         "name": name,

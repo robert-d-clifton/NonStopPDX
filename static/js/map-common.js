@@ -93,6 +93,46 @@ window.NSPMap = (function () {
     return t;
   }
 
+  /* Destination drawings from data/drawings.json: shapes in a 100 by 100 box centered on 0,0,
+     colored with the site palette. Same shape types as the motif editor. */
+  const STROKED = new Set(["wave", "line"]);
+  function smooth(pts) {
+    if (pts.length < 2) return "";
+    let d = `M${pts[0][0]},${pts[0][1]}`;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+      d += ` C${p1[0] + (p2[0] - p0[0]) / 6},${p1[1] + (p2[1] - p0[1]) / 6} ${p2[0] - (p3[0] - p1[0]) / 6},${p2[1] - (p3[1] - p1[1]) / 6} ${p2[0]},${p2[1]}`;
+    }
+    return d;
+  }
+  function shapeCenter(s) {
+    if (s.t === "circle" || s.t === "ellipse") return [s.cx, s.cy];
+    if (s.t === "rect") return [s.x + s.w / 2, s.y + s.h / 2];
+    const xs = s.pts.map(p => p[0]), ys = s.pts.map(p => p[1]);
+    if (s.t === "hill") ys.push(s.base);
+    return [(Math.min(...xs) + Math.max(...xs)) / 2, (Math.min(...ys) + Math.max(...ys)) / 2];
+  }
+  function drawShapes(g, shapes) {
+    shapes.forEach(s => {
+      let e;
+      if (s.t === "circle") e = g.append("circle").attr("cx", s.cx).attr("cy", s.cy).attr("r", s.r);
+      else if (s.t === "ellipse") e = g.append("ellipse").attr("cx", s.cx).attr("cy", s.cy).attr("rx", s.rx).attr("ry", s.ry);
+      else if (s.t === "rect") e = g.append("rect").attr("x", s.x).attr("y", s.y).attr("width", s.w).attr("height", s.h).attr("rx", s.rx || 0);
+      else if (s.t === "poly") e = g.append("polygon").attr("points", s.pts.map(p => p.join(",")).join(" "));
+      else if (s.t === "hill") {
+        const first = s.pts[0], last = s.pts[s.pts.length - 1];
+        e = g.append("path").attr("d", `${smooth(s.pts)} L${last[0]},${s.base} L${first[0]},${s.base} Z`);
+      } else if (s.t === "wave") e = g.append("path").attr("d", smooth(s.pts));
+      else if (s.t === "line") e = g.append("polyline").attr("points", s.pts.map(p => p.join(",")).join(" "));
+      else return;
+      const color = `var(--${s.c || "ink"})`;
+      if (STROKED.has(s.t)) e.style("fill", "none").style("stroke", color).attr("stroke-width", s.w || 2).attr("stroke-linecap", "round").attr("stroke-linejoin", "round");
+      else e.style("fill", color);
+      if (s.op != null && s.op < 1) e.attr("opacity", s.op);
+      if (s.rot) { const [cx, cy] = shapeCenter(s); e.attr("transform", `rotate(${s.rot} ${cx} ${cy})`); }
+    });
+  }
+
   /* Labels are measured to keep them apart, so wait for the page's fonts first, or a fallback font gets measured. */
   function fontsReady() {
     return document.fonts && document.fonts.ready ? document.fonts.ready.catch(() => {}) : Promise.resolve();
@@ -107,5 +147,5 @@ window.NSPMap = (function () {
     });
   }
 
-  return { PDX, loadJSON, flapRow, tree, treesAround, scaleFor, drawBase, placeLabel, onResize, fontsReady };
+  return { PDX, loadJSON, flapRow, tree, treesAround, scaleFor, drawBase, placeLabel, onResize, fontsReady, drawShapes };
 })();

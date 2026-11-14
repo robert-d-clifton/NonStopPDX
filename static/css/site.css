@@ -4,7 +4,7 @@
   --bg: #F3F5F5; --surface: #FFFFFF; --ink: #17242B; --muted: #56656D; --line: #D5DCDF;
   --teal: #0E7C80; --aqua: #5CC3CC; --violet: #6E58A3; --lime: #B3C63F;
   --glass: #2D6FA8; --steel: #7D8A91; --fir: #2F5E4F; --moss: #7AA65A; --timber: #B98B5E; --signal: #E0582F;
-  --lagoon: #2E9FB0;
+  --lagoon: #2E9FB0; --snow: #FFFFFF; --sand: #E3CFA4; --water: #8FC3D9;
   --row-a: #E6F2EC; --row-b: #E4EEF6; --board-ink: #17242B;
   --tile: #1E2C33; --tile-ink: #F2F6F7;
   --band: #0B5F63; --band-ink: #F2F7F7; --band-muted: #BCDADA;
@@ -20,7 +20,7 @@
     --bg: #0F181D; --surface: #162329; --ink: #E7EEF0; --muted: #9AABB2; --line: #2A3A42;
     --teal: #3FB2B6; --aqua: #6FD0D8; --violet: #9C86D4; --lime: #C3D45A;
     --glass: #6EA6D8; --steel: #8E9BA2; --fir: #6FA68E; --moss: #93BE72; --timber: #D0A577; --signal: #F07548;
-    --lagoon: #5CC3CC;
+    --lagoon: #5CC3CC; --snow: #F2F6F7; --sand: #B9A37A; --water: #3F7891;
     --row-a: #17302A; --row-b: #172A38; --board-ink: #E7EEF0;
     --tile: #0A1115; --tile-ink: #F2F6F7;
     --band: #0B3A3D; --band-ink: #F2F7F7; --band-muted: #A9CACA;

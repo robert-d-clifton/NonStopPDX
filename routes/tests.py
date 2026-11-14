@@ -276,3 +276,46 @@ class AirlinePageTests(TestCase):
         from routes.models import Airline
         a = Airline.objects.create(name="Example Airlines")
         self.assertEqual(a.slug, "example")
+
+
+class DrawingTests(TestCase):
+    def test_drawings_file_is_complete(self):
+        data = json.loads(settings.DRAWINGS_FILE.read_text())
+        self.assertTrue(data["drawings"])
+        for code, drawing_id in data["assignments"].items():
+            self.assertIn(drawing_id, data["drawings"], f"{code} points at a missing drawing")
+        for drawing_id, drawing in data["drawings"].items():
+            self.assertTrue(drawing["shapes"], f"{drawing_id} has no shapes")
+
+    def test_destination_page_carries_its_drawing(self):
+        apply_dataset(dataset(dest("PDT", "Pendleton", ("Boutique Air", "year-round"), region="US-OR", miles=182)))
+        point = self.client.get("/to/pdt/").context["route_point"]
+        data = json.loads(settings.DRAWINGS_FILE.read_text())
+        self.assertEqual(point["drawing"], data["drawings"][data["assignments"]["PDT"]]["shapes"])
+
+    def test_destination_without_an_assignment_has_no_drawing(self):
+        apply_dataset(dataset(dest("ZZZ", "Nowhere", ("Alaska Airlines", "year-round"))))
+        self.assertIsNone(self.client.get("/to/zzz/").context["route_point"]["drawing"])
+
+    def test_merge_applies_editor_edits(self):
+        import subprocess, sys
+        with tempfile.TemporaryDirectory() as d:
+            work = Path(d)
+            target = work / "data" / "drawings.json"
+            target.parent.mkdir()
+            shutil.copy(settings.DRAWINGS_FILE, target)
+            tool = work / "tools" / "merge_drawings.py"
+            tool.parent.mkdir()
+            shutil.copy(settings.BASE_DIR / "tools" / "merge_drawings.py", tool)
+            export = work / "export"
+            (export / "drawings").mkdir(parents=True)
+            (export / "assignments").mkdir()
+            (export / "drawings" / "desert.json").write_text(json.dumps(
+                {"name": "Desert", "kind": "motif", "shapes": [{"t": "circle", "cx": 0, "cy": 0, "r": 9, "c": "signal"}], "updatedAt": 1}))
+            (export / "assignments" / "all.json").write_text(json.dumps({"map": {"BZN": "desert"}}))
+            out = subprocess.run([sys.executable, str(tool), str(export)], capture_output=True, text=True)
+            self.assertEqual(out.returncode, 0, out.stderr)
+            merged = json.loads(target.read_text())
+            self.assertEqual(merged["drawings"]["desert"]["shapes"][0]["r"], 9)
+            self.assertNotIn("updatedAt", merged["drawings"]["desert"])
+            self.assertEqual(merged["assignments"]["BZN"], "desert")
