@@ -1,0 +1,771 @@
+<title>NonStopPDX Motif Editor</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: a workbench. Gallery of drawings beside a big canvas and its controls, plus a table that assigns
+   a drawing to each destination. Same palette and type as the NonStopPDX site. */
+:root {
+  --bg: #F3F5F5; --surface: #FFFFFF; --ink: #17242B; --muted: #56656D; --line: #D5DCDF; --accent: #0E7C80; --warn: #B4472A;
+  --map-land: #E9ECE8;
+  --c-teal: #0E7C80; --c-aqua: #5CC3CC; --c-violet: #6E58A3; --c-lime: #B3C63F; --c-glass: #2D6FA8; --c-steel: #7D8A91;
+  --c-fir: #2F5E4F; --c-moss: #7AA65A; --c-timber: #B98B5E; --c-signal: #E0582F; --c-ink: #17242B; --c-snow: #FFFFFF;
+  --c-sand: #E3CFA4; --c-water: #8FC3D9; --c-lagoon: #2E9FB0;
+  --display: "Jost", "Futura", "Century Gothic", sans-serif;
+  --body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F181D; --surface: #162329; --ink: #E7EEF0; --muted: #9AABB2; --line: #2A3A42; --accent: #3FB2B6; --warn: #F07548;
+    --map-land: #24343B;
+    --c-teal: #3FB2B6; --c-aqua: #6FD0D8; --c-violet: #9C86D4; --c-lime: #C3D45A; --c-glass: #6EA6D8; --c-steel: #8E9BA2;
+    --c-fir: #6FA68E; --c-moss: #93BE72; --c-timber: #D0A577; --c-signal: #F07548; --c-ink: #E7EEF0; --c-snow: #F2F6F7;
+    --c-sand: #B9A37A; --c-water: #3F7891; --c-lagoon: #5CC3CC;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F181D; --surface: #162329; --ink: #E7EEF0; --muted: #9AABB2; --line: #2A3A42; --accent: #3FB2B6; --warn: #F07548;
+  --map-land: #24343B;
+  --c-teal: #3FB2B6; --c-aqua: #6FD0D8; --c-violet: #9C86D4; --c-lime: #C3D45A; --c-glass: #6EA6D8; --c-steel: #8E9BA2;
+  --c-fir: #6FA68E; --c-moss: #93BE72; --c-timber: #D0A577; --c-signal: #F07548; --c-ink: #E7EEF0; --c-snow: #F2F6F7;
+  --c-sand: #B9A37A; --c-water: #3F7891; --c-lagoon: #5CC3CC;
+  color-scheme: dark;
+}
+/* Fixed palettes for the side by side light and dark previews */
+.pal-light { --map-land: #E9ECE8; --c-teal: #0E7C80; --c-aqua: #5CC3CC; --c-violet: #6E58A3; --c-lime: #B3C63F; --c-glass: #2D6FA8; --c-steel: #7D8A91; --c-fir: #2F5E4F; --c-moss: #7AA65A; --c-timber: #B98B5E; --c-signal: #E0582F; --c-ink: #17242B; --c-snow: #FFFFFF; --c-sand: #E3CFA4; --c-water: #8FC3D9; --c-lagoon: #2E9FB0; }
+.pal-dark { --map-land: #24343B; --c-teal: #3FB2B6; --c-aqua: #6FD0D8; --c-violet: #9C86D4; --c-lime: #C3D45A; --c-glass: #6EA6D8; --c-steel: #8E9BA2; --c-fir: #6FA68E; --c-moss: #93BE72; --c-timber: #D0A577; --c-signal: #F07548; --c-ink: #E7EEF0; --c-snow: #F2F6F7; --c-sand: #B9A37A; --c-water: #3F7891; --c-lagoon: #5CC3CC; }
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 18px 40px; display: grid; gap: 18px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; margin: 0; line-height: 1.1; }
+h1 { font-size: 30px; } h2 { font-size: 22px; } h3 { font-size: 17px; font-weight: 500; }
+p { margin: 0; }
+button, select, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--c-signal); outline-offset: 2px; }
+.eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.muted { color: var(--muted); }
+
+.top { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: end; justify-content: space-between; }
+.status { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; color: var(--muted); }
+.status.bad { color: var(--warn); }
+.tabs { display: flex; gap: 6px; }
+.tabs button { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 7px 16px; font-weight: 500; }
+.tabs button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #FFFFFF; }
+
+.bench { display: grid; gap: 18px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+@media (min-width: 1000px) { .bench { grid-template-columns: 250px minmax(0, 1fr) 300px; } }
+
+.gallery { display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); max-height: 78vh; overflow: auto; padding: 2px; }
+@media (min-width: 1000px) { .gallery { grid-template-columns: 1fr 1fr; } }
+.gallery h3 { grid-column: 1 / -1; margin-top: 6px; font-size: 13px; font-family: var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.card { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 6px; display: grid; gap: 4px; text-align: left; }
+.card[aria-current="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.card svg { width: 100%; height: auto; display: block; border-radius: 8px; }
+.card span { font-size: 13px; font-weight: 500; line-height: 1.2; }
+.card small { font-size: 11px; color: var(--muted); }
+.newcard { border-style: dashed; color: var(--muted); place-items: center; min-height: 80px; font-size: 13px; }
+
+.stage { display: grid; gap: 10px; min-width: 0; }
+.stage-head { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: space-between; }
+.name-input { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 6px 10px; font-family: var(--display); font-size: 20px; min-width: 0; width: 16ch; }
+.canvas-box { background: var(--map-land); border: 1px solid var(--line); border-radius: 14px; touch-action: none; }
+.canvas-box svg { display: block; width: 100%; height: auto; max-height: 64vh; }
+.grid-line { stroke: var(--line); stroke-width: 0.2; }
+.guide { fill: none; stroke: var(--muted); stroke-width: 0.3; stroke-dasharray: 1.5 1.5; }
+.sel-outline { fill: none; stroke: var(--c-signal); stroke-width: 0.5; stroke-dasharray: 1.2 1; pointer-events: none; }
+.handle { fill: #FFFFFF; stroke: var(--c-signal); stroke-width: 0.6; cursor: grab; }
+.handle.base { fill: var(--c-signal); }
+.shape { cursor: move; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 6px; }
+.toolbar button, .panel button.small { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 5px 10px; font-size: 13px; font-weight: 500; }
+.toolbar button:disabled, .panel button:disabled { opacity: 0.45; cursor: default; }
+.previews { display: flex; gap: 10px; flex-wrap: wrap; }
+.preview { display: grid; gap: 4px; justify-items: center; font-size: 11px; color: var(--muted); font-family: var(--mono); letter-spacing: 0.06em; }
+.preview svg { width: 120px; height: 120px; border-radius: 10px; }
+.preview.small svg { width: 56px; height: 56px; }
+
+.panel { display: grid; gap: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px; align-content: start; }
+.panel section { display: grid; gap: 8px; }
+.swatches { display: grid; grid-template-columns: repeat(8, 1fr); gap: 5px; }
+.swatch { aspect-ratio: 1; border-radius: 6px; border: 1px solid var(--line); padding: 0; }
+.swatch[aria-pressed="true"] { outline: 3px solid var(--ink); outline-offset: 1px; }
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.row label { font-size: 13px; color: var(--muted); min-width: 64px; }
+.row input[type=range] { flex: 1; min-width: 100px; }
+.layers { display: grid; gap: 3px; max-height: 220px; overflow: auto; }
+.layer { display: flex; align-items: center; gap: 8px; border: 1px solid transparent; border-radius: 6px; padding: 3px 6px; background: transparent; text-align: left; font-size: 13px; }
+.layer[aria-current="true"] { border-color: var(--accent); background: var(--bg); }
+.layer i { width: 14px; height: 14px; border-radius: 3px; flex: none; border: 1px solid var(--line); }
+.danger { color: var(--warn); }
+
+/* assignments */
+.assign-tools { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+.assign-tools input { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 6px 10px; }
+.table-scroll { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+table { width: 100%; border-collapse: collapse; min-width: 560px; }
+th { text-align: left; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 500; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+td { padding: 6px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+tr:last-child td { border-bottom: 0; }
+td.code { font-family: var(--mono); font-weight: 600; }
+td select { border: 1px solid var(--line); background: var(--bg); border-radius: 8px; padding: 5px 8px; max-width: 100%; }
+.dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; }
+.changed { font-size: 11px; color: var(--accent); font-family: var(--mono); }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <span class="eyebrow">NonStopPDX</span>
+      <h1>Motif editor</h1>
+      <p class="muted">Shared drawings for destinations, plus custom ones. Edits save as you go.</p>
+    </div>
+    <div class="row">
+      <div class="tabs" role="group" aria-label="View">
+        <button type="button" id="tab-draw" aria-pressed="true">Drawings</button>
+        <button type="button" id="tab-assign" aria-pressed="false">Assign to destinations</button>
+      </div>
+      <span class="status" id="status" aria-live="polite">Connecting…</span>
+    </div>
+  </header>
+
+  <main id="view-draw" class="bench">
+    <nav class="gallery" id="gallery" aria-label="Drawings"></nav>
+
+    <section class="stage" aria-label="Canvas">
+      <div class="stage-head">
+        <label class="visually-hidden" for="name-input" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Drawing name</label>
+        <input class="name-input" id="name-input" type="text">
+        <div class="toolbar">
+          <button type="button" id="undo-btn">Undo</button>
+          <button type="button" id="reset-btn">Reset to original</button>
+          <button type="button" id="copy-btn">Copy as JSON</button>
+        </div>
+      </div>
+      <div class="canvas-box"><svg id="canvas" viewBox="-60 -60 120 120" role="img" aria-label="Drawing canvas"></svg></div>
+      <div class="toolbar" aria-label="Add a shape">
+        <span class="eyebrow" style="align-self:center">Add</span>
+        <button type="button" data-add="circle">Circle</button>
+        <button type="button" data-add="ellipse">Oval</button>
+        <button type="button" data-add="rect">Block</button>
+        <button type="button" data-add="triangle">Triangle</button>
+        <button type="button" data-add="mountain">Mountain</button>
+        <button type="button" data-add="hill">Hill</button>
+        <button type="button" data-add="wave">Wave</button>
+        <button type="button" data-add="line">Line</button>
+        <button type="button" data-add="tree">Tree</button>
+        <button type="button" data-add="sun">Sun</button>
+      </div>
+      <div class="previews">
+        <div class="preview"><svg id="pv-light" class="pal-light" viewBox="-60 -60 120 120"></svg>Light map</div>
+        <div class="preview"><svg id="pv-dark" class="pal-dark" viewBox="-60 -60 120 120"></svg>Dark map</div>
+        <div class="preview small"><svg id="pv-small" viewBox="-60 -60 120 120"></svg>Phone size</div>
+        <div class="row" style="align-self:end">
+          <label for="region-select">Region color</label>
+          <select id="region-select"></select>
+        </div>
+      </div>
+    </section>
+
+    <aside class="panel" aria-label="Shape settings">
+      <section>
+        <h3>Layers</h3>
+        <div class="layers" id="layers"></div>
+        <div class="row">
+          <button type="button" class="small" id="up-btn">Bring forward</button>
+          <button type="button" class="small" id="down-btn">Send back</button>
+          <button type="button" class="small" id="dup-btn">Duplicate</button>
+          <button type="button" class="small danger" id="del-btn">Delete</button>
+        </div>
+      </section>
+      <section>
+        <h3>Color</h3>
+        <div class="swatches" id="swatches"></div>
+      </section>
+      <section>
+        <div class="row"><label for="op-range">Opacity</label><input type="range" id="op-range" min="0.1" max="1" step="0.05"></div>
+        <div class="row"><label for="rot-range">Rotate</label><input type="range" id="rot-range" min="-180" max="180" step="1"></div>
+        <div class="row"><label for="size-range">Size</label><input type="range" id="size-range" min="0.5" max="1.5" step="0.01" value="1"></div>
+        <div class="row" id="stroke-row"><label for="sw-range">Line width</label><input type="range" id="sw-range" min="0.5" max="8" step="0.25"></div>
+      </section>
+      <p class="muted" style="font-size:13px">Drag a shape to move it. Drag the white dots to reshape it, and the orange dot to move a hill's base. Arrow keys nudge the selected shape.</p>
+    </aside>
+  </main>
+
+  <main id="view-assign" hidden>
+    <div class="assign-tools">
+      <input type="search" id="assign-filter" placeholder="Filter by city or code" aria-label="Filter destinations">
+      <span class="muted" id="assign-count"></span>
+    </div>
+    <div class="table-scroll" style="margin-top:12px">
+      <table>
+        <thead><tr><th></th><th>Destination</th><th>Code</th><th>Drawing</th><th>Preview</th></tr></thead>
+        <tbody id="assign-body"></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<script>
+(function () {
+  const DESTS = [{"code":"ABQ","name":"Albuquerque","region":"sw"},{"code":"AMS","name":"Amsterdam","region":"in"},{"code":"ANC","name":"Anchorage","region":"ah"},{"code":"ATW","name":"Appleton","region":"ce"},{"code":"ATL","name":"Atlanta","region":"ce"},{"code":"AUS","name":"Austin","region":"ce"},{"code":"BWI","name":"Baltimore","region":"ce"},{"code":"BLI","name":"Bellingham","region":"nw"},{"code":"BIL","name":"Billings","region":"mt"},{"code":"BOI","name":"Boise","region":"nw"},{"code":"BOS","name":"Boston","region":"ce"},{"code":"BZN","name":"Bozeman","region":"mt"},{"code":"BUR","name":"Burbank","region":"sw"},{"code":"YYC","name":"Calgary","region":"mt"},{"code":"CUN","name":"Cancún","region":"in"},{"code":"CLT","name":"Charlotte","region":"ce"},{"code":"ORD","name":"Chicago O'Hare","region":"ce"},{"code":"MDW","name":"Chicago Midway","region":"ce"},{"code":"CVG","name":"Cincinnati","region":"ce"},{"code":"DAL","name":"Dallas Love Field","region":"ce"},{"code":"DFW","name":"Dallas Fort Worth","region":"ce"},{"code":"DEN","name":"Denver","region":"mt"},{"code":"DSM","name":"Des Moines","region":"ce"},{"code":"DTW","name":"Detroit","region":"ce"},{"code":"IAD","name":"Washington Dulles","region":"ce"},{"code":"EUG","name":"Eugene","region":"nw"},{"code":"PAE","name":"Everett","region":"nw"},{"code":"FAI","name":"Fairbanks","region":"ah"},{"code":"FNT","name":"Flint","region":"ce"},{"code":"FLL","name":"Fort Lauderdale","region":"ce"},{"code":"FRA","name":"Frankfurt","region":"in"},{"code":"FAT","name":"Fresno","region":"sw"},{"code":"GRR","name":"Grand Rapids","region":"ce"},{"code":"GDL","name":"Guadalajara","region":"in"},{"code":"HDN","name":"Hayden","region":"mt"},{"code":"HNL","name":"Honolulu","region":"ah"},{"code":"IAH","name":"Houston","region":"ce"},{"code":"IDA","name":"Idaho Falls","region":"nw"},{"code":"IND","name":"Indianapolis","region":"ce"},{"code":"OGG","name":"Kahului","region":"ah"},{"code":"KOA","name":"Kailua-Kona","region":"ah"},{"code":"FCA","name":"Kalispell","region":"mt"},{"code":"MCI","name":"Kansas City","region":"ce"},{"code":"LAS","name":"Las Vegas","region":"sw"},{"code":"LIH","name":"Lihue","region":"ah"},{"code":"LHR","name":"London","region":"in"},{"code":"LGB","name":"Long Beach","region":"sw"},{"code":"LAX","name":"Los Angeles","region":"sw"},{"code":"MFR","name":"Medford","region":"nw"},{"code":"AZA","name":"Mesa","region":"sw"},{"code":"MEX","name":"Mexico City","region":"in"},{"code":"MIA","name":"Miami","region":"ce"},{"code":"MSP","name":"Minneapolis","region":"ce"},{"code":"MSO","name":"Missoula","region":"mt"},{"code":"BNA","name":"Nashville","region":"ce"},{"code":"MSY","name":"New Orleans","region":"ce"},{"code":"JFK","name":"New York","region":"ce"},{"code":"EWR","name":"Newark","region":"ce"},{"code":"OAK","name":"Oakland","region":"sw"},{"code":"ONT","name":"Ontario","region":"sw"},{"code":"MCO","name":"Orlando","region":"ce"},{"code":"PSP","name":"Palm Springs","region":"sw"},{"code":"PSC","name":"Pasco","region":"nw"},{"code":"PDT","name":"Pendleton","region":"nw"},{"code":"PHL","name":"Philadelphia","region":"ce"},{"code":"PHX","name":"Phoenix","region":"sw"},{"code":"PVU","name":"Provo","region":"mt"},{"code":"PVR","name":"Puerto Vallarta","region":"in"},{"code":"RDM","name":"Redmond","region":"nw"},{"code":"RNO","name":"Reno","region":"sw"},{"code":"KEF","name":"Reykjavík","region":"in"},{"code":"SMF","name":"Sacramento","region":"sw"},{"code":"SLC","name":"Salt Lake City","region":"mt"},{"code":"SAN","name":"San Diego","region":"sw"},{"code":"SFO","name":"San Francisco","region":"sw"},{"code":"SJC","name":"San Jose","region":"sw"},{"code":"SJD","name":"Los Cabos","region":"in"},{"code":"SBP","name":"San Luis Obispo","region":"sw"},{"code":"SNA","name":"Santa Ana","region":"sw"},{"code":"SBA","name":"Santa Barbara","region":"sw"},{"code":"STS","name":"Santa Rosa","region":"sw"},{"code":"BFI","name":"Seattle Boeing Field","region":"nw"},{"code":"SEA","name":"Seattle","region":"nw"},{"code":"GEG","name":"Spokane","region":"nw"},{"code":"STL","name":"St Louis","region":"ce"},{"code":"TPA","name":"Tampa","region":"ce"},{"code":"TUS","name":"Tucson","region":"sw"},{"code":"YVR","name":"Vancouver","region":"nw"},{"code":"DCA","name":"Washington National","region":"ce"},{"code":"EAT","name":"Wenatchee","region":"nw"}];
+  const REGIONS = { nw: ["Pacific Northwest", "fir"], sw: ["California and the Southwest", "timber"], mt: ["Mountain West", "moss"],
+                    ce: ["Central and East", "glass"], ah: ["Alaska and Hawaii", "lagoon"], in: ["International", "violet"] };
+  const PALETTE = [
+    ["teal", "Carpet teal"], ["aqua", "Aqua"], ["lagoon", "Lagoon"], ["glass", "Glass blue"], ["water", "Water"], ["violet", "Carpet violet"], ["lime", "Lime"], ["signal", "Signal orange"],
+    ["fir", "Fir"], ["moss", "Moss"], ["timber", "Timber"], ["sand", "Sand"], ["steel", "Steel"], ["ink", "Ink"], ["snow", "Snow"]
+  ];
+  const STROKED = new Set(["wave", "line"]);
+
+  /* ---------- the starter library: shared motifs and three custom drawings ----------
+     Coordinates sit in a 100 by 100 box centered on 0,0 (y grows down). On the site the box
+     sits on the destination, inside its region circle. */
+  const tri = (pts, c) => ({ t: "poly", pts, c });
+  const tree = (x, y, s, c = "fir") => [
+    { t: "rect", x: x - 1.5 * s, y: y, w: 3 * s, h: 7 * s, c: "timber" },
+    tri([[x, y - 22 * s], [x + 9 * s, y], [x - 9 * s, y]], c),
+    tri([[x, y - 30 * s], [x + 7 * s, y - 12 * s], [x - 7 * s, y - 12 * s]], c)
+  ];
+  const STARTERS = {
+    mountains: { name: "Mountains", kind: "motif", shapes: [
+      tri([[-46, 26], [-12, -30], [22, 26]], "steel"), tri([[-12, -30], [-21, -15], [-14, -18], [-9, -12], [-4, -17]], "snow"),
+      tri([[-6, 26], [20, -14], [46, 26]], "fir"), tri([[20, -14], [13, -3], [19, -6], [25, -2]], "snow"),
+      { t: "hill", pts: [[-48, 24], [-20, 18], [10, 24], [48, 18]], base: 34, c: "moss" }] },
+    snowpeaks: { name: "Snowy peaks", kind: "motif", shapes: [
+      { t: "wave", pts: [[-40, -30], [-18, -40], [6, -30], [34, -38]], c: "aqua", w: 4 },
+      tri([[-48, 28], [-18, -22], [12, 28]], "glass"), tri([[-18, -22], [-30, -2], [-22, -6], [-16, 0], [-8, -6]], "snow"),
+      tri([[-8, 28], [18, -8], [46, 28]], "steel"), tri([[18, -8], [9, 5], [16, 2], [24, 6]], "snow"),
+      { t: "rect", x: -48, y: 26, w: 96, h: 8, rx: 2, c: "snow" }] },
+    desert: { name: "Desert", kind: "motif", shapes: [
+      { t: "circle", cx: 22, cy: -24, r: 12, c: "signal" },
+      tri([[-46, 26], [-40, -2], [-14, -2], [-8, 26]], "timber"),
+      { t: "rect", x: 14, y: -10, w: 7, h: 36, rx: 3.5, c: "fir" }, { t: "rect", x: 6, y: -2, w: 6, h: 14, rx: 3, c: "fir" },
+      { t: "rect", x: 23, y: -6, w: 6, h: 12, rx: 3, c: "fir" },
+      { t: "rect", x: -48, y: 24, w: 96, h: 10, rx: 2, c: "sand" }] },
+    palms: { name: "Palms and surf", kind: "motif", shapes: [
+      { t: "circle", cx: 26, cy: -20, r: 11, c: "signal" },
+      { t: "hill", pts: [[-48, 20], [-10, 14], [30, 20], [48, 16]], base: 34, c: "sand" },
+      { t: "wave", pts: [[-48, 28], [-30, 24], [-12, 28], [6, 24], [24, 28], [44, 24]], c: "water", w: 4 },
+      { t: "wave", pts: [[-14, 18], [-12, 0], [-6, -22]], c: "timber", w: 4 },
+      { t: "wave", pts: [[-6, -22], [-20, -26], [-30, -18]], c: "fir", w: 4 }, { t: "wave", pts: [[-6, -22], [-2, -34], [-14, -38]], c: "fir", w: 4 },
+      { t: "wave", pts: [[-6, -22], [8, -30], [16, -22]], c: "fir", w: 4 }, { t: "wave", pts: [[-6, -22], [6, -16], [8, -6]], c: "fir", w: 4 }] },
+    skyline: { name: "City skyline", kind: "motif", shapes: [
+      { t: "rect", x: -40, y: -8, w: 14, h: 34, c: "steel" }, { t: "rect", x: -24, y: -30, w: 12, h: 56, c: "glass" },
+      tri([[-24, -30], [-18, -40], [-12, -30]], "glass"), { t: "rect", x: -10, y: -14, w: 16, h: 40, c: "ink" },
+      { t: "rect", x: 8, y: -22, w: 12, h: 48, c: "teal" }, { t: "rect", x: 22, y: 0, w: 16, h: 26, c: "steel" },
+      { t: "line", pts: [[-18, -40], [-18, -48]], c: "signal", w: 1.5 },
+      { t: "rect", x: -48, y: 24, w: 96, h: 8, rx: 2, c: "moss" }] },
+    plains: { name: "Plains and fields", kind: "motif", shapes: [
+      { t: "circle", cx: 18, cy: -18, r: 13, c: "signal" },
+      { t: "hill", pts: [[-48, 4], [-14, -6], [18, 4], [48, -2]], base: 34, c: "moss" },
+      { t: "hill", pts: [[-48, 16], [-20, 10], [12, 16], [48, 10]], base: 34, c: "timber" },
+      { t: "line", pts: [[-22, 12], [-22, -10]], c: "ink", w: 1.4 }, { t: "line", pts: [[-26, -4], [-22, 0], [-18, -4]], c: "ink", w: 1.4 },
+      { t: "line", pts: [[-12, 12], [-12, -12]], c: "ink", w: 1.4 }, { t: "line", pts: [[-16, -6], [-12, -2], [-8, -6]], c: "ink", w: 1.4 },
+      { t: "line", pts: [[-2, 12], [-2, -8]], c: "ink", w: 1.4 }, { t: "line", pts: [[-6, -2], [-2, 2], [2, -2]], c: "ink", w: 1.4 }] },
+    forest: { name: "Evergreen forest", kind: "motif", shapes: [
+      { t: "hill", pts: [[-48, 18], [-16, 10], [16, 16], [48, 10]], base: 34, c: "moss" },
+      ...tree(-26, 14, 1.25), ...tree(2, 10, 1.55, "fir"), ...tree(28, 14, 1.15, "moss")] },
+    lake: { name: "Lake country", kind: "motif", shapes: [
+      { t: "hill", pts: [[-48, 2], [-22, -8], [6, 0], [48, -6]], base: 34, c: "moss" },
+      { t: "ellipse", cx: 4, cy: 18, rx: 36, ry: 10, c: "water" },
+      ...tree(-34, 0, 0.9), ...tree(-22, -4, 1.0, "fir"), ...tree(30, -4, 0.95, "fir"),
+      { t: "wave", pts: [[-14, 18], [-4, 16], [6, 18]], c: "snow", w: 1.5 }] },
+    bridge: { name: "Bay and bridge", kind: "motif", shapes: [
+      { t: "rect", x: -48, y: 14, w: 96, h: 20, rx: 2, c: "water" },
+      { t: "rect", x: -22, y: -30, w: 5, h: 50, c: "signal" }, { t: "rect", x: 17, y: -30, w: 5, h: 50, c: "signal" },
+      { t: "wave", pts: [[-48, -2], [-20, -28], [0, 2], [20, -28], [48, -2]], c: "signal", w: 2 },
+      { t: "rect", x: -48, y: 4, w: 96, h: 4, c: "signal" },
+      { t: "hill", pts: [[-48, 0], [-36, -8], [-28, 2]], base: 14, c: "moss" }] },
+    hills: { name: "Rolling hills", kind: "motif", shapes: [
+      { t: "circle", cx: -22, cy: -22, r: 11, c: "signal" },
+      { t: "hill", pts: [[-48, 6], [-18, -10], [14, 4], [48, -4]], base: 34, c: "timber" },
+      { t: "hill", pts: [[-48, 18], [-8, 8], [26, 16], [48, 10]], base: 34, c: "moss" },
+      { t: "rect", x: 21, y: -6, w: 3, h: 12, c: "timber" }, { t: "circle", cx: 22.5, cy: -10, r: 9, c: "fir" }] },
+    volcano: { name: "Volcanic island", kind: "motif", shapes: [
+      { t: "circle", cx: 10, cy: -36, r: 5, c: "steel", op: 0.6 }, { t: "circle", cx: 18, cy: -42, r: 6, c: "steel", op: 0.45 },
+      tri([[-40, 18], [-6, -26], [6, -26], [40, 18]], "timber"), tri([[-6, -26], [6, -26], [3, -16], [-3, -20]], "signal"),
+      { t: "rect", x: -48, y: 16, w: 96, h: 18, rx: 2, c: "water" },
+      { t: "wave", pts: [[-44, 22], [-30, 18], [-16, 22], [-2, 18], [12, 22]], c: "snow", w: 1.5 }] },
+    oldtown: { name: "Old town", kind: "motif", shapes: [
+      { t: "rect", x: -40, y: -2, w: 18, h: 28, c: "sand" }, tri([[-42, -2], [-31, -14], [-20, -2]], "violet"),
+      { t: "rect", x: -18, y: -18, w: 12, h: 44, c: "steel" }, tri([[-19, -18], [-12, -40], [-5, -18]], "teal"),
+      { t: "rect", x: -4, y: 4, w: 20, h: 22, c: "timber" }, tri([[-6, 4], [6, -8], [18, 4]], "signal"),
+      { t: "rect", x: 18, y: -6, w: 20, h: 32, c: "sand" }, tri([[16, -6], [28, -18], [40, -6]], "violet"),
+      { t: "rect", x: -48, y: 24, w: 96, h: 8, rx: 2, c: "steel" }] },
+    "custom-PDT": { name: "Pendleton", kind: "custom", code: "PDT", shapes: [
+      { t: "circle", cx: 10, cy: -20, r: 16, c: "signal" },
+      { t: "hill", pts: [[-46, 10], [-20, -4], [6, 8], [46, 2]], base: 34, c: "moss" },
+      { t: "hill", pts: [[-48, 20], [-18, 12], [12, 22], [48, 14]], base: 34, c: "timber" },
+      { t: "line", pts: [[-22, 14], [-22, -10]], c: "ink", w: 1.6 }, { t: "line", pts: [[-27, -2], [-22, 2], [-17, -2]], c: "ink", w: 1.6 },
+      { t: "line", pts: [[-12, 14], [-12, -12]], c: "ink", w: 1.6 }, { t: "line", pts: [[-17, -4], [-12, 0], [-7, -4]], c: "ink", w: 1.6 },
+      { t: "line", pts: [[-2, 16], [-2, -8]], c: "ink", w: 1.6 }, { t: "line", pts: [[-7, 0], [-2, 4], [3, 0]], c: "ink", w: 1.6 }] },
+    "custom-KEF": { name: "Reykjavík", kind: "custom", code: "KEF", shapes: [
+      { t: "wave", pts: [[-44, -26], [-20, -40], [4, -28], [36, -36]], c: "aqua", w: 6 },
+      { t: "wave", pts: [[-40, -12], [-16, -26], [6, -14], [40, -22]], c: "violet", w: 4 },
+      tri([[-44, 22], [-8, -8], [4, 2], [18, -12], [46, 22]], "steel"),
+      tri([[-8, -8], [-2, -2], [5, -4], [3, 2]], "snow"),
+      { t: "rect", x: -48, y: 20, w: 96, h: 12, rx: 2, c: "water" }] },
+    "custom-HNL": { name: "Honolulu", kind: "custom", code: "HNL", shapes: [
+      { t: "circle", cx: 26, cy: 0, r: 10, c: "signal" },
+      { t: "wave", pts: [[-48, 20], [-32, 14], [-16, 20], [0, 14], [16, 20], [32, 14], [48, 20]], c: "lagoon", w: 5 },
+      { t: "rect", x: -48, y: 22, w: 96, h: 10, rx: 2, c: "water" },
+      { t: "wave", pts: [[-4, 16], [-2, -4], [4, -26]], c: "timber", w: 4.5 },
+      { t: "wave", pts: [[4, -26], [-12, -30], [-22, -20]], c: "fir", w: 4.5 }, { t: "wave", pts: [[4, -26], [-4, -40], [-14, -40]], c: "fir", w: 4.5 },
+      { t: "wave", pts: [[4, -26], [16, -38], [22, -34]], c: "fir", w: 4.5 }, { t: "wave", pts: [[4, -26], [20, -24], [24, -14]], c: "fir", w: 4.5 }] }
+  };
+  const MOTIF_IDS = Object.keys(STARTERS).filter(id => STARTERS[id].kind === "motif");
+
+  /* Starting assignments, by what each place is known for. Customs win where they exist. */
+  const DEFAULT_ASSIGN = (() => {
+    const by = {
+      mountains: "BZN FCA MSO YYC HDN DEN SLC PVU BOI RNO IDA EAT RDM YVR",
+      snowpeaks: "ANC FAI",
+      desert: "PHX TUS ABQ LAS PSP AZA PSC",
+      palms: "LAX LGB SNA SAN BUR MIA FLL TPA MCO CUN SJD PVR LIH",
+      skyline: "JFK EWR ORD MDW ATL DFW DAL IAH CLT PHL BOS DCA IAD DTW BWI AUS BNA STL IND MCI SEA BFI MEX",
+      plains: "DSM ATW BIL GEG",
+      forest: "BLI PAE EUG MFR STS",
+      lake: "MSP GRR FNT",
+      bridge: "SFO OAK CVG",
+      hills: "SJC SBP SBA FAT SMF ONT",
+      volcano: "KOA OGG",
+      oldtown: "AMS FRA LHR MSY GDL"
+    };
+    const map = {};
+    for (const [motif, codes] of Object.entries(by)) for (const c of codes.split(" ")) map[c] = motif;
+    for (const id of Object.keys(STARTERS)) if (STARTERS[id].kind === "custom") map[STARTERS[id].code] = id;
+    return map;
+  })();
+
+  /* ---------- state ---------- */
+  const clone = o => JSON.parse(JSON.stringify(o));
+  let saved = {};            // drawings saved in the database, by id
+  let assignSaved = {};      // destination code -> drawing id, saved in the database
+  let current = "mountains";
+  let work = clone(STARTERS.mountains);  // the drawing being edited
+  let selected = -1;
+  let history = [];
+  let region = "nw";
+  let db = null, canSave = false;
+
+  const $ = id => document.getElementById(id);
+  const statusEl = $("status");
+  function setStatus(text, bad = false) { statusEl.textContent = text; statusEl.classList.toggle("bad", bad); }
+
+  function drawingFor(id) { return saved[id] ? saved[id] : STARTERS[id] ? STARTERS[id] : null; }
+  function allIds() {
+    const ids = new Set([...Object.keys(STARTERS), ...Object.keys(saved)]);
+    return [...ids].filter(id => !(saved[id] && saved[id].deleted));
+  }
+
+  /* ---------- drawing shapes ---------- */
+  const NS = "http://www.w3.org/2000/svg";
+  const el = (tag, attrs = {}) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e; };
+  function smooth(pts) {
+    if (pts.length < 2) return "";
+    let d = `M${pts[0][0]},${pts[0][1]}`;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+      const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+      const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+      d += ` C${c1[0].toFixed(2)},${c1[1].toFixed(2)} ${c2[0].toFixed(2)},${c2[1].toFixed(2)} ${p2[0]},${p2[1]}`;
+    }
+    return d;
+  }
+  function center(s) {
+    if (s.t === "circle" || s.t === "ellipse") return [s.cx, s.cy];
+    if (s.t === "rect") return [s.x + s.w / 2, s.y + s.h / 2];
+    const xs = s.pts.map(p => p[0]), ys = s.pts.map(p => p[1]);
+    if (s.t === "hill") ys.push(s.base);
+    return [(Math.min(...xs) + Math.max(...xs)) / 2, (Math.min(...ys) + Math.max(...ys)) / 2];
+  }
+  function shapeEl(s) {
+    const color = `var(--c-${s.c || "ink"})`;
+    let e;
+    if (s.t === "circle") e = el("circle", { cx: s.cx, cy: s.cy, r: Math.max(0.5, s.r) });
+    else if (s.t === "ellipse") e = el("ellipse", { cx: s.cx, cy: s.cy, rx: Math.max(0.5, s.rx), ry: Math.max(0.5, s.ry) });
+    else if (s.t === "rect") e = el("rect", { x: s.x, y: s.y, width: Math.max(0.5, s.w), height: Math.max(0.5, s.h), rx: s.rx || 0 });
+    else if (s.t === "poly") e = el("polygon", { points: s.pts.map(p => p.join(",")).join(" ") });
+    else if (s.t === "hill") {
+      const first = s.pts[0], last = s.pts[s.pts.length - 1];
+      e = el("path", { d: `${smooth(s.pts)} L${last[0]},${s.base} L${first[0]},${s.base} Z` });
+    } else if (s.t === "wave") e = el("path", { d: smooth(s.pts) });
+    else if (s.t === "line") e = el("polyline", { points: s.pts.map(p => p.join(",")).join(" ") });
+    if (STROKED.has(s.t)) { e.style.fill = "none"; e.style.stroke = color; e.setAttribute("stroke-width", s.w || 2); e.setAttribute("stroke-linecap", "round"); e.setAttribute("stroke-linejoin", "round"); }
+    else e.style.fill = color;
+    if (s.op != null && s.op < 1) e.setAttribute("opacity", s.op);
+    if (s.rot) { const [cx, cy] = center(s); e.setAttribute("transform", `rotate(${s.rot} ${cx} ${cy})`); }
+    return e;
+  }
+  function paint(svg, drawing, { circle = true, regionKey = region } = {}) {
+    svg.replaceChildren();
+    svg.append(el("rect", { x: -60, y: -60, width: 120, height: 120, style: "fill:var(--map-land)" }));
+    if (circle) svg.append(el("circle", { cx: 0, cy: 0, r: 54, style: `fill:var(--c-${REGIONS[regionKey][1]});opacity:0.22` }));
+    const g = el("g");
+    drawing.shapes.forEach(s => g.append(shapeEl(s)));
+    svg.append(g);
+    return g;
+  }
+
+  /* ---------- the canvas ---------- */
+  const canvas = $("canvas");
+  function toSvg(evt) {
+    const pt = canvas.createSVGPoint(); pt.x = evt.clientX; pt.y = evt.clientY;
+    const p = pt.matrixTransform(canvas.getScreenCTM().inverse());
+    return [p.x, p.y];
+  }
+  function rotatePoint([x, y], [cx, cy], deg) {
+    const a = deg * Math.PI / 180, c = Math.cos(a), s = Math.sin(a);
+    return [cx + (x - cx) * c - (y - cy) * s, cy + (x - cx) * s + (y - cy) * c];
+  }
+  const snap = v => Math.round(v * 2) / 2;
+  function handlesFor(s) {
+    const h = [];
+    if (s.t === "circle") h.push({ key: "r", p: [s.cx + s.r, s.cy] });
+    else if (s.t === "ellipse") { h.push({ key: "rx", p: [s.cx + s.rx, s.cy] }); h.push({ key: "ry", p: [s.cx, s.cy + s.ry] }); }
+    else if (s.t === "rect") h.push({ key: "wh", p: [s.x + s.w, s.y + s.h] });
+    else {
+      s.pts.forEach((p, i) => h.push({ key: i, p }));
+      if (s.t === "hill") h.push({ key: "base", p: [(s.pts[0][0] + s.pts[s.pts.length - 1][0]) / 2, s.base], base: true });
+    }
+    return h;
+  }
+  function renderCanvas() {
+    canvas.replaceChildren();
+    const bg = el("g");
+    for (let v = -50; v <= 50; v += 10) { bg.append(el("line", { x1: v, y1: -60, x2: v, y2: 60, class: "grid-line" })); bg.append(el("line", { x1: -60, y1: v, x2: 60, y2: v, class: "grid-line" })); }
+    bg.append(el("circle", { cx: 0, cy: 0, r: 54, style: `fill:var(--c-${REGIONS[region][1]});opacity:0.18` }));
+    bg.append(el("circle", { cx: 0, cy: 0, r: 54, class: "guide" }));
+    canvas.append(bg);
+    const g = el("g");
+    work.shapes.forEach((s, i) => {
+      const e = shapeEl(s);
+      e.classList.add("shape"); e.dataset.i = i;
+      if (STROKED.has(s.t)) { // a wide invisible copy makes thin lines easy to grab
+        const hit = shapeEl({ ...s, w: Math.max(6, (s.w || 2) + 4) }); hit.style.stroke = "transparent"; hit.classList.add("shape"); hit.dataset.i = i;
+        g.append(e, hit);
+      } else g.append(e);
+    });
+    canvas.append(g);
+    if (selected >= 0 && work.shapes[selected]) {
+      const s = work.shapes[selected];
+      const hg = el("g");
+      if (s.rot) { const [cx, cy] = center(s); hg.setAttribute("transform", `rotate(${s.rot} ${cx} ${cy})`); }
+      const outline = shapeEl({ ...s, rot: 0, op: 1 }); outline.removeAttribute("style"); outline.setAttribute("class", "sel-outline");
+      hg.append(outline);
+      handlesFor(s).forEach(h => hg.append(el("circle", { cx: h.p[0], cy: h.p[1], r: 1.8, class: "handle" + (h.base ? " base" : ""), "data-h": h.key })));
+      canvas.append(hg);
+    }
+  }
+  function renderPreviews() {
+    paint($("pv-light"), work); paint($("pv-dark"), work); paint($("pv-small"), work);
+  }
+  function renderAll() { renderCanvas(); renderPreviews(); renderLayers(); renderControls(); renderGallery(); }
+
+  /* ---------- editing ---------- */
+  function checkpoint() { history.push(JSON.stringify(work)); if (history.length > 60) history.shift(); $("undo-btn").disabled = false; }
+  function moveShape(s, dx, dy) {
+    if ("cx" in s) { s.cx = snap(s.cx + dx); s.cy = snap(s.cy + dy); }
+    else if (s.t === "rect") { s.x = snap(s.x + dx); s.y = snap(s.y + dy); }
+    else { s.pts = s.pts.map(([x, y]) => [snap(x + dx), snap(y + dy)]); if (s.t === "hill") s.base = snap(s.base + dy); }
+  }
+  let drag = null;
+  canvas.addEventListener("pointerdown", e => {
+    const target = e.target;
+    if (target.classList.contains("handle")) {
+      const key = target.dataset.h;
+      checkpoint();
+      drag = { kind: "handle", key: /^\d+$/.test(key) ? Number(key) : key };
+    } else if (target.classList.contains("shape")) {
+      selected = Number(target.dataset.i);
+      checkpoint();
+      drag = { kind: "move", last: toSvg(e), moved: false };
+    } else { selected = -1; drag = null; renderAll(); return; }
+    canvas.setPointerCapture(e.pointerId);
+    renderAll();
+    e.preventDefault();
+  });
+  canvas.addEventListener("pointermove", e => {
+    if (!drag || selected < 0) return;
+    const s = work.shapes[selected];
+    const p = toSvg(e);
+    if (drag.kind === "move") {
+      const dx = p[0] - drag.last[0], dy = p[1] - drag.last[1];
+      if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5) return;
+      moveShape(s, dx, dy); drag.last = p; drag.moved = true;
+    } else {
+      const local = s.rot ? rotatePoint(p, center(s), -s.rot) : p;
+      const [x, y] = local.map(snap);
+      if (drag.key === "r") s.r = Math.max(1, snap(Math.hypot(x - s.cx, y - s.cy)));
+      else if (drag.key === "rx") s.rx = Math.max(1, Math.abs(x - s.cx));
+      else if (drag.key === "ry") s.ry = Math.max(1, Math.abs(y - s.cy));
+      else if (drag.key === "wh") { s.w = Math.max(1, x - s.x); s.h = Math.max(1, y - s.y); }
+      else if (drag.key === "base") s.base = y;
+      else s.pts[drag.key] = [x, y];
+    }
+    renderCanvas(); renderPreviews();
+  });
+  const endDrag = () => { if (drag) { drag = null; changed(); } };
+  canvas.addEventListener("pointerup", endDrag);
+  canvas.addEventListener("pointercancel", endDrag);
+  document.addEventListener("keydown", e => {
+    if ($("view-draw").hidden || selected < 0 || ["INPUT", "SELECT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
+    const step = e.shiftKey ? 5 : 1;
+    const d = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] }[e.key];
+    if (d) { e.preventDefault(); checkpoint(); moveShape(work.shapes[selected], ...d); changed(); }
+    if ((e.key === "Delete" || e.key === "Backspace")) { e.preventDefault(); $("del-btn").click(); }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") { e.preventDefault(); $("undo-btn").click(); }
+  });
+
+  /* ---------- panel ---------- */
+  function shapeLabel(s) { return { circle: "Circle", ellipse: "Oval", rect: "Block", poly: "Shape", hill: "Hill", wave: "Wave", line: "Line" }[s.t]; }
+  function renderLayers() {
+    const box = $("layers");
+    box.replaceChildren();
+    [...work.shapes.keys()].reverse().forEach(i => {
+      const s = work.shapes[i];
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "layer"; b.setAttribute("aria-current", String(i === selected));
+      b.innerHTML = `<i style="background:var(--c-${s.c})"></i>${shapeLabel(s)} <span class="muted">${i + 1}</span>`;
+      b.addEventListener("click", () => { selected = i; renderAll(); });
+      box.append(b);
+    });
+  }
+  const swBox = $("swatches");
+  PALETTE.forEach(([key, name]) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "swatch"; b.title = name; b.setAttribute("aria-label", name); b.dataset.c = key;
+    b.style.background = `var(--c-${key})`;
+    b.addEventListener("click", () => { if (selected < 0) return; checkpoint(); work.shapes[selected].c = key; changed(); });
+    swBox.append(b);
+  });
+  let sizeBase = null;
+  function renderControls() {
+    const s = work.shapes[selected];
+    for (const id of ["up-btn", "down-btn", "dup-btn", "del-btn", "op-range", "rot-range", "size-range", "sw-range"]) $(id).disabled = !s;
+    swBox.querySelectorAll(".swatch").forEach(b => { b.setAttribute("aria-pressed", String(!!s && b.dataset.c === s.c)); b.disabled = !s; });
+    $("op-range").value = s && s.op != null ? s.op : 1;
+    $("rot-range").value = s ? s.rot || 0 : 0;
+    $("stroke-row").hidden = !(s && STROKED.has(s.t));
+    if (s && STROKED.has(s.t)) $("sw-range").value = s.w || 2;
+    $("size-range").value = 1; sizeBase = null;
+    $("undo-btn").disabled = history.length === 0;
+    $("reset-btn").disabled = !saved[current] || !STARTERS[current];
+  }
+  function rangeEdit(id, apply) {
+    const input = $(id);
+    input.addEventListener("pointerdown", () => checkpoint());
+    input.addEventListener("keydown", e => { if (e.key.startsWith("Arrow")) checkpoint(); });
+    input.addEventListener("input", () => { if (selected < 0) return; apply(work.shapes[selected], Number(input.value)); renderCanvas(); renderPreviews(); });
+    input.addEventListener("change", () => changed());
+  }
+  rangeEdit("op-range", (s, v) => { s.op = v; });
+  rangeEdit("rot-range", (s, v) => { s.rot = v; });
+  rangeEdit("sw-range", (s, v) => { s.w = v; });
+  rangeEdit("size-range", (s, v) => {
+    if (!sizeBase) sizeBase = clone(s);
+    const [cx, cy] = center(sizeBase), b = sizeBase;
+    if (s.t === "circle") s.r = snap(b.r * v);
+    else if (s.t === "ellipse") { s.rx = snap(b.rx * v); s.ry = snap(b.ry * v); }
+    else if (s.t === "rect") { s.w = snap(b.w * v); s.h = snap(b.h * v); s.x = snap(cx - s.w / 2); s.y = snap(cy - s.h / 2); }
+    else { s.pts = b.pts.map(([x, y]) => [snap(cx + (x - cx) * v), snap(cy + (y - cy) * v)]); if (s.t === "hill") s.base = snap(cy + (b.base - cy) * v); }
+  });
+  $("size-range").addEventListener("change", () => { sizeBase = null; $("size-range").value = 1; });
+  $("up-btn").addEventListener("click", () => { if (selected < work.shapes.length - 1) { checkpoint(); const [s] = work.shapes.splice(selected, 1); work.shapes.splice(++selected, 0, s); changed(); } });
+  $("down-btn").addEventListener("click", () => { if (selected > 0) { checkpoint(); const [s] = work.shapes.splice(selected, 1); work.shapes.splice(--selected, 0, s); changed(); } });
+  $("dup-btn").addEventListener("click", () => { if (selected < 0) return; checkpoint(); const s = clone(work.shapes[selected]); moveShape(s, 4, 4); work.shapes.splice(selected + 1, 0, s); selected++; changed(); });
+  $("del-btn").addEventListener("click", () => { if (selected < 0) return; checkpoint(); work.shapes.splice(selected, 1); selected = Math.min(selected, work.shapes.length - 1); changed(); });
+  $("undo-btn").addEventListener("click", () => { if (!history.length) return; work = JSON.parse(history.pop()); selected = Math.min(selected, work.shapes.length - 1); changed(); });
+  $("reset-btn").addEventListener("click", () => { if (!STARTERS[current]) return; checkpoint(); work = clone(STARTERS[current]); selected = -1; changed(); });
+  $("copy-btn").addEventListener("click", async () => {
+    const text = JSON.stringify({ id: current, ...work }, null, 2);
+    try { await navigator.clipboard.writeText(text); setStatus("Copied as JSON"); } catch (e) { setStatus("Copy isn't available here", true); }
+  });
+  $("name-input").addEventListener("change", e => { checkpoint(); work.name = e.target.value.trim() || work.name; changed(); });
+
+  const ADD = {
+    circle: () => [{ t: "circle", cx: 0, cy: 0, r: 10, c: "signal" }],
+    ellipse: () => [{ t: "ellipse", cx: 0, cy: 10, rx: 20, ry: 8, c: "water" }],
+    rect: () => [{ t: "rect", x: -8, y: -10, w: 16, h: 30, c: "steel" }],
+    triangle: () => [tri([[0, -20], [16, 12], [-16, 12]], "fir")],
+    mountain: () => [tri([[-30, 20], [-6, -24], [4, -14], [12, -20], [32, 20]], "steel")],
+    hill: () => [{ t: "hill", pts: [[-48, 14], [-16, 6], [16, 14], [48, 8]], base: 34, c: "moss" }],
+    wave: () => [{ t: "wave", pts: [[-30, 0], [-15, -6], [0, 0], [15, -6], [30, 0]], c: "water", w: 3 }],
+    line: () => [{ t: "line", pts: [[0, 14], [0, -14]], c: "ink", w: 1.5 }],
+    tree: () => tree(0, 10, 1.2),
+    sun: () => [{ t: "circle", cx: 20, cy: -22, r: 11, c: "signal" }]
+  };
+  document.querySelectorAll("[data-add]").forEach(b => b.addEventListener("click", () => {
+    checkpoint(); work.shapes.push(...ADD[b.dataset.add]()); selected = work.shapes.length - 1; changed();
+  }));
+
+  /* ---------- gallery ---------- */
+  function renderGallery() {
+    const box = $("gallery");
+    box.replaceChildren();
+    const section = (title, ids) => {
+      const h = document.createElement("h3"); h.textContent = title; box.append(h);
+      ids.forEach(id => {
+        const d = id === current ? work : drawingFor(id);
+        const b = document.createElement("button");
+        b.type = "button"; b.className = "card"; b.setAttribute("aria-current", String(id === current));
+        const svg = el("svg", { viewBox: "-60 -60 120 120", "aria-hidden": "true" });
+        const regionKey = d.kind === "custom" ? (DESTS.find(x => x.code === d.code) || {}).region || region : region;
+        paint(svg, d, { regionKey });
+        const name = document.createElement("span"); name.textContent = d.name;
+        const sub = document.createElement("small");
+        const uses = Object.entries(effectiveAssign()).filter(([, v]) => v === id).length;
+        sub.textContent = (saved[id] && STARTERS[id] ? "Edited · " : "") + (uses ? `${uses} destination${uses === 1 ? "" : "s"}` : "Not used yet");
+        b.append(svg, name, sub);
+        b.addEventListener("click", () => open(id));
+        box.append(b);
+      });
+    };
+    const ids = allIds();
+    section("Shared motifs", ids.filter(id => drawingFor(id).kind === "motif"));
+    section("Custom drawings", ids.filter(id => drawingFor(id).kind === "custom"));
+    const add = document.createElement("button");
+    add.type = "button"; add.className = "card newcard"; add.textContent = "New custom drawing";
+    add.addEventListener("click", newCustom);
+    box.append(add);
+  }
+  function open(id) {
+    flushSave();
+    current = id; work = clone(drawingFor(id)); selected = -1; history = [];
+    if (work.kind === "custom") region = (DESTS.find(x => x.code === work.code) || {}).region || region;
+    $("region-select").value = region;
+    $("name-input").value = work.name;
+    renderAll();
+  }
+  function newCustom() {
+    // Custom drawings belong to one destination, so pick it in the Assign view.
+    showView("assign");
+    setStatus("Pick “Make a custom drawing…” next to a destination");
+    $("assign-filter").focus();
+  }
+  function startCustom(code) {
+    const dest = DESTS.find(d => d.code === code);
+    const base = drawingFor(effectiveAssign()[code]) || STARTERS.mountains;
+    const id = "custom-" + code;
+    if (!drawingFor(id)) saved[id] = { name: dest.name, kind: "custom", code, shapes: clone(base.shapes) };
+    open(id);
+    changed();
+    setAssign(code, id);
+  }
+
+  /* ---------- saving ---------- */
+  let saveTimer = null, pending = false;
+  function changed() {
+    saved[current] = clone(work);
+    pending = true;
+    renderAll();
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(flushSave, 700);
+  }
+  async function flushSave() {
+    clearTimeout(saveTimer);
+    if (!pending) return;
+    pending = false;
+    if (!db) { setStatus("Not saving: storage isn't available here", true); return; }
+    const id = current, body = { ...clone(saved[id]), updatedAt: Date.now() };
+    setStatus("Saving…");
+    try { await db.doc("drawings/" + id).set(body); setStatus("All changes saved"); }
+    catch (e) { setStatus("Couldn't save: " + (e && e.message ? e.message : "unknown error"), true); }
+  }
+
+  /* ---------- assignments ---------- */
+  function effectiveAssign() { return { ...DEFAULT_ASSIGN, ...assignSaved }; }
+  let assignTimer = null;
+  function setAssign(code, id) {
+    assignSaved = { ...assignSaved, [code]: id };
+    clearTimeout(assignTimer);
+    assignTimer = setTimeout(async () => {
+      if (!db) { setStatus("Not saving: storage isn't available here", true); return; }
+      setStatus("Saving…");
+      try { await db.doc("assignments/all").set({ map: assignSaved, updatedAt: Date.now() }); setStatus("All changes saved"); }
+      catch (e) { setStatus("Couldn't save: " + (e && e.message ? e.message : "unknown error"), true); }
+    }, 500);
+    renderAssign(); renderGallery();
+  }
+  function renderAssign() {
+    const q = $("assign-filter").value.trim().toLowerCase();
+    const body = $("assign-body");
+    body.replaceChildren();
+    const map = effectiveAssign();
+    const ids = allIds();
+    const rows = DESTS.filter(d => !q || d.name.toLowerCase().includes(q) || d.code.toLowerCase().includes(q));
+    $("assign-count").textContent = `${rows.length} of ${DESTS.length} destinations`;
+    rows.forEach(d => {
+      const tr = document.createElement("tr");
+      const tdDot = document.createElement("td"); tdDot.innerHTML = `<span class="dot" style="background:var(--c-${REGIONS[d.region][1]})" title="${REGIONS[d.region][0]}"></span>`;
+      const tdName = document.createElement("td"); tdName.textContent = d.name;
+      const tdCode = document.createElement("td"); tdCode.className = "code"; tdCode.textContent = d.code;
+      const tdSel = document.createElement("td");
+      const sel = document.createElement("select"); sel.id = "assign-" + d.code; sel.setAttribute("aria-label", `Drawing for ${d.name}`);
+      const add = (value, label) => { const o = document.createElement("option"); o.value = value; o.textContent = label; sel.append(o); };
+      ids.filter(id => drawingFor(id).kind === "motif").forEach(id => add(id, drawingFor(id).name));
+      ids.filter(id => drawingFor(id).kind === "custom" && drawingFor(id).code === d.code).forEach(id => add(id, "Custom: " + drawingFor(id).name));
+      if (!drawingFor("custom-" + d.code)) add("__new", "Make a custom drawing…");
+      sel.value = map[d.code] || "";
+      sel.addEventListener("change", () => {
+        if (sel.value === "__new") { showView("draw"); startCustom(d.code); return; }
+        setAssign(d.code, sel.value);
+      });
+      tdSel.append(sel);
+      if (assignSaved[d.code] && assignSaved[d.code] !== DEFAULT_ASSIGN[d.code]) { const m = document.createElement("div"); m.className = "changed"; m.textContent = "Changed"; tdSel.append(m); }
+      const tdPv = document.createElement("td");
+      const svg = el("svg", { viewBox: "-60 -60 120 120", width: 44, height: 44, "aria-hidden": "true" });
+      const dr = drawingFor(map[d.code]);
+      if (dr) paint(svg, dr, { regionKey: d.region });
+      tdPv.append(svg);
+      tr.append(tdDot, tdName, tdCode, tdSel, tdPv);
+      body.append(tr);
+    });
+  }
+  $("assign-filter").addEventListener("input", renderAssign);
+
+  /* ---------- views and region ---------- */
+  function showView(v) {
+    $("view-draw").hidden = v !== "draw"; $("view-assign").hidden = v !== "assign";
+    $("tab-draw").setAttribute("aria-pressed", String(v === "draw")); $("tab-assign").setAttribute("aria-pressed", String(v === "assign"));
+    if (v === "assign") renderAssign();
+  }
+  $("tab-draw").addEventListener("click", () => showView("draw"));
+  $("tab-assign").addEventListener("click", () => { flushSave(); showView("assign"); });
+  const rs = $("region-select");
+  Object.entries(REGIONS).forEach(([k, [name]]) => { const o = document.createElement("option"); o.value = k; o.textContent = name; rs.append(o); });
+  rs.addEventListener("change", () => { region = rs.value; renderCanvas(); renderPreviews(); renderGallery(); });
+
+  /* ---------- start ---------- */
+  open("mountains");
+  setStatus("Connecting…");
+  const loading = setTimeout(() => { if (!db) setStatus("Storage isn't answering yet. Edits won't save until it does.", true); }, 10000);
+  (async () => {
+    const store = window.claude && window.claude.use ? await window.claude.use("db") : null;
+    clearTimeout(loading);
+    if (!store) { setStatus("Edits won't save here: open this page from your claude.ai account to save.", true); return; }
+    db = store;
+    setStatus("Connected");
+    db.collection("drawings").onSnapshot(snap => {
+      const next = {};
+      snap.docs.forEach(d => { next[d.id] = d.data(); });
+      // keep the drawing being edited as the local copy while a save is pending
+      if (pending && saved[current]) next[current] = saved[current];
+      saved = next;
+      if (!pending && !drag && saved[current]) { work = clone(saved[current]); $("name-input").value = work.name; }
+      renderAll();
+      if (!$("view-assign").hidden) renderAssign();
+    }, e => setStatus("Couldn't load saved drawings: " + e.message, true));
+    db.doc("assignments/all").onSnapshot(snap => {
+      assignSaved = snap.exists ? { ...(snap.data().map || {}) } : {};
+      renderGallery();
+      if (!$("view-assign").hidden) renderAssign();
+    }, e => setStatus("Couldn't load assignments: " + e.message, true));
+  })();
+})();
+</script>

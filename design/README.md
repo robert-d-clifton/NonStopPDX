@@ -20,3 +20,7 @@ The published copies are private to the project owner.
 ## Decisions
 
 The decisions behind these studies are recorded in the planning doc's design sessions section.
+
+## Motif editor
+
+`motif-editor/index.html` is the source of the [NonStopPDX Motif Editor](https://claude.ai/artifact/3pvz3VMi4CTPCASE51MkP8), where destination drawings are edited shape by shape and assigned to destinations. The page holds the starter drawings and default assignments. Edits are saved in the published page's own storage (`drawings` and `assignments/all`), not in this file, so the published copy is the one to use. This copy is for rebuilding or republishing it.
