@@ -7,7 +7,7 @@ from stories.models import Story
 
 from .display import (board_rows, flight_minutes, google_flights_url, hours_minutes, route_note, service_for,
                       short_airline, short_name)
-from .models import Airport, Route, SyncRun
+from .models import Airline, Airport, Route, SyncRun
 
 FILTERS = {
     "az": ("A to Z", lambda rows: sorted(rows, key=lambda r: r.name)),
@@ -58,6 +58,8 @@ def home(request):
         "current": current,
         "last_sync": last_sync,
         "map_points": map_points(all_rows),
+        "map_label": f"Map of the {len(all_rows)} nonstop routes from PDX. The departures list below has every destination.",
+        "show_west": True,
     })
 
 
@@ -65,7 +67,7 @@ def destination(request, code):
     if code != code.lower():
         return redirect("routes:destination", code=code.lower(), permanent=True)
     airport = get_object_or_404(
-        Airport.objects.prefetch_related(Prefetch("routes", queryset=Route.objects.select_related("airline").order_by("airline__name"))),
+        Airport.objects.prefetch_related(Prefetch("routes", queryset=Route.objects.select_related("airline__parent").order_by("airline__name"))),
         iata=code.upper(),
     )
     routes = list(airport.routes.all())
@@ -86,7 +88,7 @@ def destination(request, code):
         "airport": airport,
         "name": name,
         "region": region,
-        "active": [{"airline": r.airline.name, "note": route_note(r)} for r in active],
+        "active": [{"airline": r.airline.name, "note": route_note(r), "slug": r.airline.main.slug} for r in active],
         "last_flown": max((r.last_seen for r in routes if r.last_seen), default=None),
         "service": service,
         "flight": hours_minutes(flight_minutes(airport.distance_mi)),
@@ -94,4 +96,85 @@ def destination(request, code):
         "snapshot": snapshot,
         "fares_url": google_flights_url(airport.iata),
         "route_point": point,
+    })
+
+
+def _airline_rows(routes, main):
+    """One board row per destination. When a regional brand flies it, say so: "United Express" when only the
+    brand does, "Also United Express" when the main airline does too."""
+    by_dest = {}
+    for r in routes:
+        by_dest.setdefault(r.destination.pk, []).append(r)
+    rows = []
+    for dest_routes in by_dest.values():
+        a = dest_routes[0].destination
+        brands = sorted({r.airline.name for r in dest_routes if r.airline_id != main.pk})
+        main_flies = any(r.airline_id == main.pk for r in dest_routes)
+        brand = ", ".join(brands)
+        rows.append({
+            "airport": a,
+            "name": short_name(a),
+            "miles": a.distance_mi,
+            "flight": hours_minutes(flight_minutes(a.distance_mi)),
+            "service": service_for(dest_routes),
+            "region": a.region_group,
+            "brand": ("Also " + brand) if brand and main_flies else brand,
+            "seasonal": not any(r.kind == "year-round" for r in dest_routes),
+        })
+    return sorted(rows, key=lambda row: row["name"])
+
+
+def _airline_points(rows) -> list[dict]:
+    points = []
+    for row in rows:
+        a = row["airport"]
+        if a.latitude is None or a.longitude is None:
+            continue
+        points.append({
+            "code": a.iata, "name": row["name"], "lat": round(a.latitude, 4), "lon": round(a.longitude, 4),
+            "miles": row["miles"], "flight": row["flight"], "airlines": [row["brand"]] if row["brand"] else [],
+            "service": row["service"].label, "yearRound": not row["seasonal"],
+            "url": reverse("routes:destination", args=[a.iata.lower()]),
+        })
+    return points
+
+
+def airlines(request):
+    mains = Airline.objects.filter(parent__isnull=True).prefetch_related("brands")
+    entries = []
+    for airline in mains:
+        routes = Route.objects.filter(active=True, airline__in=airline.family()).select_related("destination")
+        dests = {r.destination for r in routes}
+        if not dests:
+            continue
+        entries.append({
+            "airline": airline,
+            "destinations": len(dests),
+            "seasonal": sum(1 for r in routes if r.kind != "year-round"),
+            "international": sum(1 for d in dests if d.international),
+            "brands": [b.name for b in airline.brands.all() if Route.objects.filter(active=True, airline=b).exists()],
+        })
+    entries.sort(key=lambda e: (-e["destinations"], e["airline"].name))
+    return render(request, "routes/airlines.html", {"entries": entries})
+
+
+def airline(request, slug):
+    airline = get_object_or_404(Airline.objects.select_related("parent"), slug=slug)
+    if airline.parent:  # regional brands live on their main airline's page
+        return redirect("routes:airline", slug=airline.parent.slug, permanent=True)
+    routes = list(Route.objects.filter(active=True, airline__in=airline.family())
+                  .select_related("destination", "airline").order_by("destination__city"))
+    rows = _airline_rows(routes, airline)
+    farthest = max((r for r in rows if r["miles"] is not None), key=lambda r: r["miles"], default=None)
+    points = _airline_points(rows)
+    return render(request, "routes/airline.html", {
+        "airline": airline,
+        "rows": rows,
+        "destinations": len(rows),
+        "seasonal": sum(1 for r in rows if r["seasonal"]),
+        "international": len({r["airport"].pk for r in rows if r["airport"].international}),
+        "farthest": farthest,
+        "has_brands": any(r["brand"] for r in rows),
+        "map_points": points,
+        "show_west": sum(1 for p in points if p["miles"] is not None and p["miles"] < 1150) >= 2,
     })

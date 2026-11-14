@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static humanize_miles %}
+{% block title %}{{ airline.name }} from PDX · NonStopPDX{% endblock %}
+{% block content %}
+<main>
+  <section class="wrap airline-head" aria-labelledby="airline-title">
+    <a class="back" href="{% url 'routes:airlines' %}">All airlines</a>
+    <div class="titleline">
+      {% if airline.code %}<div class="codes"><div class="flaps" id="airline-code" aria-hidden="true">{% for ch in airline.code %}<span class="flap">{{ ch }}</span>{% endfor %}</div></div>{% endif %}
+      <h1 id="airline-title">{{ airline.name }}</h1>
+    </div>
+    {% if rows %}
+    <div class="facts airline-facts">
+      <div><span class="v">{{ destinations }}</span><span class="k">Nonstop destination{{ destinations|pluralize }}</span></div>
+      <div><span class="v">{{ seasonal }}</span><span class="k">Seasonal route{{ seasonal|pluralize }}</span></div>
+      <div><span class="v">{{ international }}</span><span class="k">International</span></div>
+      {% if farthest %}<div><span class="v">{{ farthest.name }}</span><span class="k">Farthest, {{ farthest.miles|miles }} mi</span></div>{% endif %}
+    </div>
+    {% else %}
+    <p class="notice">{{ airline.name }} has no nonstop routes from PDX right now.</p>
+    {% endif %}
+    {% if airline.website %}<a class="fares" href="{{ airline.website }}" target="_blank" rel="noopener">Visit the {{ airline.name }} website</a>{% endif %}
+  </section>
+
+  {% if rows %}
+  {% with map_label="Map of "|add:airline.name|add:"'s nonstop routes from PDX. The list below has every destination." map_title="Map of "|add:airline.name|add:" routes from PDX" %}
+  {% include "routes/_overview_map.html" %}
+  {% endwith %}
+
+  <div class="band" id="departures">
+    <svg class="edge" aria-hidden="true"><rect width="100%" height="100%" style="fill:url(#carpet)"/></svg>
+    <div class="wrap band-inner">
+      <div>
+        <span class="eyebrow">The list view</span>
+        <h2>Where {{ airline.name }} flies from PDX</h2>
+      </div>
+      <div class="fids">
+        <div class="bar"><h3>Departures</h3></div>
+        <div class="fids-scroll">
+          <table>
+            <thead><tr><th aria-label="Region"></th><th>Destination</th><th>Code</th>{% if has_brands %}<th>Flown as</th>{% endif %}<th class="num">Miles</th><th class="num">Flight</th><th>Service</th></tr></thead>
+            <tbody>
+              {% for row in rows %}
+              <tr>
+                <td class="rg"><span class="rowdot" style="background:{{ row.region.color }}" title="{{ row.region.name }}"></span></td>
+                <td class="city"><a href="{% url 'routes:destination' row.airport.iata|lower %}">{{ row.name }}</a></td>
+                <td class="code">{{ row.airport.iata }}</td>
+                {% if has_brands %}<td>{{ row.brand }}</td>{% endif %}
+                <td class="num">{{ row.miles|miles }}</td>
+                <td class="num">{{ row.flight }}</td>
+                <td><span class="st {{ row.service.css }}">{{ row.service.label }}</span></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="foot"><span>{{ rows|length }} route{{ rows|length|pluralize }}</span><span>{{ airline.name }}</span></div>
+      </div>
+    </div>
+    <svg class="edge" aria-hidden="true"><rect width="100%" height="100%" style="fill:url(#carpet)"/></svg>
+  </div>
+  {% include "routes/_overview_map_scripts.html" %}
+  {% endif %}
+</main>
+{% endblock %}

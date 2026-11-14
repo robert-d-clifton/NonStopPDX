@@ -70,18 +70,32 @@ window.NSPMap = (function () {
 
   const boxesHit = (a, b) => a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
 
-  /* A text label that steps up or down until it clears the labels already placed. */
-  function placeLabel(labels, placed, { x, y, text, size, right = true, k = 1, cls = "label" }) {
-    const t = labels.append("text").attr("class", cls).attr("x", x + (right ? 8 : -8) * k)
-      .attr("text-anchor", right ? "start" : "end").attr("font-size", size).text(text);
-    let box;
-    for (const step of [0, -1, 1, -2, 2]) {
-      t.attr("y", y + 5 * k + step * 15 * k);
-      box = t.node().getBBox();
-      if (!placed.some(p => boxesHit(box, p))) break;
+  /* A city label beside its dot. It tries the preferred side, then the other side, each a little up or down,
+     and takes the first spot that covers no placed label and no other dot. With no clear spot it's left off,
+     unless force is set (the selected city always keeps its name). Returns the text, or null. */
+  function placeLabel(labels, placed, { x, y, text, size, right = true, k = 1, cls = "label", dots = [], force = false }) {
+    const t = labels.append("text").attr("class", cls).attr("font-size", size).text(text);
+    const pad = 2 * k;
+    const coversDot = box => dots.some(([dx, dy]) => (dx !== x || dy !== y) &&
+      dx > box.x - pad && dx < box.x + box.width + pad && dy > box.y - pad && dy < box.y + box.height + pad);
+    const spots = [];
+    for (const side of [right, !right]) for (const step of [0, -1, 1, -2, 2]) spots.push({ side, step });
+    let first = null;
+    for (const { side, step } of spots) {
+      t.attr("x", x + (side ? 8 : -8) * k).attr("text-anchor", side ? "start" : "end").attr("y", y + 5 * k + step * 14 * k);
+      const box = t.node().getBBox();
+      if (!first) first = { side, step, box };
+      if (!placed.some(p => boxesHit(box, p)) && !coversDot(box)) { placed.push(box); return t; }
     }
-    placed.push(box);
+    if (!force) { t.remove(); return null; }
+    t.attr("x", x + (first.side ? 8 : -8) * k).attr("text-anchor", first.side ? "start" : "end").attr("y", y + 5 * k + first.step * 14 * k);
+    placed.push(first.box);
     return t;
+  }
+
+  /* Labels are measured to keep them apart, so wait for the page's fonts first, or a fallback font gets measured. */
+  function fontsReady() {
+    return document.fonts && document.fonts.ready ? document.fonts.ready.catch(() => {}) : Promise.resolve();
   }
 
   /* Redraw when the map's width changes, since text and tap targets scale with it. */
@@ -93,5 +107,5 @@ window.NSPMap = (function () {
     });
   }
 
-  return { PDX, loadJSON, flapRow, tree, treesAround, scaleFor, drawBase, placeLabel, onResize };
+  return { PDX, loadJSON, flapRow, tree, treesAround, scaleFor, drawBase, placeLabel, onResize, fontsReady };
 })();

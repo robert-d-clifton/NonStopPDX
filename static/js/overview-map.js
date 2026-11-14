@@ -20,12 +20,14 @@
     west: ["SEA", "PDT", "BOI", "SFO", "LAX", "LAS", "PHX", "SLC", "DEN"]
   };
   const byCode = Object.fromEntries(POINTS.map(p => [p.code, p]));
+  // An airline with only a few routes gets every destination labeled.
+  const LABEL_ALL = POINTS.length <= 24;
   const svg = d3.select(svgEl);
   let world = null, detail = null;
   let zoom = "world", selected = null;
 
   function draw() {
-    const west = zoom === "west" && detail;
+    const west = zoom === "west" && detail && POINTS.filter(p => p.miles !== null && p.miles < WEST_MILES).length >= 2;
     const k = M.scaleFor(svgEl, W);
     const small = k > 1.6;
 
@@ -55,16 +57,18 @@
       node.append("circle").attr("class", "hit").attr("cx", x).attr("cy", y).attr("r", 11 * k);
       node.append("circle").attr("class", "dest" + (p.code === selected ? " on" : "")).attr("cx", x).attr("cy", y)
         .attr("r", (p.code === selected ? 6 : 3.6) * Math.min(k, 1.6));
-      if (labelSet.includes(p.code) || p.code === selected) wanted.push({ x, y, sel: p.code === selected, text: p.name, right: x < W * 0.82 });
+      if (LABEL_ALL || labelSet.includes(p.code) || p.code === selected) wanted.push({ x, y, sel: p.code === selected, text: p.name, right: x < W * 0.82, code: p.code });
     });
     svg.append("circle").attr("class", "pdx-dot").attr("cx", p0[0]).attr("cy", p0[1]).attr("r", 8 * Math.min(k, 1.6));
 
     // Labels sit above the clipped layers and step aside when they would overlap.
     const lg = labels();
     const placed = [];
-    const pdx = lg.append("text").attr("class", "label").attr("x", p0[0] + 12 * k).attr("y", p0[1] + 26 * k).attr("font-size", 22 * k).text("PDX");
-    placed.push(pdx.node().getBBox());
-    wanted.sort((a, b) => b.sel - a.sel).forEach(w => M.placeLabel(lg, placed, { ...w, size: (w.sel ? 19 : 14) * k, k }));
+    const dotsXY = vis.map(p => proj([p.lon, p.lat]));
+    M.placeLabel(lg, placed, { x: p0[0], y: p0[1] + 18 * k, text: "PDX", size: 22 * k, k, dots: dotsXY, force: true });
+    // The selected city first, then in the order of the label list, so the most useful names win a crowded spot.
+    const rank = w => { const i = labelSet.indexOf(w.code); return i < 0 ? labelSet.length : i; };
+    wanted.sort((a, b) => (b.sel - a.sel) || (rank(a) - rank(b))).forEach(w => M.placeLabel(lg, placed, { ...w, size: (w.sel ? 19 : 14) * k, k, dots: dotsXY, force: w.sel }));
   }
 
   const roCode = document.getElementById("readout-code");
@@ -92,6 +96,6 @@
   }));
 
   M.onResize(svgEl, () => { if (world) draw(); });
-  M.loadJSON(script.dataset.world).then(w => { world = w; draw(); })
+  Promise.all([M.loadJSON(script.dataset.world), M.fontsReady()]).then(([w]) => { world = w; draw(); })
     .catch(() => { svgEl.insertAdjacentHTML("afterend", '<p class="map-fallback">The map couldn\'t load. Every destination is in the departures list below.</p>'); });
 })();

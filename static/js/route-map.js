@@ -52,7 +52,7 @@
 
   M.onResize(svgEl, () => { if (world || detail) draw(); });
   const geo = near ? M.loadJSON(script.dataset.detail).then(d => { detail = d; }) : M.loadJSON(script.dataset.world).then(w => { world = w; });
-  geo.then(draw).catch(() => {
+  Promise.all([geo, M.fontsReady()]).then(draw).catch(() => {
     // Fall back to the world map if the finer one fails, and say so only if that fails too.
     M.loadJSON(script.dataset.world).then(w => { world = w; detail = null; draw(); })
       .catch(() => svgEl.insertAdjacentHTML("afterend", '<p class="map-fallback">The route map couldn\'t load.</p>'));

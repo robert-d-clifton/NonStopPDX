@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
 
 from routes.models import Override, SyncRun
-from routes.sync import apply_dataset, import_overrides, overrides_from_db
+from routes.sync import apply_dataset, import_airlines, import_overrides, overrides_from_db
 from sync import pdx_routes
 
 
@@ -29,6 +29,8 @@ class Command(BaseCommand):
             raise CommandError(f"Route sync failed: {exc}") from exc
 
         run = apply_dataset(dataset, revision, started)
+        if settings.AIRLINES_FILE.exists():
+            import_airlines(settings.AIRLINES_FILE)  # new airlines from the sources get their page details
         if options["write_files"]:
             pdx_routes.write_outputs(dataset, revision)
             self.stdout.write("Wrote data/routes.json and data/routes.csv")

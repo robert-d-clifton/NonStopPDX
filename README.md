@@ -33,6 +33,7 @@ The site listens on `WEB_BIND` from `.env` (127.0.0.1:8000 unless you change it)
 | `sync_opensky` | Stores a week of observed departures per destination. Needs the OpenSky settings in `.env`. |
 | `import_overrides` / `export_overrides` | `data/overrides.json` is the source of truth. Import loads it into the database; export writes admin site changes back so they can be committed. |
 | `import_stories` / `export_stories` | The same, for `stories/*.md`. |
+| `import_airlines` | Applies `data/airlines.json`: airline page addresses, codes, websites, and which regional brands (like United Express) belong to which airline. `sync_routes` runs it too. |
 
 Every sync run is recorded in the admin site under Sync runs, with its warnings.
 

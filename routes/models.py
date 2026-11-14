@@ -39,7 +39,14 @@ class Airport(models.Model):
 
 
 class Airline(models.Model):
+    """An airline, or a regional brand flown for one (parent set), like United Express for United Airlines."""
+
     name = models.CharField(max_length=120, unique=True)
+    slug = models.SlugField(max_length=80, unique=True, help_text="Page address, /airlines/<slug>/")
+    code = models.CharField("IATA code", max_length=3, blank=True)
+    website = models.URLField(blank=True)
+    parent = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL, related_name="brands",
+                               help_text="For a regional brand, the main airline whose page it appears on")
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -47,6 +54,28 @@ class Airline(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = unique_slug(self.name, Airline, self.pk)
+        super().save(*args, **kwargs)
+
+    @property
+    def main(self) -> "Airline":
+        return self.parent or self
+
+    def family(self) -> list["Airline"]:
+        """This airline and the regional brands flown for it."""
+        return [self, *self.brands.all()]
+
+
+def unique_slug(name: str, model, pk=None) -> str:
+    from django.utils.text import slugify
+    base = slugify(name.replace(" Airlines", "").replace(" Air Lines", "")) or "airline"
+    slug, n = base, 2
+    while model.objects.filter(slug=slug).exclude(pk=pk).exists():
+        slug, n = f"{base}-{n}", n + 1
+    return slug
 
 
 class Route(models.Model):

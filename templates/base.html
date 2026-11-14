@@ -16,6 +16,7 @@
     <nav aria-label="Main">
       <a href="{% url 'routes:home' %}#map">Map</a>
       <a href="{% url 'routes:home' %}#departures">Departures</a>
+      <a href="{% url 'routes:airlines' %}" {% if request.resolver_match.url_name == 'airlines' or request.resolver_match.url_name == 'airline' %}aria-current="page"{% endif %}>Airlines</a>
       {% if user.is_staff %}<a href="{% url 'admin:index' %}">Admin</a>{% endif %}
     </nav>
   </header>

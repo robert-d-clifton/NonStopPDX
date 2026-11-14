@@ -201,3 +201,78 @@ class DestinationPageTests(TestCase):
         home = self.client.get("/")
         self.assertContains(home, 'href="/to/sea/"')
         self.assertEqual({p["url"] for p in home.context["map_points"]}, {"/to/sea/", "/to/hdn/"})
+
+
+class AirlinePageTests(TestCase):
+    def setUp(self):
+        apply_dataset(dataset(
+            dest("SEA", "Seattle", ("Alaska Airlines", "year-round"), ("Delta Connection", "year-round")),
+            dest("JFK", "New York", ("Delta Air Lines", "year-round"), ("Alaska Airlines", "year-round"), region="US-NY", miles=2454),
+            dest("MSP", "Minneapolis", ("Delta Air Lines", "seasonal"), region="US-MN", miles=1426),
+        ))
+        from routes.sync import import_airlines
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "airlines.json"
+            path.write_text(json.dumps({"airlines": [
+                {"name": "Alaska Airlines", "slug": "alaska", "code": "AS", "website": "https://www.alaskaair.com/"},
+                {"name": "Delta Air Lines", "slug": "delta", "code": "DL", "website": "https://www.delta.com/"},
+                {"name": "Delta Connection", "parent": "Delta Air Lines"},
+            ]}))
+            import_airlines(path)
+
+    def test_import_sets_details_and_brands(self):
+        from routes.models import Airline
+        delta = Airline.objects.get(slug="delta")
+        self.assertEqual((delta.code, delta.website), ("DL", "https://www.delta.com/"))
+        self.assertEqual([b.name for b in delta.brands.all()], ["Delta Connection"])
+
+    def test_index_folds_brands_into_their_airline(self):
+        page = self.client.get("/airlines/")
+        names = [e["airline"].name for e in page.context["entries"]]
+        self.assertEqual(names, ["Delta Air Lines", "Alaska Airlines"])  # Delta has 3 destinations with its brand
+        delta = page.context["entries"][0]
+        self.assertEqual((delta["destinations"], delta["seasonal"], delta["brands"]), (3, 1, ["Delta Connection"]))
+        self.assertContains(page, "with Delta Connection")
+
+    def test_airline_page_lists_its_routes_and_brand_routes(self):
+        page = self.client.get("/airlines/delta/")
+        self.assertEqual(page.status_code, 200)
+        self.assertEqual([r["airport"].iata for r in page.context["rows"]], ["MSP", "JFK", "SEA"])
+        self.assertTrue(page.context["has_brands"])
+        self.assertContains(page, "Flown as")
+        self.assertContains(page, "Delta Connection")
+        self.assertContains(page, 'href="https://www.delta.com/"')
+        self.assertContains(page, 'href="/to/msp/"')
+        self.assertEqual(page.context["farthest"]["airport"].iata, "JFK")
+        self.assertEqual(page.context["rows"][2]["brand"], "Delta Connection")
+        self.assertEqual(len(page.context["map_points"]), 3)
+
+    def test_destination_flown_by_airline_and_brand_is_one_row(self):
+        apply_dataset(dataset(
+            dest("SEA", "Seattle", ("Alaska Airlines", "year-round"), ("Delta Connection", "year-round"), ("Delta Air Lines", "seasonal")),
+            dest("JFK", "New York", ("Delta Air Lines", "year-round"), region="US-NY", miles=2454),
+        ))
+        page = self.client.get("/airlines/delta/")
+        sea = [r for r in page.context["rows"] if r["airport"].iata == "SEA"]
+        self.assertEqual(len(sea), 1)
+        self.assertEqual(sea[0]["brand"], "Also Delta Connection")
+        self.assertFalse(sea[0]["seasonal"])
+        self.assertEqual(len(page.context["map_points"]), 2)
+
+    def test_brand_address_redirects_to_its_airline(self):
+        from routes.models import Airline
+        brand = Airline.objects.get(name="Delta Connection")
+        self.assertRedirects(self.client.get(f"/airlines/{brand.slug}/"), "/airlines/delta/", status_code=301)
+
+    def test_unknown_airline_is_not_found(self):
+        self.assertEqual(self.client.get("/airlines/nope/").status_code, 404)
+
+    def test_destination_page_links_airlines_to_their_main_page(self):
+        page = self.client.get("/to/sea/")
+        self.assertContains(page, 'href="/airlines/alaska/"')
+        self.assertContains(page, 'href="/airlines/delta/"')
+
+    def test_new_airline_gets_a_slug_automatically(self):
+        from routes.models import Airline
+        a = Airline.objects.create(name="Example Airlines")
+        self.assertEqual(a.slug, "example")

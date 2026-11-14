@@ -37,7 +37,7 @@
       <div class="side-col">
       {% if active %}
       <div class="chips">
-        {% for r in active %}<span class="chip">{{ r.airline }}<i>{{ r.note }}</i></span>{% endfor %}
+        {% for r in active %}<a class="chip" href="{% url 'routes:airline' r.slug %}">{{ r.airline }}<i>{{ r.note }}</i></a>{% endfor %}
       </div>
       <a class="fares" href="{{ fares_url }}" target="_blank" rel="noopener">Check fares on Google Flights</a>
       {% endif %}

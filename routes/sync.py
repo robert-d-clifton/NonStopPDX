@@ -111,3 +111,29 @@ def export_overrides(path: Path) -> int:
     entries = overrides_from_db()
     path.write_text(json.dumps({"_help": OVERRIDES_HELP, "overrides": entries}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return len(entries)
+
+
+@transaction.atomic
+def import_airlines(path: Path) -> int:
+    """Apply data/airlines.json: slugs, codes, websites, and which regional brands belong to which airline.
+    Airlines the file names but the routes don't (like a main airline flown only by its regional brand) are created."""
+    entries = json.loads(path.read_text(encoding="utf-8"))["airlines"]
+    by_name = {}
+    for e in entries:
+        airline, _ = Airline.objects.get_or_create(name=e["name"])
+        if e.get("slug") and e["slug"] != airline.slug:
+            Airline.objects.filter(slug=e["slug"]).exclude(pk=airline.pk).update(slug=f"{e['slug']}-old-{airline.pk}")
+            airline.slug = e["slug"]
+        airline.code = e.get("code", "")
+        airline.website = e.get("website", "")
+        airline.save()
+        by_name[e["name"]] = airline
+    for e in entries:
+        airline = by_name[e["name"]]
+        parent = by_name.get(e.get("parent")) if e.get("parent") else None
+        if e.get("parent") and parent is None:
+            raise ValueError(f"{e['name']}: parent {e['parent']!r} isn't in the file")
+        if airline.parent != parent:
+            airline.parent = parent
+            airline.save(update_fields=["parent"])
+    return len(entries)

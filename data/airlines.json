@@ -1,0 +1,30 @@
+{
+  "_help": "Airline details the route data doesn't carry. name must match the airline's name in the route data. A regional brand gets parent, the main airline's name, and is shown on that airline's page. slug is the page address, /airlines/<slug>/. code is the two letter IATA code. website is checked by hand.",
+  "airlines": [
+    {"name": "Aeroméxico", "slug": "aeromexico", "code": "AM", "website": "https://www.aeromexico.com/"},
+    {"name": "Air Canada", "slug": "air-canada", "code": "AC", "website": "https://www.aircanada.com/"},
+    {"name": "Air Canada Express", "parent": "Air Canada"},
+    {"name": "Alaska Airlines", "slug": "alaska", "code": "AS", "website": "https://www.alaskaair.com/"},
+    {"name": "Allegiant Air", "slug": "allegiant", "code": "G4", "website": "https://www.allegiantair.com/"},
+    {"name": "American Airlines", "slug": "american", "code": "AA", "website": "https://www.aa.com/"},
+    {"name": "American Eagle", "parent": "American Airlines"},
+    {"name": "Boutique Air", "slug": "boutique", "code": "4B", "website": "https://www.boutiqueair.com/"},
+    {"name": "British Airways", "slug": "british-airways", "code": "BA", "website": "https://www.britishairways.com/"},
+    {"name": "Condor", "slug": "condor", "code": "DE", "website": "https://www.condor.com/"},
+    {"name": "Delta Air Lines", "slug": "delta", "code": "DL", "website": "https://www.delta.com/"},
+    {"name": "Delta Connection", "parent": "Delta Air Lines"},
+    {"name": "Frontier Airlines", "slug": "frontier", "code": "F9", "website": "https://www.flyfrontier.com/"},
+    {"name": "Hawaiian Airlines", "slug": "hawaiian", "code": "HA", "website": "https://www.hawaiianairlines.com/"},
+    {"name": "Icelandair", "slug": "icelandair", "code": "FI", "website": "https://www.icelandair.com/"},
+    {"name": "JetBlue", "slug": "jetblue", "code": "B6", "website": "https://www.jetblue.com/"},
+    {"name": "KLM", "slug": "klm", "code": "KL", "website": "https://www.klm.com/"},
+    {"name": "SeaPort Airlines", "slug": "seaport", "code": "K5", "website": ""},
+    {"name": "Southwest Airlines", "slug": "southwest", "code": "WN", "website": "https://www.southwest.com/"},
+    {"name": "Sun Country Airlines", "slug": "sun-country", "code": "SY", "website": "https://www.suncountry.com/"},
+    {"name": "United Airlines", "slug": "united", "code": "UA", "website": "https://www.united.com/"},
+    {"name": "United Express", "parent": "United Airlines"},
+    {"name": "Volaris", "slug": "volaris", "code": "Y4", "website": "https://www.volaris.com/"},
+    {"name": "WestJet", "slug": "westjet", "code": "WS", "website": "https://www.westjet.com/"},
+    {"name": "WestJet Encore", "parent": "WestJet"}
+  ]
+}

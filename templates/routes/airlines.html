@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Airlines · NonStopPDX{% endblock %}
+{% block content %}
+<main class="wrap airlines-page">
+  <section class="intro" aria-labelledby="airlines-title">
+    <span class="eyebrow">Who flies nonstop from PDX</span>
+    <h1 id="airlines-title">Airlines</h1>
+    <p>{{ entries|length }} airlines, with the most destinations first. Regional brands, like United Express, are shown with the airline they fly for.</p>
+  </section>
+
+  <ul class="airline-list">
+    {% for e in entries %}
+    <li>
+      <a class="airline-card" href="{% url 'routes:airline' e.airline.slug %}">
+        {% if e.airline.code %}<span class="codes"><span class="flaps" aria-hidden="true">{% for ch in e.airline.code %}<span class="flap">{{ ch }}</span>{% endfor %}</span></span>{% endif %}
+        <span class="airline-name">{{ e.airline.name }}{% if e.brands %}<small>with {{ e.brands|join:", " }}</small>{% endif %}</span>
+        <span class="airline-count"><b>{{ e.destinations }}</b> destination{{ e.destinations|pluralize }}</span>
+        <span class="airline-meta">{% if e.seasonal %}{{ e.seasonal }} seasonal{% endif %}{% if e.seasonal and e.international %} · {% endif %}{% if e.international %}{{ e.international }} international{% endif %}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</main>
+{% endblock %}

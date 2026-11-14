@@ -101,6 +101,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Weekly sync settings
 SYNC_INTERVAL_HOURS = int(os.environ.get("SYNC_INTERVAL_HOURS", "168"))
 OVERRIDES_FILE = BASE_DIR / "data" / "overrides.json"
+AIRLINES_FILE = BASE_DIR / "data" / "airlines.json"
 STORIES_DIR = BASE_DIR / "stories"
 
 LOGGING = {
