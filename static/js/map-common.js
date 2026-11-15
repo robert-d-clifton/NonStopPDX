@@ -58,7 +58,7 @@ window.NSPMap = (function () {
     wobble.append("feDisplacementMap").attr("in", "SourceGraphic").attr("in2", "n").attr("scale", 4).attr("xChannelSelector", "R").attr("yChannelSelector", "G");
 
     svg.append("rect").attr("class", "ocean").attr("width", W).attr("height", H).attr("rx", radius);
-    const g = svg.append("g").attr("clip-path", `url(#${id}-clip)`);
+    const g = svg.append("g").attr("clip-path", `url(#${id}-clip)`).append("g").attr("class", "map-content");
     if (graticule) g.append("path").attr("class", "grat").attr("d", path(d3.geoGraticule().step([15, 15])()));
     const land = g.append("g").attr("filter", `url(#${id}-wobble)`);
     land.selectAll("path.land").data(geo.land.features).join("path").attr("class", "land").attr("d", path);
@@ -70,27 +70,56 @@ window.NSPMap = (function () {
 
   const boxesHit = (a, b) => a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
 
+  /* Label sizes come from the font's measured width, cached, so finding a free spot doesn't make the
+     browser lay out every candidate. Matches svg text.label: Jost 500, capitals, 0.08em letter spacing. */
+  const measure = document.createElement("canvas").getContext("2d");
+  const widths = new Map();
+  let fit = null;  // how the browser's drawn label compares with the canvas measurement, found once per page
+  function calibrate(labels) {
+    const sample = "SALT LAKE CITY";
+    const t = labels.append("text").attr("class", "label").attr("font-size", 100).attr("x", 0).attr("y", 0).text(sample);
+    const b = t.node().getBBox();
+    t.remove();
+    measure.font = '500 100px Jost, Futura, "Century Gothic", sans-serif';
+    const guess = measure.measureText(sample).width + 0.08 * 100 * sample.length;
+    fit = b.width > 0 ? { width: b.width / guess, top: -b.y / 100, height: b.height / 100 } : { width: 1.05, top: 0.95, height: 1.25 };
+  }
+  function labelBox(labels, text, size, start, x, y) {
+    if (!fit) calibrate(labels);
+    const key = size.toFixed(2) + "|" + text;
+    let w = widths.get(key);
+    if (w === undefined) {
+      measure.font = `500 ${size}px Jost, Futura, "Century Gothic", sans-serif`;
+      w = (measure.measureText(text.toUpperCase()).width + 0.08 * size * text.length) * fit.width;
+      widths.set(key, w);
+    }
+    return { x: start ? x : x - w, y: y - fit.top * size, width: w, height: fit.height * size };
+  }
+
   /* A city label beside its dot. It tries the preferred side, then the other side, each a little up or down,
-     and takes the first spot that covers no placed label and no other dot. With no clear spot it's left off,
-     unless force is set (the selected city always keeps its name). Returns the text, or null. */
-  function placeLabel(labels, placed, { x, y, text, size, right = true, k = 1, cls = "label", dots = [], force = false }) {
-    const t = labels.append("text").attr("class", cls).attr("font-size", size).text(text);
+     and takes the first spot that covers no placed label and no other dot, inside bounds when given.
+     With no clear spot it's left off, unless force is set (the selected city always keeps its name). */
+  function placeLabel(labels, placed, { x, y, text, size, right = true, k = 1, cls = "label", dots = [], force = false, bounds = null }) {
     const pad = 2 * k;
     const coversDot = box => dots.some(([dx, dy]) => (dx !== x || dy !== y) &&
       dx > box.x - pad && dx < box.x + box.width + pad && dy > box.y - pad && dy < box.y + box.height + pad);
-    const spots = [];
-    for (const side of [right, !right]) for (const step of [0, -1, 1, -2, 2]) spots.push({ side, step });
-    let first = null;
-    for (const { side, step } of spots) {
-      t.attr("x", x + (side ? 8 : -8) * k).attr("text-anchor", side ? "start" : "end").attr("y", y + 5 * k + step * 14 * k);
-      const box = t.node().getBBox();
-      if (!first) first = { side, step, box };
-      if (!placed.some(p => boxesHit(box, p)) && !coversDot(box)) { placed.push(box); return t; }
+    const inside = box => !bounds || (box.x >= 2 && box.y >= 2 && box.x + box.width <= bounds[0] - 2 && box.y + box.height <= bounds[1] - 2);
+    let chosen = null, first = null;
+    for (const side of [right, !right]) {
+      for (const step of [0, -1, 1, -2, 2]) {
+        const lx = x + (side ? 8 : -8) * k, ly = y + 5 * k + step * 14 * k;
+        const box = labelBox(labels, text, size, side, lx, ly);
+        const spot = { side, lx, ly, box };
+        if (!first) first = spot;
+        if (inside(box) && !placed.some(p => boxesHit(box, p)) && !coversDot(box)) { chosen = spot; break; }
+      }
+      if (chosen) break;
     }
-    if (!force) { t.remove(); return null; }
-    t.attr("x", x + (first.side ? 8 : -8) * k).attr("text-anchor", first.side ? "start" : "end").attr("y", y + 5 * k + first.step * 14 * k);
-    placed.push(first.box);
-    return t;
+    if (!chosen && !force) return null;
+    const spot = chosen || first;
+    placed.push(spot.box);
+    return labels.append("text").attr("class", cls).attr("font-size", size).attr("x", spot.lx).attr("y", spot.ly)
+      .attr("text-anchor", spot.side ? "start" : "end").text(text);
   }
 
   /* Destination drawings from data/drawings.json: shapes in a 100 by 100 box centered on 0,0,

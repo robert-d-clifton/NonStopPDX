@@ -89,7 +89,16 @@ p { margin: 0; }
 .map-section { padding-block: 16px 0; }
 .overview { display: grid; gap: 24px; grid-template-columns: minmax(0, 1fr); align-items: start; }
 @media (min-width: 900px) { .overview { grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.5fr); } }
-.map-frame { min-width: 0; }
+.map-frame { min-width: 0; position: relative; }
+.overview-map.zoomable { cursor: grab; touch-action: pan-x pan-y; }
+.overview-map.zoomable:active { cursor: grabbing; }
+.zoom-buttons { position: absolute; top: 12px; right: 12px; display: grid; gap: 6px; }
+.zoom-buttons button { width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: 500 22px/1 var(--body); cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
+.zoom-buttons button:hover { border-color: var(--teal); }
+.map-hint { margin-top: 8px; font-size: 13px; color: var(--muted); }
+/* The zoomable map moves its coastline layer with a transform; its lines keep their width at every zoom. */
+.zoom-base .grat, .zoom-base .stateline, .zoom-base .countryline, .zoom-base .spoke, .zoom-base .pdx-dot, .zoom-base .dest { vector-effect: non-scaling-stroke; }
+.overview-map.moving .grat, .overview-map.moving .stateline, .overview-map.moving .countryline { display: none; }
 .overview-map { display: block; width: 100%; height: auto; aspect-ratio: 1000 / 640; }
 .map-fallback { padding: 18px; color: var(--muted); }
 .side { display: grid; gap: 18px; }

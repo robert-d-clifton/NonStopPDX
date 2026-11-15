@@ -2,8 +2,15 @@
     <h2 id="map-title" class="visually-hidden">{{ map_title|default:"Map of nonstop routes from PDX" }}</h2>
     <div class="overview">
       <div class="map-frame">
-        <svg class="overview-map" id="overview-map" viewBox="0 0 1000 640" role="img"
-             aria-label="{{ map_label }}"></svg>
+        <svg class="overview-map{% if zoomable %} zoomable{% endif %}" id="overview-map" viewBox="0 0 1000 640" role="img"
+             aria-label="{{ map_label }}"{% if zoomable %} data-zoomable="true"{% endif %}></svg>
+        {% if zoomable %}
+        <div class="zoom-buttons" role="group" aria-label="Zoom the map">
+          <button type="button" id="zoom-in" aria-label="Zoom in">+</button>
+          <button type="button" id="zoom-out" aria-label="Zoom out">&minus;</button>
+        </div>
+        <p class="map-hint">Zoom with the scroll wheel, a double click or the buttons, and drag to move. On a phone, pinch with two fingers.</p>
+        {% endif %}
         <noscript><p class="map-fallback">The map needs JavaScript. Every destination is in the departures list below.</p></noscript>
       </div>
       <div class="side">

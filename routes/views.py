@@ -61,6 +61,7 @@ def home(request):
         "map_points": map_points(all_rows),
         "map_label": f"Map of the {len(all_rows)} nonstop routes from PDX. The departures list below has every destination.",
         "show_west": True,
+        "zoomable": True,
     })
 
 
