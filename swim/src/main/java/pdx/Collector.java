@@ -131,7 +131,7 @@ public final class Collector {
 
     synchronized void receive(Message message) {
         try {
-            Document doc = parser.parse(new ByteArrayInputStream(body(message)));
+            Document doc = parser.parse(new ByteArrayInputStream(body(message, stats)));
             stats.message(doc.getDocumentElement().getLocalName());
             NodeList flights = doc.getElementsByTagNameNS("*", "fltdMessage");
             for (int i = 0; i < flights.getLength(); i++) {
@@ -174,7 +174,7 @@ public final class Collector {
         return m.find() ? m.group(1) : null;
     }
 
-    static byte[] body(Message message) throws Exception {
+    static byte[] body(Message message, Stats stats) throws Exception {
         byte[] bytes;
         if (message instanceof TextMessage text) {
             bytes = text.getText().getBytes(StandardCharsets.UTF_8);
@@ -184,11 +184,14 @@ public final class Collector {
         } else {
             throw new IllegalArgumentException("unexpected message type " + message.getClass().getSimpleName());
         }
-        if (bytes.length > 2 && (bytes[0] & 0xff) == 0x1f && (bytes[1] & 0xff) == 0x8b) {
+        boolean gzipped = bytes.length > 2 && (bytes[0] & 0xff) == 0x1f && (bytes[1] & 0xff) == 0x8b;
+        stats.delivered(message instanceof TextMessage ? "text" : "bytes", gzipped, bytes.length);
+        if (gzipped) {
             try (InputStream in = new GZIPInputStream(new ByteArrayInputStream(bytes))) {
-                return in.readAllBytes();
+                bytes = in.readAllBytes();
             }
         }
+        stats.payload(bytes.length);
         return bytes;
     }
 
@@ -265,6 +268,31 @@ public final class Collector {
         final Map<String, Long> droppedOperators = new TreeMap<>();
         final Map<String, Long> attributes = new TreeMap<>();
         String lastError;
+        // Bytes as the JMS library hands them over, the XML after any gzip, and what the network carried.
+        long deliveredBytes, payloadBytes, networkMark = networkBytes();
+        final Map<String, Long> bodyKinds = new TreeMap<>();
+
+        synchronized void delivered(String kind, boolean gzipped, long bytes) {
+            deliveredBytes += bytes;
+            bodyKinds.merge(kind + (gzipped ? " gzip" : ""), 1L, Long::sum);
+        }
+
+        synchronized void payload(long bytes) {
+            payloadBytes += bytes;
+        }
+
+        /** Bytes received by this container, which only the collector's connection uses. */
+        static long networkBytes() {
+            try {
+                return Long.parseLong(Files.readString(Path.of("/sys/class/net/eth0/statistics/rx_bytes")).trim());
+            } catch (Exception e) {
+                return -1;
+            }
+        }
+
+        static String mb(long bytes) {
+            return String.format("%.1f MB", bytes / 1_000_000.0);
+        }
 
         synchronized void message(String root) {
             messages++;
@@ -305,9 +333,17 @@ public final class Collector {
             log("  Kept by type " + keptTypes);
             log("  Skipped by type " + skippedTypes);
             log("  Dropped at " + AIRPORT + " " + droppedOperators);
+            long network = networkBytes();
+            String received = networkMark < 0 || network < 0 ? "unknown" : mb(network - networkMark);
+            String ratio = network < 0 || network <= networkMark ? "" :
+                    String.format(" (XML is %.1f times the network traffic)", payloadBytes / (double) (network - networkMark));
+            log("  Bytes: network " + received + ", delivered " + mb(deliveredBytes) + ", XML " + mb(payloadBytes) + ratio + ", bodies " + bodyKinds);
             if (lastError != null) {
                 log("  Last error " + lastError);
             }
+            networkMark = network;
+            deliveredBytes = payloadBytes = 0;
+            bodyKinds.clear();
             messages = flights = kept = errors = 0;
             roots.clear();
             keptTypes.clear();
