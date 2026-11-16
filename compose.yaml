@@ -43,5 +43,17 @@ services:
     <<: *app
     command: python manage.py run_scheduler
 
+  # FAA SWIM trial: keeps airline flights to and from PDX in data/swim. Started on its own with
+  # `docker compose --profile swim up -d swim`; needs the SWIM_* settings in .env.
+  swim:
+    build: swim
+    profiles: [swim]
+    env_file: .env
+    user: "${UID:-1000}:${GID:-1000}"
+    volumes:
+      - ./data/swim_operators.json:/config/operators.json:ro
+      - ./data/swim:/out
+    restart: unless-stopped
+
 volumes:
   pgdata:
