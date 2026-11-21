@@ -1,0 +1,75 @@
+<title>NonStopPDX Roof Options</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/*SITECSS*/
+/* Layout: a row of close ups of the main terminal roof, one per option, above the full model.
+   Uses the site's own tokens and model styles; the page adds only the option tiles. */
+.study-intro { padding-block: 36px 20px; display: grid; gap: 12px; }
+.study-intro h1 { font-size: clamp(34px, 5vw, 46px); }
+.study-intro p { color: var(--muted); max-width: 62ch; font-size: 18px; }
+.options { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 14px; }
+.option { display: grid; gap: 8px; text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 10px 14px; cursor: pointer; color: var(--ink); font: inherit; }
+.option[aria-pressed="true"] { border-color: var(--teal); box-shadow: 0 0 0 1px var(--teal); }
+.option .tile { background: var(--apron); border-radius: 8px; overflow: hidden; }
+.option .tile svg { display: block; width: 100%; height: auto; }
+.option strong { font-family: var(--display); font-weight: 500; font-size: 22px; padding-inline: 4px; }
+.option span { font-size: 15px; color: var(--muted); padding-inline: 4px; }
+.option .now { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); }
+.full { padding-block: 28px 12px; display: grid; gap: 10px; }
+.full h2 { font-size: clamp(24px, 3vw, 30px); }
+.study-foot { padding-block: 16px 40px; color: var(--muted); font-size: 14px; display: grid; gap: 6px; }
+</style>
+
+<header class="wrap top">
+  <span class="logo">Non<b>✕</b>Stop PDX</span>
+  <span class="eyebrow">Inside PDX · Roof options</span>
+</header>
+
+<section class="wrap study-intro">
+  <span class="eyebrow">The main terminal roof</span>
+  <h1>Five ways to draw the timber roof</h1>
+  <p>The real roof is a nine acre lattice of Douglas fir, built in big sections on the ground and lifted into place, with dozens of skylights and a gentle wave to it. Each option leans on a different part of that. Pick one to see it on the whole model below.</p>
+</section>
+
+<section class="wrap options" id="options" aria-label="Roof options"></section>
+
+<section class="wrap full" aria-labelledby="full-title">
+  <h2 id="full-title">On the whole model</h2>
+  <div class="model-frame" id="full-model"></div>
+</section>
+
+<footer class="wrap study-foot">
+  <p>Building outlines, gates and MAX tracks © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>, ODbL. The skylight layouts are drawn to suggest the real ones, not to match them panel for panel.</p>
+</footer>
+
+<script>
+/*MODELJS*/
+</script>
+<script>
+const DATA = /*DATA*/;
+const OPTIONS = [
+  ["grid", "Grid", "What's on the site now, lined up with the building. Even and calm, but reads more like a tiled floor than timber.", true],
+  ["woven", "Woven", "A diagonal lattice, closer to the real ceiling's crisscross and to the carpet. Two staggered rows of skylights."],
+  ["cassettes", "Cassettes", "Long fir grain with seams where the roof went up in sections. Three rows of skylights. The most like a built thing."],
+  ["waves", "Waves", "Soft bands across the roof that hint at its undulating shape. Warm and simple from far away."],
+  ["plain", "Plain", "Solid warm timber and a field of skylights, no pattern. Quietest, and lets the skylights carry it."],
+];
+const options = document.getElementById("options"), full = document.getElementById("full-model");
+function showFull(key) {
+  full.innerHTML = "";
+  NSPTerminal.draw(full, DATA, { roof: key, label: "The whole terminal with the " + key + " roof" });
+  options.querySelectorAll(".option").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.roof === key)));
+}
+OPTIONS.forEach(([key, name, note, now]) => {
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "option"; b.dataset.roof = key; b.id = "roof-" + key;
+  b.innerHTML = `<div class="tile"></div><strong>${name}</strong><span>${note}</span>${now ? '<span class="now">On the site now</span>' : ""}`;
+  NSPTerminal.draw(b.querySelector(".tile"), DATA, { roof: key, crop: "hall", quiet: true, label: name + " roof, close up" });
+  b.addEventListener("click", () => showFull(key));
+  options.appendChild(b);
+});
+showFull("woven");
+</script>

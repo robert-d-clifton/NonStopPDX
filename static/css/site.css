@@ -11,6 +11,7 @@
   --ocean: #D3E4EC; --land: #E9ECE8; --lake: #D3E4EC; --grat: #A9C0CB; --spoke: #0E7C80;
   --apron: #E4E8E8; --apron-line: #CDD4D6; --wall-lit: #A9C6DA; --wall: #7FA6C2; --roof: #DCC29E; --roof-line: #A87C51;
   --con-roof: #C9D1D5; --block: #D9DEE0; --plane: #B5C0C5; --plane-edge: #8C999F;
+  --roof-hi: #F1DFC2; --max-side: #E9EDEE; --max-lit: #FFFFFF; --max-roof: #C9D1D5; --max-edge: #7D8A91; --max-glass: #2E4652;
   --display: "Jost", "Futura", "Century Gothic", "Avenir Next", sans-serif;
   --body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
   --cond: "IBM Plex Sans Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
@@ -29,6 +30,7 @@
     --ocean: #14303C; --land: #24343B; --lake: #14303C; --grat: #2F5566; --spoke: #4FC0C4;
     --apron: #1B282E; --apron-line: #2A3A42; --wall-lit: #35566B; --wall: #284558; --roof: #7A6045; --roof-line: #B48A5E;
     --con-roof: #3A4A52; --block: #26343A; --plane: #4A5A62; --plane-edge: #6C7D85;
+    --roof-hi: #A9865F; --max-side: #A9B4B9; --max-lit: #C9D1D5; --max-roof: #8E9BA2; --max-edge: #5A6A72; --max-glass: #14232A;
     color-scheme: dark;
   }
 }
@@ -223,21 +225,32 @@ footer a { color: inherit; }
 .tm-mullion { stroke: var(--glass); stroke-width: 0.6; opacity: 0.7; }
 .tm-block-wall, .tm-block-roof { fill: var(--block); stroke: var(--apron-line); stroke-width: 0.6; }
 .tm-con-roof { fill: var(--con-roof); stroke: var(--steel); stroke-width: 0.8; }
-.tm-hall-roof { stroke: var(--roof-line); stroke-width: 0.8; }
-.tm-roof { fill: var(--roof); }
-.tm-roof-line { stroke: var(--roof-line); stroke-width: 0.7; opacity: 0.8; fill: none; }
+.tm-hall-roof { fill: var(--roof); stroke: var(--roof-line); stroke-width: 0.8; }
+.tm-roof-line { stroke: var(--roof-line); stroke-width: 0.7; opacity: 0.75; }
+.tm-roof-grain { stroke: var(--roof-line); stroke-width: 0.5; opacity: 0.45; }
+.tm-roof-seam { stroke: var(--roof-line); stroke-width: 1.6; opacity: 0.9; }
+.tm-roof-wave { stroke: var(--roof-line); stroke-width: 6; opacity: 0.22; }
+.tm-roof-crest { stroke: var(--roof-hi); stroke-width: 1.2; opacity: 0.7; transform: translateY(-3px); }
 .tm-skylight { fill: var(--aqua); opacity: 0.8; }
 .tm-cab { fill: var(--steel); }
 .tm-note { font-family: var(--body); font-size: 13px; fill: var(--muted); }
 .tm-badge circle { fill: var(--ink); }
 .tm-badge text { font-family: var(--display); font-weight: 500; font-size: 21px; fill: var(--surface); text-anchor: middle; }
 .tm-hall-label { font-family: var(--display); font-weight: 500; font-size: 18px; fill: var(--ink); text-anchor: middle; stroke: var(--roof); stroke-width: 4; paint-order: stroke; }
-.tm-pin { fill: var(--signal); }
+.tm-rail-bed { stroke: var(--apron-line); stroke-width: 3.2; stroke-linecap: round; }
+.tm-rail { stroke: var(--steel); stroke-width: 0.6; }
+.tm-train { fill: var(--max-side); stroke: var(--max-edge); stroke-width: 0.4; }
+.tm-train-lit { fill: var(--max-lit); stroke: var(--max-edge); stroke-width: 0.4; }
+.tm-train-roof { fill: var(--max-roof); stroke: var(--max-edge); stroke-width: 0.4; }
+.tm-train-windows { stroke: var(--max-glass); stroke-width: 1.4; }
+.tm-train-stripe { stroke: var(--signal); stroke-width: 1.1; }
 .tm-pin-label { font-family: var(--body); font-size: 13px; font-weight: 600; fill: var(--ink); stroke: var(--apron); stroke-width: 4; paint-order: stroke; }
 .tm-area, .tm-badge { cursor: pointer; transition: opacity 0.2s; }
+.areas .area { will-change: transform; }
 .tm-area:focus { outline: none; }
 .tm-area:focus-visible polygon { stroke: var(--signal); stroke-width: 2; }
 .model-frame svg[data-pick] .off { opacity: 0.3; }
+.model-frame svg[data-pick] .off[data-area="main"] { opacity: 0.6; }
 @media (prefers-reduced-motion: reduce) { .tm-area, .tm-badge { transition: none; } }
 
 .areas { padding-block: 32px 8px; display: grid; gap: 14px; }

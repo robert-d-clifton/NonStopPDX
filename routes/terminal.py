@@ -65,6 +65,7 @@ def inside_pdx(airlines_by_slug: dict) -> dict:
     map_data = {
         "shapes": terminal["shapes"],
         "gates": terminal["gates"],
+        "rail": terminal.get("rail", []),
         "pins": [{"name": p["name"], "p": p["p"]} for p in terminal["places"] if p["category"] == "transit"],
         "areas": {a["key"]: {"title": a["title"], "anchor": a["anchor"], "gateSpan": a["gate_span"],
                              "airlines": [x["name"] + (f" ({x['note']})" if x["note"] else "") for x in a["airlines"]]}

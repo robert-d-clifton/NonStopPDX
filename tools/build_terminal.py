@@ -35,6 +35,8 @@ QUERY = """[out:json][timeout:90];
   nwr["tourism"](45.584,-122.600,45.594,-122.583);
   nwr["leisure"](45.584,-122.600,45.594,-122.583);
   node["railway"="halt"](45.584,-122.600,45.594,-122.583);
+  way["railway"="light_rail"](45.575,-122.610,45.595,-122.565);
+  node["railway"="buffer_stop"](45.585,-122.596,45.590,-122.590);
 );
 out body center;
 >;
@@ -182,7 +184,42 @@ def build(osm: dict) -> dict:
         places.append({"name": name, "kind": kind, "category": cat, "area": area, "p": [round(v) for v in p]})
     places.sort(key=lambda pl: (pl["area"], pl["category"], pl["name"].lower()))
     return {"_source": "© OpenStreetMap contributors, ODbL. Built by tools/build_terminal.py; edit that, not this file.",
-            "shapes": shapes, "gates": gates, "places": places}
+            "shapes": shapes, "gates": gates, "places": places, "rail": rail_lines(els, nodes)}
+
+
+def rail_lines(els: list, nodes: dict, reach: float = 1300) -> list[list[list[float]]]:
+    """The MAX tracks, one line per track, from the station's end of track out along the line."""
+    main = [e for e in els if e["type"] == "way" and e.get("tags", {}).get("railway") == "light_rail"
+            and e["tags"].get("service") not in ("siding", "crossover", "yard", "spur")]
+    links: dict[int, set[int]] = {}
+    for w in main:
+        for a, b in zip(w["nodes"], w["nodes"][1:]):
+            links.setdefault(a, set()).add(b)
+            links.setdefault(b, set()).add(a)
+    ends = [e["id"] for e in els if e["type"] == "node" and e.get("tags", {}).get("railway") == "buffer_stop" and e["id"] in links]
+    lines = []
+    for start in sorted(ends):
+        path, prev, here, length = [start], None, start, 0.0
+        while length < reach:
+            options = [n for n in links.get(here, ()) if n != prev and n not in path and n in nodes]
+            if not options:
+                break
+            if prev is None:
+                nxt = options[0]
+            else:
+                a, b = meters(*nodes[prev]), meters(*nodes[here])
+                heading = math.atan2(b[1] - a[1], b[0] - a[0])
+                def turn(n):
+                    c = meters(*nodes[n])
+                    d = math.atan2(c[1] - b[1], c[0] - b[0]) - heading
+                    return abs(math.atan2(math.sin(d), math.cos(d)))
+                nxt = min(options, key=turn)
+            a, b = meters(*nodes[here]), meters(*nodes[nxt])
+            length += math.hypot(b[0] - a[0], b[1] - a[1])
+            path.append(nxt)
+            prev, here = here, nxt
+        lines.append([[round(v, 1) for v in meters(*nodes[n])] for n in path])
+    return lines
 
 
 def main() -> None:
