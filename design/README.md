@@ -8,6 +8,9 @@ The four design studies from the first design sessions, November 2026. Each one 
 | [2](studies/2/index.html) | Glass, steel and carpet teal palette, four logo options, a board after the PDX flight boards | [Design Study 2](https://claude.ai/artifact/5sPVpsD48UCAdtbdMe6akm) |
 | [3](studies/3/index.html) | Logo A against lowercase versions, three map projections, rivers on short routes | [Design Study 3](https://claude.ai/artifact/QoXFpV1NwhejU6xnStER5Y) |
 | [4](studies/4/index.html) | The settled direction: logo A, the flat map, region colors on destination pages, the teal band | [Design Study 4](https://claude.ai/artifact/9VEKMaUAbsLiKPWx1gg5KT) |
+| [5](studies/5/index.html) | Terminal map: a transit style diagram, a flat plan and a raised model, all from OpenStreetMap outlines, each with a destination inset | [Design Study 5](https://claude.ai/artifact/GPk22dPBdu5SBhoL9VNnFF) |
+
+Study 5 is built from `studies/5/source.html` and `studies/5/terminal.json` (building outlines, gates and places from OpenStreetMap, © OpenStreetMap contributors, ODbL). Run `python3 design/studies/5/build.py` after editing either.
 
 Study 4 is the reference for the real site. Its map code (d3, a flat Natural Earth projection, route arcs, river labels) is the starting point for the Django templates.
 

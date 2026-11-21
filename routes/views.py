@@ -9,6 +9,7 @@ from .drawings import drawing_for
 from .display import (board_rows, flight_minutes, google_flights_url, hours_minutes, route_note, service_for,
                       short_airline, short_name)
 from .models import Airline, Airport, Route, SyncRun
+from .terminal import inside_pdx
 
 FILTERS = {
     "az": ("A to Z", lambda rows: sorted(rows, key=lambda r: r.name)),
@@ -181,3 +182,9 @@ def airline(request, slug):
         "map_points": points,
         "show_west": sum(1 for p in points if p["miles"] is not None and p["miles"] < 1150) >= 2,
     })
+
+
+def inside(request):
+    """Inside PDX: the terminal as a raised model, and what's on each concourse."""
+    airlines = {a.slug: a for a in Airline.objects.filter(parent__isnull=True)}
+    return render(request, "routes/inside.html", inside_pdx(airlines))

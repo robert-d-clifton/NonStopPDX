@@ -6,7 +6,7 @@ from pathlib import Path
 from django.conf import settings
 from django.test import TestCase
 
-from routes.models import Airport, Override, Route
+from routes.models import Airline, Airport, Override, Route
 from routes.regions import region_for
 from routes.sync import apply_dataset, export_overrides, import_overrides
 
@@ -319,3 +319,31 @@ class DrawingTests(TestCase):
             self.assertEqual(merged["drawings"]["desert"]["shapes"][0]["r"], 9)
             self.assertNotIn("updatedAt", merged["drawings"]["desert"])
             self.assertEqual(merged["assignments"]["BZN"], "desert")
+
+
+class InsidePdxTests(TestCase):
+    def setUp(self):
+        Airline.objects.create(name="Alaska Airlines", slug="alaska")
+        Airline.objects.create(name="Southwest Airlines", slug="southwest")
+
+    def test_page_lists_concourses_airlines_and_places(self):
+        resp = self.client.get("/inside/")
+        self.assertEqual(resp.status_code, 200)
+        self.assertContains(resp, 'id="concourse-c"')
+        self.assertContains(resp, "Powell")
+        self.assertContains(resp, 'href="/airlines/southwest/"')
+        self.assertContains(resp, 'id="terminal-data"')
+
+    def test_airline_missing_from_the_database_is_left_out(self):
+        resp = self.client.get("/inside/")
+        self.assertNotContains(resp, 'href="/airlines/delta/"')
+
+    def test_data_files_agree(self):
+        from django.conf import settings
+        from .terminal import gate_span, load
+        terminal, concourses = load(settings.TERMINAL_FILE), load(settings.CONCOURSES_FILE)
+        letters = {s["name"][-1] for s in terminal["shapes"] if s["name"].startswith("Concourse")}
+        self.assertEqual(letters, set(concourses["concourses"]))
+        self.assertTrue(all(g["ref"][0] in letters for g in terminal["gates"]))
+        self.assertTrue(all(p["area"] in letters | {"main", "outside"} for p in terminal["places"]))
+        self.assertEqual(gate_span(["C10", "C4", "C23", "C9"]), "C4 to C23")

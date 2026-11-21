@@ -103,6 +103,8 @@ SYNC_INTERVAL_HOURS = int(os.environ.get("SYNC_INTERVAL_HOURS", "168"))
 OVERRIDES_FILE = BASE_DIR / "data" / "overrides.json"
 AIRLINES_FILE = BASE_DIR / "data" / "airlines.json"
 DRAWINGS_FILE = BASE_DIR / "data" / "drawings.json"
+TERMINAL_FILE = BASE_DIR / "data" / "terminal.json"
+CONCOURSES_FILE = BASE_DIR / "data" / "concourses.json"
 STORIES_DIR = BASE_DIR / "stories"
 
 LOGGING = {

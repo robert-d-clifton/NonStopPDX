@@ -1,0 +1,611 @@
+<title>NonStopPDX Design Study 5</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: one terminal, three ways of drawing it, stacked so they compare top to bottom.
+   Tokens are the site's own (study 4), plus a few for the building: floor, wall, roof, apron. */
+:root {
+  --bg: #F3F5F5; --surface: #FFFFFF; --ink: #17242B; --muted: #56656D; --line: #D5DCDF;
+  --teal: #0E7C80; --aqua: #5CC3CC; --violet: #6E58A3; --lime: #B3C63F; --glass: #2D6FA8; --steel: #7D8A91;
+  --fir: #2F5E4F; --moss: #7AA65A; --timber: #B98B5E; --signal: #E0582F; --lagoon: #2E9FB0; --sand: #E3CFA4;
+  --band: #0B5F63; --band-ink: #F2F7F7; --band-muted: #BCDADA;
+  --apron: #E4E8E8; --apron-line: #CDD4D6; --floor: #FFFFFF; --wall-l: #A9C6DA; --wall-r: #7FA6C2;
+  --roof: #DCC29E; --roof-line: #A87C51; --conroof: #C9D1D5; --garage: #D9DEE0; --plane: #B5C0C5; --plane-edge: #8C999F;
+  --dim: 0.32;
+  --display: "Jost", "Futura", "Century Gothic", "Avenir Next", sans-serif;
+  --body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --cond: "IBM Plex Sans Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --mono: "IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0F181D; --surface: #162329; --ink: #E7EEF0; --muted: #9AABB2; --line: #2A3A42;
+  --teal: #3FB2B6; --aqua: #6FD0D8; --violet: #9C86D4; --lime: #C3D45A; --glass: #6EA6D8; --steel: #8E9BA2;
+  --fir: #6FA68E; --moss: #93BE72; --timber: #D0A577; --signal: #F07548; --lagoon: #5CC3CC; --sand: #B9A37A;
+  --band: #0B3A3D; --band-ink: #F2F7F7; --band-muted: #A9CACA;
+  --apron: #1B282E; --apron-line: #2A3A42; --floor: #22333B; --wall-l: #35566B; --wall-r: #284558;
+  --roof: #7A6045; --roof-line: #B48A5E; --conroof: #3A4A52; --garage: #26343A; --plane: #4A5A62; --plane-edge: #6C7D85;
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0F181D; --surface: #162329; --ink: #E7EEF0; --muted: #9AABB2; --line: #2A3A42;
+  --teal: #3FB2B6; --aqua: #6FD0D8; --violet: #9C86D4; --lime: #C3D45A; --glass: #6EA6D8; --steel: #8E9BA2;
+  --fir: #6FA68E; --moss: #93BE72; --timber: #D0A577; --signal: #F07548; --lagoon: #5CC3CC; --sand: #B9A37A;
+  --band: #0B3A3D; --band-ink: #F2F7F7; --band-muted: #A9CACA;
+  --apron: #1B282E; --apron-line: #2A3A42; --floor: #22333B; --wall-l: #35566B; --wall-r: #284558;
+  --roof: #7A6045; --roof-line: #B48A5E; --conroof: #3A4A52; --garage: #26343A; --plane: #4A5A62; --plane-edge: #6C7D85;
+  color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.55; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.08; text-wrap: balance; margin: 0; }
+p { margin: 0; }
+a { color: var(--teal); }
+.eyebrow { font-family: var(--mono); font-weight: 500; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+:focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; }
+
+.top { padding-block: 18px; display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
+.logo { font-family: var(--display); font-size: 21px; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
+.logo b { font-weight: 600; color: var(--teal); }
+.intro { padding-block: 40px 24px; display: grid; gap: 14px; }
+.intro h1 { font-size: clamp(36px, 6vw, 60px); }
+.intro p { font-size: clamp(17px, 2vw, 20px); color: var(--muted); max-width: 60ch; }
+
+/* sticky concourse picker shared by all three maps */
+.picker { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.picker .wrap { padding-block: 10px; display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { font: 500 15px var(--body); border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 5px 14px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--teal); border-color: var(--teal); color: #FFFFFF; }
+.picked { font-size: 15px; color: var(--muted); min-width: 0; flex: 1 1 260px; }
+.picked strong { color: var(--ink); font-weight: 600; }
+.check { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--signal); }
+
+section.study { padding-block: 44px 8px; display: grid; gap: 18px; }
+.study-head { display: grid; gap: 8px; max-width: 70ch; }
+.study-head h2 { font-size: clamp(30px, 4.6vw, 42px); }
+.study-head p { color: var(--muted); }
+.frame { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.frame svg { display: block; width: 100%; height: auto; }
+.frame svg text { font-family: var(--body); }
+.foot { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 340px); gap: 18px; align-items: start; }
+@media (max-width: 760px) { .foot { grid-template-columns: minmax(0, 1fr); } }
+.notes { display: grid; gap: 6px; font-size: 16px; color: var(--muted); }
+.notes li { margin-left: 1.1em; }
+.notes ul { margin: 0; padding: 0; display: grid; gap: 4px; }
+
+/* the destination inset, as it would sit on a destination page */
+.inset { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.inset .cap { padding: 12px 14px 4px; display: grid; gap: 2px; }
+.inset .cap .eyebrow { font-size: 11px; }
+.inset .cap strong { font-family: var(--display); font-weight: 500; font-size: 22px; }
+.inset .cap span { font-size: 14px; color: var(--muted); }
+.inset svg { display: block; width: 100%; height: auto; }
+
+.compare { padding-block: 48px 24px; display: grid; gap: 16px; }
+.compare h2 { font-size: clamp(28px, 4vw, 38px); }
+.table-scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 15px; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--mono); font-weight: 500; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+td:first-child { font-family: var(--display); font-size: 19px; white-space: nowrap; }
+.questions { padding-block: 8px 40px; display: grid; gap: 10px; max-width: 70ch; }
+.questions ol { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; color: var(--muted); }
+.credits { border-top: 1px solid var(--line); padding-block: 20px 48px; font-size: 14px; color: var(--muted); display: grid; gap: 6px; }
+
+/* map pieces */
+.c-group { cursor: pointer; transition: opacity 0.2s; }
+.maps[data-pick] .c-group.off { opacity: var(--dim); }
+.maps[data-pick] .poi.off { opacity: 0.25; }
+@media (prefers-reduced-motion: reduce) { .c-group { transition: none; } }
+</style>
+
+<header class="wrap top">
+  <span class="logo">Non<b>✕</b>Stop PDX</span>
+  <span class="eyebrow">Design study 5 · Terminal map</span>
+</header>
+
+<div class="wrap intro">
+  <span class="eyebrow">Inside PDX</span>
+  <h1>Where every nonstop starts</h1>
+  <p>Three ways to draw the terminal, all built from the same real building outlines and gate positions. Each one ends with the small inset a destination page would carry. Pick a concourse to compare them.</p>
+</div>
+
+<div class="picker">
+  <div class="wrap">
+    <div class="chips" role="group" aria-label="Highlight a concourse">
+      <button class="chip" type="button" id="pick-all" data-c="" aria-pressed="true">All</button>
+      <button class="chip" type="button" id="pick-B" data-c="B" aria-pressed="false">B</button>
+      <button class="chip" type="button" id="pick-C" data-c="C" aria-pressed="false">C</button>
+      <button class="chip" type="button" id="pick-D" data-c="D" aria-pressed="false">D</button>
+      <button class="chip" type="button" id="pick-E" data-c="E" aria-pressed="false">E</button>
+    </div>
+    <p class="picked" id="picked">Four concourses, 53 gates. Tap a concourse on any map.</p>
+  </div>
+</div>
+
+<main class="maps" id="maps">
+  <section class="wrap study" aria-labelledby="h-diagram">
+    <div class="study-head">
+      <span class="eyebrow">Style one · Diagram</span>
+      <h2 id="h-diagram">Like a transit map</h2>
+      <p>Concourses straightened into lines, gates as stops in their real order and on their real side. Clear at any size, and it matches the route maps. Least sense of the building itself.</p>
+    </div>
+    <div class="frame" id="diagram"></div>
+    <div class="foot">
+      <div class="notes"><ul>
+        <li>Gate order and sides come from the real gate positions; spacing is even.</li>
+        <li>Landmarks sit at the gate they're nearest to.</li>
+        <li>Easiest to keep current when airlines move.</li>
+      </ul></div>
+      <div class="inset" id="inset-diagram"></div>
+    </div>
+  </section>
+
+  <section class="wrap study" aria-labelledby="h-plan">
+    <div class="study-head">
+      <span class="eyebrow">Style two · Plan</span>
+      <h2 id="h-plan">The real footprint, drawn flat</h2>
+      <p>The building's true outline from above: the timber roof over the main terminal, carpet down the concourses, jet bridges and parked aircraft at the gates. Realistic and still easy to read.</p>
+    </div>
+    <div class="frame" id="plan"></div>
+    <div class="foot">
+      <div class="notes"><ul>
+        <li>Outlines, gates and places are from OpenStreetMap, to scale.</li>
+        <li>Parked aircraft and trees are illustrative, not live.</li>
+        <li>Works as a big map and shrinks well into an inset.</li>
+      </ul></div>
+      <div class="inset" id="inset-plan"></div>
+    </div>
+  </section>
+
+  <section class="wrap study" aria-labelledby="h-model">
+    <div class="study-head">
+      <span class="eyebrow">Style three · Model</span>
+      <h2 id="h-model">A raised model of the building</h2>
+      <p>The same footprint lifted into 3D, seen from the curb side: glass walls, the timber roof, the control tower. The most sense of place, and the hardest to label and keep tidy.</p>
+    </div>
+    <div class="frame" id="model"></div>
+    <div class="foot">
+      <div class="notes"><ul>
+        <li>Heights are approximate and stretched a little so the shapes read.</li>
+        <li>Gates and places are hard to show without clutter at this angle.</li>
+        <li>Could pair with the plan: model on the Inside PDX page, plan for insets.</li>
+      </ul></div>
+      <div class="inset" id="inset-model"></div>
+    </div>
+  </section>
+</main>
+
+<section class="wrap compare" aria-labelledby="h-compare">
+  <h2 id="h-compare">Side by side</h2>
+  <div class="table-scroll"><table>
+    <thead><tr><th>Style</th><th>Sense of place</th><th>Finding your concourse</th><th>As a small inset</th><th>Upkeep</th></tr></thead>
+    <tbody>
+      <tr><td>Diagram</td><td>Low: it could be any airport</td><td>Best: every gate labeled</td><td>Good</td><td>Easiest</td></tr>
+      <tr><td>Plan</td><td>Good: the real shape, roof and carpet</td><td>Good: gates on the real building</td><td>Best: the shape is recognizable small</td><td>Easy: redraws from data</td></tr>
+      <tr><td>Model</td><td>Best: feels like the building</td><td>Fair: labels crowd at this angle</td><td>Fair: detail is lost small</td><td>Most work to tune</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="wrap questions" aria-labelledby="h-q">
+  <h2 id="h-q" class="eyebrow">Questions for you</h2>
+  <ol>
+    <li>Plan, model, or the two together (model on the main page, plan for insets)?</li>
+    <li>Should parked aircraft stay, or does that read as live data when it isn't?</li>
+    <li>Which places belong on it from day one? These are pulled from OpenStreetMap as a starting point.</li>
+  </ol>
+</section>
+
+<footer class="wrap credits">
+  <p>Building outlines, gates and places © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>, ODbL. Airline placements marked <span class="check">to check</span> are placeholders until checked against FlyPDX; Southwest on Concourse E and Alaska regional flights on Concourse B are from the <a href="https://www.portofportland.com/Newsroom/PDX-Opens-Concourse-E-Extension-First-New-Gates-at-Airport-in-Nearly-20-Years">Port of Portland</a> <a href="https://www.portofportland.com/Newsroom/Port-of-Portland-Opens-New-Concourse-B-for-Alaska-Airlines-at-PDX">newsroom</a>.</p>
+  <p>Not an official map of Portland International Airport.</p>
+</footer>
+
+<script>
+const DATA = {"features":[{"kind":"garage","name":"P1","pts":[[222,17],[225,11],[227,7],[233,-4],[226,-7],[112,-70],[95,-37],[62,22],[50,43],[42,58],[46,60],[80,80],[153,121],[161,125],[166,116],[169,111],[176,99],[176,98],[182,86],[185,82],[190,73],[193,66],[200,54],[210,37],[212,35],[214,30],[218,23],[222,17]]},{"kind":"terminal","name":"Concourse B","pts":[[-65,92],[-53,71],[-14,93],[-15,94],[32,168],[30,170],[19,178],[18,178],[16,180],[11,174],[-8,149],[-40,107],[-45,104],[-65,92]]},{"kind":"terminal","name":"Concourse E","pts":[[79,-160],[82,-166],[86,-163],[91,-160],[94,-159],[98,-157],[106,-171],[114,-166],[106,-152],[126,-141],[175,-115],[207,-97],[229,-85],[229,-87],[254,-73],[282,-57],[285,-56],[287,-60],[302,-52],[303,-53],[322,-43],[320,-41],[335,-33],[334,-30],[340,-26],[367,-12],[373,-9],[374,-10],[392,0],[391,1],[396,4],[427,21],[446,31],[447,29],[451,31],[455,34],[451,41],[456,44],[456,45],[454,47],[452,51],[449,56],[448,59],[446,58],[224,-65],[223,-64],[91,-137],[95,-144],[98,-150],[86,-156],[79,-160]]},{"kind":"terminal","name":"Concourse D","pts":[[-57,-233],[-27,-216],[-45,-184],[-74,-200],[-78,-202],[-102,-215],[-126,-229],[-139,-236],[-161,-248],[-164,-250],[-165,-250],[-168,-246],[-187,-256],[-186,-257],[-204,-267],[-202,-271],[-222,-282],[-240,-291],[-268,-307],[-269,-308],[-259,-326],[-256,-332],[-251,-340],[-244,-336],[-212,-318],[-206,-315],[-204,-318],[-166,-297],[-168,-294],[-145,-282],[-143,-280],[-113,-264],[-108,-261],[-84,-248],[-57,-233]]},{"kind":"garage","name":"P2","pts":[[228,14],[263,34],[269,24],[270,24],[270,20],[276,21],[282,22],[288,23],[294,25],[300,28],[305,31],[310,35],[315,39],[320,45],[325,50],[329,55],[334,62],[338,69],[342,75],[348,86],[344,88],[343,85],[326,86],[325,88],[326,89],[322,95],[325,96],[312,121],[310,124],[308,122],[307,126],[305,124],[271,186],[202,148],[208,136],[211,130],[175,112],[174,109],[180,101],[176,99],[176,98],[182,86],[185,82],[189,84],[194,76],[190,73],[193,66],[198,69],[201,62],[206,53],[214,39],[210,37],[214,30],[217,32],[225,18],[226,16],[228,14]]},{"kind":"terminal","name":"Main terminal","pts":[[62,-104],[73,-110],[98,-125],[88,-131],[91,-137],[95,-144],[98,-150],[79,-160],[76,-162],[77,-165],[74,-167],[74,-168],[-19,-219],[-20,-218],[-22,-220],[-24,-216],[-26,-218],[-27,-216],[-45,-184],[-66,-146],[-148,0],[-150,5],[-168,38],[-166,39],[-168,42],[-166,44],[-166,44],[-74,95],[-73,94],[-69,96],[-66,92],[-65,92],[-53,71],[-14,93],[-9,96],[1,91],[0,91],[-6,87],[-23,47],[-16,33],[-13,29],[-12,26],[-1,7],[7,-6],[9,-10],[24,-36],[25,-38],[38,-61],[40,-65],[50,-82],[60,-98],[62,-104]]},{"kind":"tower","name":"Control tower","pts":[[349,96],[377,112],[364,135],[369,138],[376,127],[378,128],[383,118],[404,130],[398,140],[394,138],[384,154],[366,144],[366,143],[338,128],[334,134],[326,136],[323,134],[320,132],[318,125],[321,118],[329,116],[336,119],[349,96]]},{"kind":"canopy","name":"","pts":[[-19,31],[57,-106],[60,-105],[65,-104],[68,-102],[70,-101],[73,-100],[76,-99],[79,-97],[82,-96],[85,-94],[88,-93],[90,-91],[93,-90],[95,-88],[97,-86],[98,-86],[100,-84],[103,-82],[105,-80],[108,-78],[110,-76],[114,-72],[112,-70],[95,-37],[62,22],[42,58],[40,61],[30,58],[20,55],[10,50],[2,46],[-5,41],[-16,33],[-19,31]]},{"kind":"garage","name":"P3","pts":[[140,184],[136,190],[136,190],[127,205],[122,215],[160,286],[189,302],[310,369],[313,363],[316,358],[319,360],[323,354],[320,351],[334,326],[338,328],[342,321],[342,322],[349,311],[344,308],[358,283],[362,285],[366,278],[362,276],[366,268],[368,265],[359,260],[255,202],[264,187],[207,156],[199,171],[162,151],[156,163],[151,161],[140,184]]},{"kind":"terminal","name":"Concourse C","pts":[[-150,5],[-168,38],[-177,33],[-180,31],[-184,29],[-196,22],[-204,18],[-225,6],[-226,9],[-229,8],[-234,5],[-241,1],[-267,-14],[-266,-16],[-292,-31],[-297,-34],[-323,-48],[-330,-51],[-367,-73],[-373,-76],[-380,-80],[-401,-91],[-402,-88],[-412,-93],[-435,-106],[-433,-109],[-442,-114],[-474,-131],[-488,-139],[-497,-144],[-494,-150],[-492,-153],[-496,-155],[-488,-170],[-484,-167],[-482,-171],[-479,-176],[-470,-172],[-439,-154],[-415,-141],[-414,-144],[-381,-126],[-382,-123],[-376,-119],[-359,-110],[-354,-108],[-348,-104],[-320,-89],[-311,-84],[-278,-66],[-276,-64],[-247,-48],[-246,-51],[-239,-47],[-221,-37],[-209,-31],[-205,-29],[-207,-26],[-191,-18],[-179,-11],[-178,-10],[-163,-2],[-156,2],[-150,5]]}],"gates":[{"ref":"E4","p":[175,-115]},{"ref":"E5","p":[207,-97]},{"ref":"E6","p":[254,-73]},{"ref":"D10","p":[-240,-291]},{"ref":"D8","p":[-164,-250]},{"ref":"D6","p":[-139,-236]},{"ref":"D7","p":[-113,-264]},{"ref":"D5","p":[-57,-233]},{"ref":"D12","p":[-268,-307]},{"ref":"D15","p":[-256,-332]},{"ref":"D14","p":[-259,-326]},{"ref":"D13","p":[-244,-336]},{"ref":"D11","p":[-212,-318]},{"ref":"D9","p":[-145,-282]},{"ref":"C10","p":[-276,-64]},{"ref":"C8","p":[-239,-47]},{"ref":"C6","p":[-191,-18]},{"ref":"C20","p":[-470,-172]},{"ref":"C18","p":[-439,-154]},{"ref":"C16","p":[-376,-119]},{"ref":"C14","p":[-359,-110]},{"ref":"C12","p":[-320,-89]},{"ref":"C17","p":[-442,-114]},{"ref":"C19","p":[-474,-131]},{"ref":"C21","p":[-488,-139]},{"ref":"C23","p":[-494,-150]},{"ref":"C7","p":[-234,5]},{"ref":"C9","p":[-292,-31]},{"ref":"C11","p":[-323,-48]},{"ref":"C13","p":[-367,-73]},{"ref":"C15","p":[-412,-93]},{"ref":"C5","p":[-204,18]},{"ref":"C22","p":[-482,-171]},{"ref":"E10","p":[396,4]},{"ref":"E3","p":[126,-141]},{"ref":"E8","p":[340,-26]},{"ref":"E9","p":[367,-12]},{"ref":"E11","p":[427,21]},{"ref":"E12","p":[451,31]},{"ref":"E13B","p":[452,51]},{"ref":"E7","p":[282,-57]},{"ref":"B3","p":[-45,104]},{"ref":"B7","p":[0,148]},{"ref":"B6","p":[-5,143]},{"ref":"B10","p":[13,167]},{"ref":"B11","p":[18,173]},{"ref":"B9","p":[8,160]},{"ref":"B8","p":[5,156]},{"ref":"E13A","p":[454,47]},{"ref":"B4","p":[-36,105]},{"ref":"D4","p":[-78,-202]},{"ref":"C4","p":[-156,2]},{"ref":"B5","p":[-29,109]}],"pois":[{"name":"Burgerville","kind":"fast_food","p":[-103,-222]},{"name":"Stumptown Coffee Roasters","kind":"cafe","p":[-136,12]},{"name":"Made In Oregon","kind":"gift","p":[-229,-34]},{"name":"Grassa","kind":"restaurant","p":[-15,-203]},{"name":"Blue Star Donuts + Coffee","kind":"cafe","p":[-26,-190]},{"name":"Deschutes Brewery","kind":"pub","p":[-80,-242]},{"name":"Hopworks Urban Brewery","kind":"pub","p":[152,-124]},{"name":"Westward Whiskey","kind":"alcohol","p":[-237,-39]},{"name":"Pet Relief Area","kind":"dog_park","p":[-156,12]},{"name":"Hollywood Theatre","kind":"cinema","p":[-353,-68]},{"name":"Travel Oregon","kind":"information","p":[16,-26]},{"name":"Pendleton","kind":"clothes","p":[-328,-88]},{"name":"Powell's Books","kind":"books","p":[-394,-107]},{"name":"Tillamook Market","kind":"restaurant","p":[290,-54]},{"name":"MAX Red Line","kind":"halt","p":[16,126]},{"name":"Sentinels and Habitat Tiles","kind":"artwork","p":[16,146]},{"name":"Good Coffee","kind":"cafe","p":[-14,123]},{"name":"Screen Door","kind":"restaurant","p":[-20,117]},{"name":"Cloud Walk","kind":"artwork","p":[3,153]},{"name":"Stumptown Coffee Roasters","kind":"cafe","p":[378,1]},{"name":"Tillamook Play Area","kind":"playground","p":[363,10]},{"name":"Blue Star","kind":"fast_food","p":[207,-76]},{"name":"Pendleton","kind":"clothes","p":[-37,-168]},{"name":"Loyal Legion","kind":"restaurant","p":[-71,-81]},{"name":"The Country Cat","kind":"restaurant","p":[-75,-17]},{"name":"Steven Smith Teamaker","kind":"tea","p":[7,-175]},{"name":"Powell's Books","kind":"books","p":[-118,15]}]};
+const NS = "http://www.w3.org/2000/svg";
+
+/* What each concourse holds. Placements not confirmed by the Port are marked to check. */
+const CONCOURSES = {
+  B: { airlines: [["Alaska regional (Horizon)", true]] },
+  C: { airlines: [["Alaska", false]] },
+  D: { airlines: [["Delta", false], ["International flights", false]] },
+  E: { airlines: [["Southwest", true], ["United", false]] },
+};
+const LANDMARKS = ["Powell's Books", "Hollywood Theatre", "Tillamook Play Area", "MAX Red Line", "Cloud Walk"];
+const POI_COLOR = { books: "--violet", cinema: "--violet", gift: "--violet", clothes: "--violet", playground: "--lime", artwork: "--lime",
+  halt: "--signal", information: "--steel", dog_park: "--moss" };
+const poiColor = k => `var(${POI_COLOR[k] || "--timber"})`;
+
+/* ---------- geometry from the data ---------- */
+const feats = DATA.features;
+const mainHall = feats.find(f => f.name === "Main terminal");
+const concourses = feats.filter(f => f.kind === "terminal" && f.name.startsWith("Concourse")).map(f => ({ ...f, letter: f.name.slice(-1) }));
+const centroid = pts => { let x = 0, y = 0; pts.forEach(p => { x += p[0]; y += p[1]; }); return [x / pts.length, y / pts.length]; };
+const hallC = centroid(mainHall.pts);
+function inside(pt, pts) {
+  let c = false;
+  for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+    const [xi, yi] = pts[i], [xj, yj] = pts[j];
+    if ((yi > pt[1]) !== (yj > pt[1]) && pt[0] < (xj - xi) * (pt[1] - yi) / (yj - yi) + xi) c = !c;
+  }
+  return c;
+}
+/* main axis of each concourse, pointing away from the main terminal */
+concourses.forEach(c => {
+  const m = centroid(c.pts);
+  let sxx = 0, syy = 0, sxy = 0;
+  c.pts.forEach(([x, y]) => { sxx += (x - m[0]) ** 2; syy += (y - m[1]) ** 2; sxy += (x - m[0]) * (y - m[1]); });
+  const ang = 0.5 * Math.atan2(2 * sxy, sxx - syy);
+  let d = [Math.cos(ang), Math.sin(ang)];
+  if ((m[0] - hallC[0]) * d[0] + (m[1] - hallC[1]) * d[1] < 0) d = [-d[0], -d[1]];
+  c.mid = m; c.dir = d;
+});
+const byLetter = Object.fromEntries(concourses.map(c => [c.letter, c]));
+DATA.gates.forEach(g => {
+  const c = byLetter[g.ref[0]];
+  const t = (g.p[0] - c.mid[0]) * c.dir[0] + (g.p[1] - c.mid[1]) * c.dir[1];
+  const foot = [c.mid[0] + c.dir[0] * t, c.mid[1] + c.dir[1] * t];
+  let n = [g.p[0] - foot[0], g.p[1] - foot[1]];
+  const len = Math.hypot(n[0], n[1]);
+  const side = Math.sign(c.dir[0] * n[1] - c.dir[1] * n[0]) || 1;
+  n = len > 1 ? [n[0] / len, n[1] / len] : [-c.dir[1] * side, c.dir[0] * side];
+  Object.assign(g, { letter: g.ref[0], t, n, side });
+});
+/* which concourse a place is on: inside the main terminal, else the nearest gate's concourse */
+DATA.pois.forEach(p => {
+  if (inside(p.p, mainHall.pts)) { p.letter = ""; return; }
+  let best = null, bd = 1e9;
+  DATA.gates.forEach(g => { const d = Math.hypot(g.p[0] - p.p[0], g.p[1] - p.p[1]); if (d < bd) { bd = d; best = g; } });
+  p.letter = bd < 90 && concourses.some(c => c.letter === best.letter && inside(p.p, c.pts)) ? best.letter : "";
+  p.gate = best;
+});
+
+/* ---------- svg helpers ---------- */
+function el(name, attrs = {}, parent) {
+  const e = document.createElementNS(NS, name);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+const pts2 = pts => pts.map(p => p.map(v => +v.toFixed(1)).join(",")).join(" ");
+function text(parent, x, y, str, attrs = {}) { const t = el("text", { x, y, ...attrs }, parent); t.textContent = str; return t; }
+function svg(viewBox, label) { return el("svg", { viewBox, role: "img", "aria-label": label }); }
+
+/* aircraft seen from above, nose along +x, about 36 m long */
+const HALF = [[18, 0], [15, 1.8], [4, 2.1], [0.5, 16.5], [-3, 16.5], [-4.5, 2.1], [-13, 1.9], [-16, 6.5], [-18.2, 6.5], [-17.2, 1.2], [-18.4, 0]];
+const PLANE = HALF.concat(HALF.slice(1, -1).reverse().map(([x, y]) => [x, -y]));
+function planeAt(gate, scale) {
+  const len = 36 * scale, c = [gate.p[0] + gate.n[0] * (len / 2 + 9), gate.p[1] + gate.n[1] * (len / 2 + 9)];
+  const a = Math.atan2(-gate.n[1], -gate.n[0]), ca = Math.cos(a), sa = Math.sin(a);
+  return { c, pts: PLANE.map(([x, y]) => [c[0] + (x * ca - y * sa) * scale, c[1] + (x * sa + y * ca) * scale]) };
+}
+function parkedPlanes() {
+  const placed = [];
+  DATA.gates.forEach((g, i) => {
+    if (i % 5 === 2) return; /* leave some gates empty */
+    const p = planeAt(g, g.letter === "B" ? 0.8 : 1);
+    if (placed.some(q => Math.hypot(q.c[0] - p.c[0], q.c[1] - p.c[1]) < 27)) return;
+    if (feats.some(f => f.kind === "terminal" && inside(p.c, f.pts))) return;
+    placed.push({ ...p, gate: g });
+  });
+  return placed;
+}
+const PLANES = parkedPlanes();
+
+/* ---------- style two: plan ---------- */
+function defs(root, id) {
+  const d = el("defs", {}, root);
+  const carpet = el("pattern", { id: `carpet-${id}`, width: 9, height: 9, patternUnits: "userSpaceOnUse", patternTransform: "rotate(35)" }, d);
+  el("rect", { width: 9, height: 9, fill: "var(--teal)" }, carpet);
+  el("path", { d: "M1 1 L4 4 M4 1 L1 4", stroke: "var(--aqua)", "stroke-width": 0.9 }, carpet);
+  el("path", { d: "M5.5 5.5 L8.5 8.5 M8.5 5.5 L5.5 8.5", stroke: "var(--violet)", "stroke-width": 0.9 }, carpet);
+  const lattice = el("pattern", { id: `lattice-${id}`, width: 14, height: 14, patternUnits: "userSpaceOnUse", patternTransform: "rotate(-28)" }, d);
+  el("rect", { width: 14, height: 14, fill: "var(--roof)" }, lattice);
+  el("path", { d: "M0 0 L14 0 M0 7 L14 7 M0 0 L0 14 M7 0 L7 14", stroke: "var(--roof-line)", "stroke-width": 0.7, opacity: 0.8 }, lattice);
+  return d;
+}
+function tree(parent, x, y, r) {
+  el("circle", { cx: x, cy: y, r, fill: "var(--fir)" }, parent);
+  el("circle", { cx: x - r * 0.3, cy: y - r * 0.3, r: r * 0.55, fill: "var(--moss)" }, parent);
+}
+/* illustrative trees along the long middle of the main terminal */
+function hallTrees() {
+  const out = [], [cx, cy] = hallC;
+  for (let i = -5; i <= 5; i++) {
+    for (const off of [-14, 14]) {
+      const x = cx + i * 22 * 0.5 + off * 0.86, y = cy - i * 22 * 0.86 + off * 0.5;
+      if (inside([x, y], mainHall.pts)) out.push([x, y]);
+    }
+  }
+  return out;
+}
+
+function drawPlan(host, opts = {}) {
+  const vb = opts.viewBox || "-530 -372 1010 610";
+  const root = svg(vb, opts.label || "Plan of the PDX terminal");
+  const id = opts.id || "plan";
+  defs(root, id);
+  const [vx, vy, vw, vh] = vb.split(" ").map(Number);
+  el("rect", { x: vx, y: vy, width: vw, height: vh, fill: "var(--apron)" }, root);
+  /* garages, canopy and tower for context */
+  feats.filter(f => f.kind === "garage").forEach(f => {
+    el("polygon", { points: pts2(f.pts), fill: "var(--garage)", stroke: "var(--apron-line)", "stroke-width": 1.2 }, root);
+    if (!opts.small) { const [x, y] = centroid(f.pts); text(root, x, y + 5, f.name, { "text-anchor": "middle", "font-size": 15, fill: "var(--muted)", "font-family": "var(--mono)" }); }
+  });
+  feats.filter(f => f.kind === "canopy").forEach(f => el("polygon", { points: pts2(f.pts), fill: "var(--roof)", opacity: 0.45, stroke: "var(--roof-line)", "stroke-width": 0.6 }, root));
+  const tower = feats.find(f => f.kind === "tower");
+  if (tower) {
+    el("polygon", { points: pts2(tower.pts), fill: "var(--garage)", stroke: "var(--apron-line)" }, root);
+    const [x, y] = centroid(tower.pts);
+    el("circle", { cx: x, cy: y, r: 9, fill: "var(--surface)", stroke: "var(--steel)", "stroke-width": 2 }, root);
+    if (!opts.small) text(root, x + 14, y + 5, "Tower", { "font-size": 14, fill: "var(--muted)" });
+  }
+  /* parked aircraft and jet bridges */
+  const air = el("g", {}, root);
+  PLANES.forEach(p => {
+    const g = el("g", { class: "c-group", "data-c": p.gate.letter }, air);
+    el("line", { x1: p.gate.p[0], y1: p.gate.p[1], x2: p.gate.p[0] + p.gate.n[0] * 10, y2: p.gate.p[1] + p.gate.n[1] * 10, stroke: "var(--steel)", "stroke-width": 3, "stroke-linecap": "round" }, g);
+    el("polygon", { points: pts2(p.pts), fill: "var(--plane)", stroke: "var(--plane-edge)", "stroke-width": 0.6 }, g);
+  });
+  /* main terminal: timber lattice roof and trees */
+  el("polygon", { points: pts2(mainHall.pts), fill: `url(#lattice-${id})`, stroke: "var(--roof-line)", "stroke-width": 1.5 }, root);
+  hallTrees().forEach(([x, y]) => tree(root, x, y, opts.small ? 6 : 5));
+  /* concourses with carpet down the middle */
+  concourses.forEach(c => {
+    const g = el("g", { class: "c-group", "data-c": c.letter }, root);
+    el("polygon", { points: pts2(c.pts), fill: "var(--floor)", stroke: "var(--steel)", "stroke-width": 1.4 }, g);
+    el("polygon", { points: pts2(c.pts), fill: `url(#carpet-${id})`, opacity: 0.85, transform: shrink(c, 0.55) }, g);
+    const [mx, my] = c.mid;
+    const lx = mx + c.dir[0] * (c.letter === "B" ? 0 : 40), ly = my + c.dir[1] * (c.letter === "B" ? 0 : 40);
+    const off = { B: [-88, 18], C: [40, -70], D: [-30, -50], E: [10, -46] }[c.letter];
+    el("circle", { cx: lx + off[0], cy: ly + off[1], r: opts.small ? 26 : 20, fill: "var(--ink)" }, g);
+    text(g, lx + off[0], ly + off[1] + (opts.small ? 10 : 8), c.letter, { "text-anchor": "middle", "font-size": opts.small ? 30 : 24, fill: "var(--surface)", "font-family": "var(--display)", "font-weight": 500 });
+    g.addEventListener("click", () => pick(c.letter));
+  });
+  if (!opts.small) {
+    /* gate numbers */
+    DATA.gates.forEach(g => {
+      const grp = el("g", { class: "c-group", "data-c": g.letter }, root);
+      el("circle", { cx: g.p[0], cy: g.p[1], r: 2.6, fill: "var(--ink)" }, grp);
+      const lx = g.p[0] - g.n[0] * 9, ly = g.p[1] - g.n[1] * 9;
+      text(grp, lx, ly + 3.5, g.ref.slice(1), { "text-anchor": "middle", "font-size": 9, "font-weight": 600, fill: "#FFFFFF", "font-family": "var(--mono)" });
+    });
+    /* places */
+    DATA.pois.forEach(p => {
+      const g = el("g", { class: "poi", "data-c": p.letter }, root);
+      el("circle", { cx: p.p[0], cy: p.p[1], r: 4.2, fill: poiColor(p.kind), stroke: "var(--surface)", "stroke-width": 1.4 }, g);
+      el("title", {}, g).textContent = p.name;
+    });
+    labelLandmarks(root);
+    text(root, hallC[0] + 6, hallC[1] + 4, "Main terminal", { "text-anchor": "middle", "font-size": 19, fill: "var(--ink)", "font-family": "var(--display)", "font-weight": 500, stroke: "var(--roof)", "stroke-width": 4, "paint-order": "stroke" });
+    scale(root, vx + 16, vy + vh - 18);
+  }
+  if (opts.focus) focusOn(root, opts.focus);
+  host.appendChild(root);
+  return root;
+}
+/* the carpet strip: the concourse outline shrunk toward its axis */
+function shrink(c, k) {
+  const [mx, my] = c.mid, [dx, dy] = c.dir;
+  /* scale across the axis only: rotate to the axis, squash y, rotate back */
+  const a = Math.atan2(dy, dx) * 180 / Math.PI;
+  return `translate(${mx} ${my}) rotate(${a}) scale(1 ${k}) rotate(${-a}) translate(${-mx} ${-my})`;
+}
+const PLAN_LABEL = { "Cloud Walk": [12, 16], "MAX Red Line": [12, -2], "Tillamook Play Area": [-8, 18] };
+function labelLandmarks(root) {
+  const seen = new Set();
+  DATA.pois.filter(p => LANDMARKS.includes(p.name)).forEach(p => {
+    const key = p.name + p.letter;
+    if (seen.has(key)) return; seen.add(key);
+    const g = el("g", { class: "poi", "data-c": p.letter }, root);
+    const place = PLAN_LABEL[p.name] || [p.p[0] > hallC[0] - 40 ? 8 : -8, -7];
+    const x = p.p[0] + place[0], y = p.p[1] + place[1];
+    text(g, x, y, p.name, { "text-anchor": place[0] > 0 ? "start" : "end", "font-size": 13, "font-weight": 600, fill: "var(--ink)", stroke: "var(--apron)", "stroke-width": 4, "paint-order": "stroke" });
+  });
+}
+function scale(root, x, y) {
+  const g = el("g", {}, root);
+  el("path", { d: `M${x} ${y} h100 M${x} ${y - 5} v10 M${x + 100} ${y - 5} v10`, stroke: "var(--muted)", "stroke-width": 1.5, fill: "none" }, g);
+  text(g, x + 106, y + 4, "100 m", { "font-size": 12, fill: "var(--muted)", "font-family": "var(--mono)" });
+  const nx = x + 190;
+  el("path", { d: `M${nx} ${y + 6} l6 -18 l6 18 l-6 -5 z`, fill: "var(--muted)" }, g);
+  text(g, nx + 16, y + 4, "N", { "font-size": 12, fill: "var(--muted)", "font-family": "var(--mono)" });
+}
+function focusOn(root, letter) {
+  root.querySelectorAll(".c-group").forEach(g => { if (g.dataset.c !== letter) g.style.opacity = 0.3; });
+}
+
+/* ---------- style one: diagram ---------- */
+const LINES = {
+  C: { start: [448, 262], ang: -135, step: 15.5, color: "var(--teal)" },
+  D: { start: [548, 250], ang: -135, step: 15.5, color: "var(--violet)" },
+  E: { start: [612, 292], ang: 0, step: 24, color: "var(--glass)" },
+  B: { start: [462, 382], ang: 45, step: 13, color: "var(--lagoon)" },
+};
+function drawDiagram(host, opts = {}) {
+  const root = svg(opts.viewBox || "40 -48 950 610", opts.label || "Diagram of the PDX concourses");
+  el("rect", { x: -100, y: -100, width: 1200, height: 800, fill: "var(--surface)" }, root);
+  /* MAX Red Line */
+  if (!opts.small) {
+    el("path", { d: "M600 382 V470 H990", stroke: "var(--signal)", "stroke-width": 7, fill: "none", "stroke-linejoin": "round" }, root);
+    el("circle", { cx: 600, cy: 470, r: 10, fill: "var(--surface)", stroke: "var(--ink)", "stroke-width": 3 }, root);
+    text(root, 618, 498, "MAX Red Line", { "font-size": 15, "font-weight": 600, fill: "var(--ink)" });
+    text(root, 990, 456, "to downtown Portland", { "font-size": 13, fill: "var(--muted)", "text-anchor": "end" });
+  }
+  Object.entries(LINES).forEach(([L, s]) => {
+    const g = el("g", { class: "c-group", "data-c": L }, root);
+    const gates = DATA.gates.filter(x => x.letter === L).sort((a, b) => a.t - b.t);
+    const a = s.ang * Math.PI / 180, d = [Math.cos(a), Math.sin(a)], n = [-d[1], d[0]];
+    const len = 34 + (gates.length - 1) * s.step + 26;
+    const end = [s.start[0] + d[0] * len, s.start[1] + d[1] * len];
+    el("line", { x1: s.start[0], y1: s.start[1], x2: end[0], y2: end[1], stroke: opts.focus && opts.focus !== L ? "var(--line)" : s.color, "stroke-width": opts.small ? 18 : 11, "stroke-linecap": "round" }, g);
+    if (!opts.small) gates.forEach((gt, i) => {
+      const p = [s.start[0] + d[0] * (34 + i * s.step), s.start[1] + d[1] * (34 + i * s.step)];
+      const sd = gt.side, q = [p[0] + n[0] * 13 * sd, p[1] + n[1] * 13 * sd];
+      el("line", { x1: p[0], y1: p[1], x2: q[0], y2: q[1], stroke: s.color, "stroke-width": 3 }, g);
+      const lx = p[0] + n[0] * 24 * sd, ly = p[1] + n[1] * 24 * sd;
+      text(g, lx, ly + 4, gt.ref, { "text-anchor": "middle", "font-size": 11, fill: "var(--muted)", "font-family": "var(--mono)" });
+      gt.dia = p;
+    });
+    /* letter at the far end */
+    const tip = [end[0] + d[0] * (opts.small ? 34 : 26), end[1] + d[1] * (opts.small ? 34 : 26)];
+    el("circle", { cx: tip[0], cy: tip[1], r: opts.small ? 30 : 19, fill: opts.focus && opts.focus !== L ? "var(--line)" : s.color }, g);
+    text(g, tip[0], tip[1] + (opts.small ? 11 : 7), L, { "text-anchor": "middle", "font-size": opts.small ? 32 : 21, fill: "#FFFFFF", "font-family": "var(--display)", "font-weight": 500 });
+    g.addEventListener("click", () => pick(L));
+  });
+  /* main terminal as the hub */
+  el("rect", { x: 430, y: 246, width: 182, height: 140, rx: 30, fill: "var(--surface)", stroke: "var(--ink)", "stroke-width": opts.small ? 8 : 4 }, root);
+  if (!opts.small) {
+    text(root, 521, 300, "Main terminal", { "text-anchor": "middle", "font-size": 19, "font-family": "var(--display)", "font-weight": 500, fill: "var(--ink)" });
+    text(root, 521, 322, "Check in, security, bags", { "text-anchor": "middle", "font-size": 12.5, fill: "var(--muted)" });
+    [[490, 352], [508, 346], [526, 354], [544, 346], [560, 352]].forEach(([x, y]) => tree(root, x, y, 6));
+    /* landmarks as stops at their nearest gate */
+    const done = new Set();
+    DATA.pois.filter(p => LANDMARKS.includes(p.name) && p.letter && p.gate && p.gate.dia).forEach(p => {
+      if (done.has(p.name + p.letter)) return; done.add(p.name + p.letter);
+      const s = LINES[p.letter], a = s.ang * Math.PI / 180, n = [-Math.sin(a), Math.cos(a)];
+      const sd = p.letter === "E" ? 1 : -p.gate.side, [x, y] = p.gate.dia, reach = s.ang === 0 ? 40 : 46;
+      const g = el("g", { class: "poi", "data-c": p.letter }, root);
+      el("circle", { cx: x, cy: y, r: 6.5, fill: "var(--surface)", stroke: "var(--ink)", "stroke-width": 2.5 }, g);
+      const lx = x + n[0] * reach * sd, ly = y + n[1] * reach * sd;
+      el("line", { x1: x + n[0] * 7 * sd, y1: y + n[1] * 7 * sd, x2: lx, y2: ly, stroke: "var(--ink)", "stroke-width": 1 }, g);
+      text(g, lx + (n[0] * sd < -0.1 ? -4 : n[0] * sd > 0.1 ? 4 : 0), ly + (n[1] * sd > 0.5 ? 14 : 4), p.name, { "text-anchor": n[0] * sd < -0.1 ? "end" : n[0] * sd > 0.1 ? "start" : "middle", "font-size": 13, "font-weight": 600, fill: "var(--ink)", stroke: "var(--surface)", "stroke-width": 4, "paint-order": "stroke" });
+    });
+  }
+  host.appendChild(root);
+  return root;
+}
+
+/* ---------- style three: model ---------- */
+const VIEW = 32 * Math.PI / 180, SQUASH = 0.55, LIFT = 1.15;
+function iso([x, y], z = 0) {
+  const rx = x * Math.cos(VIEW) - y * Math.sin(VIEW), ry = x * Math.sin(VIEW) + y * Math.cos(VIEW);
+  return [rx, ry * SQUASH - z * LIFT];
+}
+const depth = ([x, y]) => x * Math.sin(VIEW) + y * Math.cos(VIEW);
+const HEIGHT = { "Main terminal": 22, P1: 21, P2: 21, P3: 14 };
+function solids() {
+  const list = [];
+  feats.forEach(f => {
+    if (f.kind === "terminal") list.push({ f, h: HEIGHT[f.name] || 12, roof: f.name === "Main terminal" ? "lattice" : "con", letter: f.name.startsWith("Concourse") ? f.name.slice(-1) : "" });
+    if (f.kind === "garage") list.push({ f, h: HEIGHT[f.name] || 18, roof: "garage", letter: "" });
+    if (f.kind === "tower") list.push({ f, h: 8, roof: "garage", letter: "" });
+  });
+  return list;
+}
+function drawModel(host, opts = {}) {
+  const items = solids();
+  /* fit the view to the buildings */
+  let minX = 1e9, minY = 1e9, maxX = -1e9, maxY = -1e9;
+  items.forEach(s => s.f.pts.forEach(p => { [0, s.h].forEach(z => { const [X, Y] = iso(p, z); minX = Math.min(minX, X); maxX = Math.max(maxX, X); minY = Math.min(minY, Y); maxY = Math.max(maxY, Y); }); }));
+  const tw = feats.find(f => f.kind === "tower"), twc = tw ? centroid(tw.pts) : null;
+  if (twc) minY = Math.min(minY, iso(twc, 82)[1]);
+  const pad = 30, vb = opts.viewBox || `${(minX - pad).toFixed(0)} ${(minY - pad).toFixed(0)} ${(maxX - minX + pad * 2).toFixed(0)} ${(maxY - minY + pad * 2).toFixed(0)}`;
+  const root = svg(vb, opts.label || "Model of the PDX terminal");
+  const id = opts.id || "model";
+  defs(root, id);
+  const [vx, vy, vw, vh] = vb.split(" ").map(Number);
+  el("rect", { x: vx, y: vy, width: vw, height: vh, fill: "var(--apron)" }, root);
+  /* aircraft on the ground first */
+  PLANES.forEach(p => {
+    const g = el("g", { class: "c-group", "data-c": p.gate.letter }, root);
+    el("polygon", { points: pts2(p.pts.map(q => iso(q))), fill: "var(--plane)", stroke: "var(--plane-edge)", "stroke-width": 0.5 }, g);
+  });
+  /* buildings far to near */
+  items.sort((a, b) => Math.max(...a.f.pts.map(depth)) - Math.max(...b.f.pts.map(depth)));
+  items.forEach(s => {
+    const g = el("g", { class: s.letter ? "c-group" : "", "data-c": s.letter }, root);
+    if (opts.focus && s.letter && s.letter !== opts.focus) g.style.opacity = 0.35;
+    const pts = s.f.pts, area = pts.reduce((acc, p, i) => { const q = pts[(i + 1) % pts.length]; return acc + p[0] * q[1] - q[0] * p[1]; }, 0);
+    const walls = [];
+    for (let i = 0; i < pts.length - 1; i++) {
+      const a = pts[i], b = pts[i + 1];
+      const ex = b[0] - a[0], ey = b[1] - a[1];
+      const nx = area > 0 ? ey : -ey, ny = area > 0 ? -ex : ex; /* outward normal */
+      const facing = nx * Math.sin(VIEW) + ny * Math.cos(VIEW);
+      if (facing <= 0) continue;
+      const light = (nx * Math.cos(VIEW) - ny * Math.sin(VIEW)) < 0;
+      walls.push({ a, b, d: (depth(a) + depth(b)) / 2, light });
+    }
+    walls.sort((p, q) => p.d - q.d).forEach(w => {
+      const quad = [iso(w.a), iso(w.b), iso(w.b, s.h), iso(w.a, s.h)];
+      const glassy = s.f.kind === "terminal";
+      el("polygon", { points: pts2(quad), fill: glassy ? (w.light ? "var(--wall-l)" : "var(--wall-r)") : "var(--garage)", stroke: glassy ? "var(--glass)" : "var(--apron-line)", "stroke-width": 0.5 }, g);
+      if (glassy) el("line", { x1: iso(w.a, s.h * 0.45)[0], y1: iso(w.a, s.h * 0.45)[1], x2: iso(w.b, s.h * 0.45)[0], y2: iso(w.b, s.h * 0.45)[1], stroke: "var(--glass)", "stroke-width": 0.6, opacity: 0.7 }, g);
+    });
+    const top = pts.map(p => iso(p, s.h));
+    const fill = s.roof === "lattice" ? `url(#lattice-${id})` : s.roof === "con" ? "var(--conroof)" : "var(--garage)";
+    el("polygon", { points: pts2(top), fill, stroke: s.roof === "lattice" ? "var(--roof-line)" : "var(--steel)", "stroke-width": 0.8 }, g);
+    if (s.roof === "lattice") {
+      /* skylights: a row of glass panels down the middle of the roof */
+      const [cx, cy] = centroid(pts);
+      for (let i = -4; i <= 4; i++) {
+        const p = [cx + i * 26 * 0.5, cy - i * 26 * 0.86];
+        if (!inside(p, pts)) continue;
+        const sq = [[-6, -3], [6, -3], [6, 3], [-6, 3]].map(([dx, dy]) => iso([p[0] + dx * 0.86 + dy * 0.5, p[1] + dx * 0.5 - dy * 0.86], s.h + 0.5));
+        el("polygon", { points: pts2(sq), fill: "var(--aqua)", opacity: 0.8 }, g);
+      }
+    }
+    if (s.letter) {
+      const c = byLetter[s.letter], at = iso([c.mid[0] + c.dir[0] * 30, c.mid[1] + c.dir[1] * 30], s.h + 14);
+      el("circle", { cx: at[0], cy: at[1], r: opts.small ? 24 : 17, fill: "var(--ink)" }, g);
+      text(g, at[0], at[1] + (opts.small ? 9 : 7), s.letter, { "text-anchor": "middle", "font-size": opts.small ? 28 : 21, fill: "var(--surface)", "font-family": "var(--display)", "font-weight": 500 });
+      g.addEventListener("click", () => pick(s.letter));
+    }
+  });
+  /* control tower: a shaft and cab */
+  if (twc) {
+    const base = iso(twc, 8), topY = iso(twc, 70), cab = iso(twc, 76);
+    el("rect", { x: base[0] - 4, y: topY[1], width: 8, height: base[1] - topY[1], fill: "var(--wall-r)", stroke: "var(--glass)", "stroke-width": 0.5 }, root);
+    el("ellipse", { cx: cab[0], cy: cab[1] + 4, rx: 11, ry: 7, fill: "var(--wall-l)", stroke: "var(--glass)" }, root);
+    el("ellipse", { cx: cab[0], cy: cab[1] - 1, rx: 12, ry: 5, fill: "var(--steel)" }, root);
+    if (!opts.small) text(root, cab[0] + 18, cab[1] + 4, "Control tower", { "font-size": 13, fill: "var(--muted)" });
+  }
+  if (!opts.small) {
+    const lab = iso(hallC, 30);
+    text(root, lab[0], lab[1] - 4, "Main terminal", { "text-anchor": "middle", "font-size": 18, "font-family": "var(--display)", "font-weight": 500, fill: "var(--ink)", stroke: "var(--roof)", "stroke-width": 4, "paint-order": "stroke" });
+    const max = DATA.pois.find(p => p.name === "MAX Red Line");
+    if (max) { const m = iso(max.p, 2); el("circle", { cx: m[0], cy: m[1], r: 6, fill: "var(--signal)" }, root); text(root, m[0] + 10, m[1] + 5, "MAX Red Line", { "font-size": 13, "font-weight": 600, fill: "var(--ink)", stroke: "var(--apron)", "stroke-width": 4, "paint-order": "stroke" }); }
+  }
+  host.appendChild(root);
+  return root;
+}
+
+/* ---------- insets ---------- */
+function inset(hostId, draw, opts) {
+  const host = document.getElementById(hostId);
+  host.innerHTML = `<div class="cap"><span class="eyebrow">Nonstop to Chicago Midway</span><strong>Concourse E</strong><span>Southwest flights leave from gates E3 to E13</span></div>`;
+  draw(host, { small: true, focus: "E", id: hostId, label: "Concourse E highlighted", ...opts });
+}
+
+/* ---------- picking a concourse ---------- */
+const picked = document.getElementById("picked"), maps = document.getElementById("maps");
+function pick(letter) {
+  document.querySelectorAll(".chip").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.c === letter)));
+  if (!letter) {
+    delete maps.dataset.pick;
+    picked.textContent = "Four concourses, 53 gates. Tap a concourse on any map.";
+  } else {
+    maps.dataset.pick = letter;
+    const gates = DATA.gates.filter(g => g.letter === letter).length;
+    const spots = [...new Set(DATA.pois.filter(p => p.letter === letter).map(p => p.name))];
+    const air = CONCOURSES[letter].airlines.map(([n, ok]) => ok ? n : `${n} <span class="check">to check</span>`).join(", ");
+    picked.innerHTML = `<strong>Concourse ${letter}</strong> · ${gates} gates · ${air}${spots.length ? ` · ${spots.slice(0, 4).join(", ")}` : ""}`;
+  }
+  maps.querySelectorAll(".maps > section .frame .c-group, .frame .c-group").forEach(g => g.classList.toggle("off", !!letter && g.dataset.c !== letter));
+  maps.querySelectorAll(".frame .poi").forEach(g => g.classList.toggle("off", !!letter && g.dataset.c !== letter));
+}
+document.querySelectorAll(".chip").forEach(b => b.addEventListener("click", () => pick(b.dataset.c)));
+
+drawDiagram(document.getElementById("diagram"));
+drawPlan(document.getElementById("plan"));
+drawModel(document.getElementById("model"));
+inset("inset-diagram", drawDiagram, {});
+inset("inset-plan", drawPlan, { viewBox: "-200 -230 690 330" });
+inset("inset-model", drawModel, {});
+</script>

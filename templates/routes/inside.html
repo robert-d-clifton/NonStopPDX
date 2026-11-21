@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Inside PDX · NonStopPDX{% endblock %}
+{% block content %}
+<main class="inside-page">
+  <section class="wrap intro" aria-labelledby="inside-title">
+    <span class="eyebrow">Where every nonstop starts</span>
+    <h1 id="inside-title">Inside PDX</h1>
+    <p>The main terminal under its timber roof, and four concourses reaching out to the gates. Pick a concourse to see who flies from it and what's there.</p>
+  </section>
+
+  <section class="wrap model-block" aria-label="Model of the terminal">
+    <div class="model-chips" role="group" aria-label="Highlight part of the terminal">
+      <button class="area-chip" type="button" id="area-all" data-area="" aria-pressed="true">All</button>
+      {% for a in areas %}<button class="area-chip" type="button" id="area-{{ a.key }}" data-area="{{ a.key }}" aria-pressed="false">{% if a.key == "main" %}Main terminal{% else %}{{ a.key }}{% endif %}</button>
+      {% endfor %}
+    </div>
+    <div class="model-frame" id="terminal-model">
+      <noscript><p class="map-fallback">The terminal model needs JavaScript. Everything on it is listed below.</p></noscript>
+    </div>
+    <p class="model-caption" id="model-caption" aria-live="polite">Tap a concourse on the model, or pick one above.</p>
+  </section>
+
+  <section class="wrap areas" aria-label="What's where">
+    {% for a in areas %}
+    <article class="area" id="{{ a.anchor }}" data-area="{{ a.key }}">
+      <header class="area-head">
+        <span class="area-mark" aria-hidden="true">{% if a.key == "main" %}PDX{% else %}{{ a.key }}{% endif %}</span>
+        <div>
+          <h2>{{ a.title }}</h2>
+          <p class="area-meta">{% if a.gates %}{{ a.gates }} gates, {{ a.gate_span }}{% else %}Check in, security and bags{% endif %}</p>
+        </div>
+      </header>
+      {% if a.airlines %}
+      <p class="area-airlines">
+        {% for x in a.airlines %}<a href="{% url 'routes:airline' x.slug %}">{{ x.name }}</a>{% if x.note %} {{ x.note }}{% endif %}{% if not x.checked %} <span class="unconfirmed" title="Not yet checked against FlyPDX">unconfirmed</span>{% endif %}{% if not forloop.last %}, {% endif %}{% endfor %}
+      </p>
+      {% endif %}
+      {% if a.groups %}
+      <div class="area-groups">
+        {% for label, names in a.groups %}
+        <div class="area-group">
+          <h3 class="eyebrow">{{ label }}</h3>
+          <ul>{% for n in names %}<li>{{ n }}</li>{% endfor %}</ul>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </article>
+    {% endfor %}
+    {% if getting_here %}
+    <article class="area" id="getting-here">
+      <header class="area-head">
+        <span class="area-mark max" aria-hidden="true">MAX</span>
+        <div>
+          <h2>Getting here</h2>
+          <p class="area-meta">The {{ getting_here|join:", " }} is a short walk from baggage claim, with trains to downtown Portland.</p>
+        </div>
+      </header>
+    </article>
+    {% endif %}
+  </section>
+
+  <p class="wrap credit-line">Building outlines, gates and places © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>. Places change, so a few may have closed. Heights in the model are approximate, and parked aircraft are illustrative.</p>
+</main>
+
+{{ map_data|json_script:"terminal-data" }}
+<script src="{% static 'js/terminal-model.js' %}" defer></script>
+{% endblock %}
