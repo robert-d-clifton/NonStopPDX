@@ -449,7 +449,7 @@ footer a { color: inherit; }
     const planes = [];
     DATA.gates.forEach((gate, i) => {
       const c = byLetter[gate.ref[0]];
-      if (!c || i % 5 === 2) return;
+      if (!c || i % 5 === 2 || (DATA.noAircraft || []).includes(gate.ref)) return;
       const t = (gate.p[0] - c.mid[0]) * c.dir[0] + (gate.p[1] - c.mid[1]) * c.dir[1];
       let n = [gate.p[0] - (c.mid[0] + c.dir[0] * t), gate.p[1] - (c.mid[1] + c.dir[1] * t)];
       const len = Math.hypot(n[0], n[1]);

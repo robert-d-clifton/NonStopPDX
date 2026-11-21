@@ -1,9 +1,46 @@
 {
- "_help": "Which airlines use each concourse, kept by hand. slug is the airline's page address (data/airlines.json). checked is true once confirmed against FlyPDX or the Port of Portland; unchecked ones show as unconfirmed on the Inside PDX page. note is optional, shown after the airline's name.",
+ "_help": "Which airlines use each concourse, kept by hand. slug is the airline's page address (data/airlines.json). checked is true once confirmed against FlyPDX or the Port of Portland; unchecked ones show as unconfirmed on the Inside PDX page. note is optional, shown after the airline's name. no_aircraft lists gates where the model should not draw a parked plane, for spots where one could not really park.",
  "concourses": {
-  "B": {"airlines": [{"slug": "alaska", "note": "regional flights", "checked": true}]},
-  "C": {"airlines": [{"slug": "alaska", "checked": false}]},
-  "D": {"airlines": [{"slug": "delta", "checked": false}]},
-  "E": {"airlines": [{"slug": "southwest", "checked": true}, {"slug": "united", "checked": false}]}
- }
+  "B": {
+   "airlines": [
+    {
+     "slug": "alaska",
+     "note": "regional flights",
+     "checked": true
+    }
+   ]
+  },
+  "C": {
+   "airlines": [
+    {
+     "slug": "alaska",
+     "checked": false
+    }
+   ]
+  },
+  "D": {
+   "airlines": [
+    {
+     "slug": "delta",
+     "checked": false
+    }
+   ]
+  },
+  "E": {
+   "airlines": [
+    {
+     "slug": "southwest",
+     "checked": true
+    },
+    {
+     "slug": "united",
+     "checked": false
+    }
+   ]
+  }
+ },
+ "no_aircraft": [
+  "E13A",
+  "E13B"
+ ]
 }

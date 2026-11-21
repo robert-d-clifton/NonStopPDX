@@ -39,7 +39,8 @@ def gate_span(refs: list[str]) -> str:
 def inside_pdx(airlines_by_slug: dict) -> dict:
     """Everything the page needs: one entry per area in walking order, plus the map payload."""
     terminal = load(settings.TERMINAL_FILE)
-    concourses = load(settings.CONCOURSES_FILE)["concourses"]
+    hand = load(settings.CONCOURSES_FILE)
+    concourses = hand["concourses"]
     areas = []
     for key, title in AREA_NAMES.items():
         places = [p for p in terminal["places"] if p["area"] == key]
@@ -66,6 +67,7 @@ def inside_pdx(airlines_by_slug: dict) -> dict:
         "shapes": terminal["shapes"],
         "gates": terminal["gates"],
         "rail": terminal.get("rail", []),
+        "noAircraft": hand.get("no_aircraft", []),
         "pins": [{"name": p["name"], "p": p["p"]} for p in terminal["places"] if p["category"] == "transit"],
         "areas": {a["key"]: {"title": a["title"], "anchor": a["anchor"], "gateSpan": a["gate_span"],
                              "airlines": [x["name"] + (f" ({x['note']})" if x["note"] else "") for x in a["airlines"]]}
