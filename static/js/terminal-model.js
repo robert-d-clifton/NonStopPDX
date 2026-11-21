@@ -1,6 +1,6 @@
 /* Inside PDX: the terminal as a raised model, drawn from building outlines in meters (x east, y south).
    NSPTerminal.draw(host, data, options) draws one model; the page wiring at the bottom adds picking a
-   concourse and moving its card to the top. Roof styles: grid, woven, cassettes, waves, plain. */
+   concourse and moving its card to the top. Roof styles: cassettes (the site's), grid, woven, waves, plain. */
 (function () {
   "use strict";
   const NS = "http://www.w3.org/2000/svg";
@@ -105,7 +105,6 @@
     cassettes(g, pts, h, ax) {
       roofLines(g, pts, h, ax, 0, 4.5, "tm-roof-grain");
       roofLines(g, pts, h, ax, Math.PI / 2, 38, "tm-roof-seam");
-      skylights(g, pts, h, ax, [-26, 0, 26], 38);
     },
     waves(g, pts, h, ax) { roofLines(g, pts, h, ax, Math.PI / 2, 16, "tm-roof-wave"); roofLines(g, pts, h, ax, Math.PI / 2, 16, "tm-roof-crest"); skylights(g, pts, h, ax, [0], 32); },
     plain(g, pts, h, ax) { skylights(g, pts, h, ax, [-36, -12, 12, 36], 26); },
@@ -214,7 +213,7 @@
         const clip = el("clipPath", { id: id + "-roof" }, defs);
         el("polygon", { points: pts2(o.pts.map(p => iso(p, o.h))) }, clip);
         const roof = el("g", { "clip-path": `url(#${id}-roof)` }, g);
-        (ROOFS[opts.roof] || ROOFS.grid)(roof, o.pts, o.h, hallAxis);
+        (ROOFS[opts.roof] || ROOFS.cassettes)(roof, o.pts, o.h, hallAxis);
       }
     });
 

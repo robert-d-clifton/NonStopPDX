@@ -51,9 +51,9 @@
 <script>
 const DATA = /*DATA*/;
 const OPTIONS = [
-  ["grid", "Grid", "What's on the site now, lined up with the building. Even and calm, but reads more like a tiled floor than timber.", true],
+  ["grid", "Grid", "Lined up with the building. Even and calm, but reads more like a tiled floor than timber."],
   ["woven", "Woven", "A diagonal lattice, closer to the real ceiling's crisscross and to the carpet. Two staggered rows of skylights."],
-  ["cassettes", "Cassettes", "Long fir grain with seams where the roof went up in sections. Three rows of skylights. The most like a built thing."],
+  ["cassettes", "Cassettes", "Long fir grain with seams where the roof went up in sections, without skylights. The most like a built thing.", true],
   ["waves", "Waves", "Soft bands across the roof that hint at its undulating shape. Warm and simple from far away."],
   ["plain", "Plain", "Solid warm timber and a field of skylights, no pattern. Quietest, and lets the skylights carry it."],
 ];
@@ -71,5 +71,5 @@ OPTIONS.forEach(([key, name, note, now]) => {
   b.addEventListener("click", () => showFull(key));
   options.appendChild(b);
 });
-showFull("woven");
+showFull("cassettes");
 </script>
