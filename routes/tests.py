@@ -342,7 +342,8 @@ class InsidePdxTests(TestCase):
         from django.conf import settings
         from .terminal import gate_span, load
         terminal, concourses = load(settings.TERMINAL_FILE), load(settings.CONCOURSES_FILE)
-        letters = {s["name"][-1] for s in terminal["shapes"] if s["name"].startswith("Concourse")}
+        letters = {s["name"][-1] for s in terminal["shapes"] if s["kind"] == "terminal" and s["name"].startswith("Concourse")}
+        self.assertTrue(any(s["kind"] == "walkway" for s in terminal["shapes"]))
         self.assertEqual(letters, set(concourses["concourses"]))
         self.assertTrue(all(g["ref"][0] in letters for g in terminal["gates"]))
         self.assertTrue(all(p["area"] in letters | {"main", "outside"} for p in terminal["places"]))
