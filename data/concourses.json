@@ -14,7 +14,7 @@
    "airlines": [
     {
      "slug": "alaska",
-     "checked": false
+     "checked": true
     }
    ]
   },
@@ -22,7 +22,7 @@
    "airlines": [
     {
      "slug": "delta",
-     "checked": false
+     "checked": true
     }
    ]
   },
@@ -34,7 +34,7 @@
     },
     {
      "slug": "united",
-     "checked": false
+     "checked": true
     }
    ]
   }
