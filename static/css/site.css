@@ -217,9 +217,23 @@ footer a { color: inherit; }
 .model-frame { background: var(--apron); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
 .model-frame svg { display: block; width: 100%; height: auto; }
 .model-caption { font-size: 16px; color: var(--muted); min-height: 1.6em; }
+.model-hint { display: none; font-size: 14px; color: var(--muted); }
+/* phones: the model keeps a readable size and pans sideways inside its frame */
+@media (max-width: 720px) {
+  .model-frame { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; position: relative; }
+  .model-frame::-webkit-scrollbar { display: none; }
+  .model-frame svg { width: 860px; max-width: none; }
+  .model-hint { display: block; }
+  .model-chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+  .model-chips::-webkit-scrollbar { display: none; }
+  .area-chip { flex: none; padding: 8px 16px; }
+  .tm-badge circle { r: 21px; }
+  .tm-badge text { font-size: 25px; }
+}
 .model-caption strong { color: var(--ink); font-weight: 600; }
 .tm-ground { fill: var(--apron); }
 .tm-plane { fill: var(--plane); stroke: var(--plane-edge); stroke-width: 0.5; }
+.tm-walk { fill: none; stroke: var(--signal); stroke-width: 1.4; stroke-dasharray: 2.5 2.5; stroke-linecap: round; }
 .tm-wall { fill: var(--wall); stroke: var(--glass); stroke-width: 0.5; }
 .tm-wall-lit { fill: var(--wall-lit); stroke: var(--glass); stroke-width: 0.5; }
 .tm-mullion { stroke: var(--glass); stroke-width: 0.6; opacity: 0.7; }

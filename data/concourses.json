@@ -1,5 +1,5 @@
 {
- "_help": "Which airlines use each concourse, kept by hand. slug is the airline's page address (data/airlines.json). checked is true once confirmed against FlyPDX or the Port of Portland; unchecked ones show as unconfirmed on the Inside PDX page. note is optional, shown after the airline's name. no_aircraft lists gates where the model should not draw a parked plane, for spots where one could not really park.",
+ "_help": "Which airlines use each concourse, kept by hand. slug is the airline's page address (data/airlines.json). checked is true once confirmed against FlyPDX or the Port of Portland; unchecked ones show as unconfirmed on the Inside PDX page. note is optional, shown after the airline's name. no_aircraft lists gates where the model should not draw a parked plane, for spots where one could not really park. ground_boarding lists gates where people walk out to the plane on the ramp; the model draws a plane past the end of the concourse with a walking path.",
  "concourses": {
   "B": {
    "airlines": [
@@ -91,5 +91,8 @@
  "no_aircraft": [
   "E13A",
   "E13B"
+ ],
+ "ground_boarding": [
+  "E13A"
  ]
 }

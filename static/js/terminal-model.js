@@ -145,6 +145,23 @@
       planes.push({ c: ctr, area: c.letter, pts: PLANE.map(([x, y]) => [ctr[0] + (x * ca - y * sa) * k, ctr[1] + (x * sa + y * ca) * k]) });
     });
 
+    /* gates where people walk out to the plane: a smaller plane past the end of the concourse, no jet bridge */
+    const walks = [];
+    (DATA.groundBoarding || []).forEach(ref => {
+      const gate = DATA.gates.find(g => g.ref === ref), c = gate && byLetter[ref[0]];
+      if (!c) return;
+      const tMax = Math.max(...c.pts.map(p => (p[0] - c.mid[0]) * c.dir[0] + (p[1] - c.mid[1]) * c.dir[1]));
+      const n = [-c.dir[1], c.dir[0]];
+      const side = Math.sign((gate.p[0] - c.mid[0]) * n[0] + (gate.p[1] - c.mid[1]) * n[1]) || 1;
+      const k = 0.72, ctr = [c.mid[0] + c.dir[0] * (tMax + 30) + n[0] * side * 6, c.mid[1] + c.dir[1] * (tMax + 30) + n[1] * side * 6];
+      const h = [-n[0] * side, -n[1] * side]; /* nose points away from the gate's side, parked across the end */
+      const a = Math.atan2(h[1], h[0]), ca = Math.cos(a), sa = Math.sin(a);
+      const pts = PLANE.map(([x, y]) => [ctr[0] + (x * ca - y * sa) * k, ctr[1] + (x * sa + y * ca) * k]);
+      const left = [h[1], -h[0]], doors = [1, -1].map(s => [ctr[0] + h[0] * 7 * k + left[0] * 2.6 * s, ctr[1] + h[1] * 7 * k + left[1] * 2.6 * s]);
+      const door = doors.sort((p, q) => Math.hypot(p[0] - gate.p[0], p[1] - gate.p[1]) - Math.hypot(q[0] - gate.p[0], q[1] - gate.p[1]))[0];
+      walks.push({ area: c.letter, pts, path: [gate.p, [gate.p[0] + c.dir[0] * 10, gate.p[1] + c.dir[1] * 10], door] });
+    });
+
     /* solids: buildings, plus a two car MAX train waiting at the station */
     const solids = shapes.filter(s => s.kind !== "canopy").map(s => ({
       kind: s.kind, name: s.name, pts: s.pts, h: HEIGHT[s.name] || (s.kind === "terminal" ? 12 : 18),
@@ -166,7 +183,7 @@
     const grow = ([X, Y]) => { minX = Math.min(minX, X); maxX = Math.max(maxX, X); minY = Math.min(minY, Y); maxY = Math.max(maxY, Y); };
     const framed = opts.crop === "hall" ? solids.filter(o => o.area === "main") : solids.filter(o => o.kind === "terminal");
     framed.forEach(o => o.pts.forEach(p => { grow(iso(p)); grow(iso(p, o.h)); }));
-    if (opts.crop !== "hall") planes.forEach(p => p.pts.forEach(q => grow(iso(q))));
+    if (opts.crop !== "hall") planes.concat(walks).forEach(p => p.pts.forEach(q => grow(iso(q))));
     const tower = shapes.find(s => s.kind === "tower"), towerC = tower ? centroid(tower.pts) : null;
     if (towerC && opts.crop !== "hall") grow(iso(towerC, 82));
     const pad = opts.crop === "hall" ? 10 : 24;
@@ -196,6 +213,10 @@
     });
 
     planes.forEach(p => el("polygon", { points: pts2(p.pts.map(q => iso(q))), class: "tm-plane", "data-area": p.area }, root));
+    walks.forEach(w => {
+      el("polyline", { points: pts2(w.path.map(q => iso(q))), class: "tm-walk", "data-area": w.area }, root);
+      el("polygon", { points: pts2(w.pts.map(q => iso(q))), class: "tm-plane", "data-area": w.area }, root);
+    });
 
     const groups = {};
     solids.forEach(o => {
@@ -276,12 +297,32 @@
     });
   }
 
+  /* on phones the model pans inside its frame: keep the picked part, or the main terminal, in view */
+  function centerOn(key, smooth) {
+    if (host.scrollWidth <= host.clientWidth + 2) return;
+    const target = groups[key] || groups.main;
+    if (!target) return;
+    const frame = host.getBoundingClientRect(), box = target.getBoundingClientRect();
+    const left = host.scrollLeft + (box.left + box.width / 2) - (frame.left + frame.width / 2);
+    host.scrollTo({ left: Math.max(0, left), behavior: smooth && !still.matches ? "smooth" : "auto" });
+  }
+  centerOn("main", false);
+  window.addEventListener("resize", () => centerOn(root.getAttribute("data-pick") || "main", false));
+  let swiped = false;
+  host.addEventListener("scroll", () => {
+    if (swiped) return;
+    swiped = true;
+    const hint = document.getElementById("model-hint");
+    if (hint) hint.hidden = true;
+  }, { passive: true, once: false });
+
   function pick(key) {
     chips.forEach(b => b.setAttribute("aria-pressed", String(b.dataset.area === key)));
     if (key) root.setAttribute("data-pick", key); else root.removeAttribute("data-pick");
     root.querySelectorAll("[data-area]").forEach(n => n.classList.toggle("off", !!key && n.dataset.area !== key));
     if (list) Array.from(list.children).forEach(a => a.classList.toggle("current", !!key && a.dataset.area === key));
     reorder(key);
+    centerOn(key, true);
     if (!caption) return;
     if (!key) { caption.textContent = restingCaption; return; }
     const a = DATA.areas[key];

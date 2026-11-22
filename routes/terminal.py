@@ -68,6 +68,7 @@ def inside_pdx(airlines_by_slug: dict) -> dict:
         "gates": terminal["gates"],
         "rail": terminal.get("rail", []),
         "noAircraft": hand.get("no_aircraft", []),
+        "groundBoarding": hand.get("ground_boarding", []),
         "pins": [{"name": p["name"], "p": p["p"]} for p in terminal["places"] if p["category"] == "transit"],
         "areas": {a["key"]: {"title": a["title"], "anchor": a["anchor"], "gateSpan": a["gate_span"],
                              "airlines": [x["name"] + (f" ({x['note']})" if x["note"] else "") for x in a["airlines"]]}
