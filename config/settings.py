@@ -105,6 +105,7 @@ AIRLINES_FILE = BASE_DIR / "data" / "airlines.json"
 DRAWINGS_FILE = BASE_DIR / "data" / "drawings.json"
 TERMINAL_FILE = BASE_DIR / "data" / "terminal.json"
 CONCOURSES_FILE = BASE_DIR / "data" / "concourses.json"
+PLACES_FILE = BASE_DIR / "data" / "places.json"
 STORIES_DIR = BASE_DIR / "stories"
 
 LOGGING = {

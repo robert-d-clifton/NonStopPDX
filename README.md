@@ -118,9 +118,10 @@ python3 -m sync.seed_stories   # adds placeholders for new destinations, never o
 
 ### Inside PDX
 
-The Inside PDX page (`/inside/`) draws the terminal as a raised model and lists what's on each concourse. Two files feed it:
+The Inside PDX page (`/inside/`) draws the terminal as a raised model and lists what's on each concourse. Three files feed it:
 
 * `data/terminal.json`: building outlines, gates and places from OpenStreetMap, in meters around the main terminal. Rebuild it with `python3 tools/build_terminal.py` (add `--offline` to reuse the last download). Don't edit it by hand.
+* `data/places.json`: shops, restaurants and services, copied by hand from FlyPDX's Shops, Dining & More list (never scraped), with an as of date shown on the page. Art, play areas and airline lounges still come from OpenStreetMap.
 * `data/concourses.json`: which airlines use each concourse, kept by hand. Mark an airline `checked` once it's confirmed against FlyPDX; unchecked ones show as unconfirmed.
 
 ## Hosting (planned)

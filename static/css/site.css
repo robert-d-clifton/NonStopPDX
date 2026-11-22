@@ -280,5 +280,8 @@ footer a { color: inherit; }
 .unconfirmed { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; }
 .area-groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px 24px; }
 .area-group { display: grid; gap: 6px; align-content: start; min-width: 0; }
+.area-group h3 { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: baseline; }
+.security { letter-spacing: 0.06em; color: var(--teal); }
+.security.before { color: var(--muted); }
 .area-group ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 2px; font-size: 15px; }
 .credit-line { font-size: 14px; color: var(--muted); padding-block: 18px 8px; }

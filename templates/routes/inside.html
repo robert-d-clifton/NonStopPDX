@@ -39,9 +39,9 @@
       {% endif %}
       {% if a.groups %}
       <div class="area-groups">
-        {% for label, names in a.groups %}
+        {% for label, names, note in a.groups %}
         <div class="area-group">
-          <h3 class="eyebrow">{{ label }}</h3>
+          <h3 class="eyebrow">{{ label }}{% if note %} <span class="security{% if note == 'Before security' %} before{% endif %}">{{ note }}</span>{% endif %}</h3>
           <ul>{% for n in names %}<li>{{ n }}</li>{% endfor %}</ul>
         </div>
         {% endfor %}
@@ -62,7 +62,7 @@
     {% endif %}
   </section>
 
-  <p class="wrap credit-line">Building outlines, gates and places © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>. Places change, so a few may have closed. Heights in the model are approximate, and parked aircraft are illustrative.</p>
+  <p class="wrap credit-line">Shops, restaurants and services from <a href="https://www.flypdx.com/">FlyPDX</a>, as of {{ places_as_of }}. Building outlines, gates, art and lounges © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>. Heights in the model are approximate, and parked aircraft are illustrative.</p>
 </main>
 
 {{ map_data|json_script:"terminal-data" }}

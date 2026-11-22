@@ -1,0 +1,1017 @@
+{
+ "_help": "Shops, restaurants and services at PDX, copied by hand from flypdx.com (Shops, Dining & More). kind is restaurant, shop or service; security is pre, post or both; where uses FlyPDX's own place names. show false keeps an entry out of the Inside PDX lists (ATMs, carts, drop boxes). see true lists it under Things to see. Update by hand from FlyPDX; don't scrape it.",
+ "as_of": "2026-11-22",
+ "source": "https://www.flypdx.com/",
+ "places": [
+  {
+   "name": "Aurora",
+   "kind": "restaurant",
+   "tags": [
+    "Bar",
+    "Burgers",
+    "Counter Service",
+    "Gluten Free",
+    "Snacks & Beverages",
+    "Vegan",
+    "Vegetarian"
+   ],
+   "security": "pre",
+   "where": [
+    "Mezzanine"
+   ]
+  },
+  {
+   "name": "Bambuza Vietnam Kitchen",
+   "kind": "restaurant",
+   "tags": [
+    "Bar",
+    "Breakfast",
+    "Counter Service",
+    "Gluten Free",
+    "Grab & Go",
+    "Snacks & Beverages",
+    "Vegan"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse C",
+    "Concourse E"
+   ]
+  },
+  {
+   "name": "Barbur Foods",
+   "kind": "shop",
+   "tags": [
+    "Books & News",
+    "Grab & Go",
+    "Snacks & Beverages"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse E"
+   ]
+  },
+  {
+   "name": "Blue Star Donuts",
+   "kind": "restaurant",
+   "tags": [
+    "Breakfast",
+    "Coffee",
+    "Counter Service",
+    "Dessert",
+    "Snacks & Beverages",
+    "Vegan",
+    "Vegetarian"
+   ],
+   "security": "post",
+   "where": [
+    "North Concession Hall"
+   ]
+  },
+  {
+   "name": "Burgerville",
+   "kind": "restaurant",
+   "tags": [
+    "Breakfast",
+    "Burgers",
+    "Counter Service",
+    "Dessert",
+    "Gluten Free",
+    "Mobile Order",
+    "Snacks & Beverages"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse D"
+   ]
+  },
+  {
+   "name": "Café Yumm",
+   "kind": "restaurant",
+   "tags": [
+    "Breakfast",
+    "Counter Service",
+    "Gluten Free",
+    "Snacks & Beverages",
+    "Vegan",
+    "Vegetarian"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse C"
+   ]
+  },
+  {
+   "name": "Calliope",
+   "kind": "shop",
+   "tags": [
+    "Gift & Specialty"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse E"
+   ]
+  },
+  {
+   "name": "Capers Bistro",
+   "kind": "restaurant",
+   "tags": [
+    "Bar",
+    "Breakfast",
+    "Burgers",
+    "Dessert",
+    "Full Service",
+    "Grab & Go",
+    "Snacks & Beverages",
+    "Spirits & Wine",
+    "Vegan",
+    "Vegetarian"
+   ],
+   "security": "post",
+   "where": [
+    "South Concession Hall"
+   ]
+  },
+  {
+   "name": "Cascade Market",
+   "kind": "shop",
+   "tags": [
+    "Books & News",
+    "Grab & Go",
+    "Snacks & Beverages"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse D"
+   ]
+  },
+  {
+   "name": "ccMcKenzie Shoes & Apparel",
+   "kind": "shop",
+   "tags": [
+    "Clothing",
+    "Gift & Specialty"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse C"
+   ]
+  },
+  {
+   "name": "Cha! Cha! Cha!",
+   "kind": "restaurant",
+   "tags": [
+    "Breakfast",
+    "Counter Service",
+    "Mobile Order"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse D"
+   ]
+  },
+  {
+   "name": "Clear",
+   "kind": "service",
+   "tags": [
+    "Travel Services"
+   ],
+   "security": "pre",
+   "where": [
+    "Ticket Hall"
+   ]
+  },
+  {
+   "name": "Columbia Sportswear",
+   "kind": "shop",
+   "tags": [
+    "Clothing"
+   ],
+   "security": "post",
+   "where": [
+    "South Concession Hall"
+   ]
+  },
+  {
+   "name": "Currency Exchange International",
+   "kind": "service",
+   "tags": [
+    "Financial Services"
+   ],
+   "security": "both",
+   "where": [
+    "Baggage Claim",
+    "Concourse D"
+   ]
+  },
+  {
+   "name": "Deschutes Brewery",
+   "kind": "restaurant",
+   "tags": [
+    "Bar",
+    "Breakfast",
+    "Burgers",
+    "Dessert",
+    "Full Service",
+    "Snacks & Beverages"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse D"
+   ]
+  },
+  {
+   "name": "Eastbank Market",
+   "kind": "shop",
+   "tags": [
+    "Books & News",
+    "Grab & Go",
+    "SNAP/EBT",
+    "Snacks & Beverages"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse C"
+   ]
+  },
+  {
+   "name": "ECOVIBE",
+   "kind": "shop",
+   "tags": [
+    "Clothing",
+    "Gift & Specialty"
+   ],
+   "security": "pre",
+   "where": [
+    "Ticket Hall"
+   ]
+  },
+  {
+   "name": "Escape Lounge",
+   "kind": "service",
+   "tags": [
+    "Bar",
+    "Breakfast",
+    "Gluten Free",
+    "Lounge",
+    "Vegan",
+    "Vegetarian"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse D"
+   ]
+  },
+  {
+   "name": "Evergreens",
+   "kind": "restaurant",
+   "tags": [
+    "Counter Service",
+    "Gluten Free",
+    "Mobile Order",
+    "Snacks & Beverages",
+    "Vegan",
+    "Vegetarian"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse E"
+   ]
+  },
+  {
+   "name": "FedEx Drop Box",
+   "kind": "service",
+   "tags": [
+    "Mailing Services"
+   ],
+   "security": "pre",
+   "where": [
+    "Baggage Claim"
+   ],
+   "show": false
+  },
+  {
+   "name": "Freeland Spirits",
+   "kind": "shop",
+   "tags": [
+    "Spirits & Wine"
+   ],
+   "security": "post",
+   "where": [
+    "North Concession Hall"
+   ]
+  },
+  {
+   "name": "Good Coffee",
+   "kind": "restaurant",
+   "tags": [
+    "Breakfast",
+    "Coffee",
+    "Counter Service",
+    "Dessert",
+    "Snacks & Beverages",
+    "Vegan"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse B"
+   ]
+  },
+  {
+   "name": "Grassa",
+   "kind": "restaurant",
+   "tags": [
+    "Bar",
+    "Counter Service",
+    "Gluten Free",
+    "Grab & Go",
+    "Mobile Order",
+    "Vegan",
+    "Vegetarian"
+   ],
+   "security": "post",
+   "where": [
+    "North Concession Hall"
+   ]
+  },
+  {
+   "name": "Hello From Portland",
+   "kind": "shop",
+   "tags": [
+    "Books & News",
+    "Clothing",
+    "Gift & Specialty",
+    "SNAP/EBT",
+    "Snacks & Beverages"
+   ],
+   "security": "pre",
+   "where": [
+    "Ticket Hall"
+   ]
+  },
+  {
+   "name": "Henry's Tavern",
+   "kind": "restaurant",
+   "tags": [
+    "Bar",
+    "Breakfast",
+    "Burgers",
+    "Dessert",
+    "Full Service",
+    "Gluten Free",
+    "Grab & Go",
+    "Snacks & Beverages",
+    "Vegetarian"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse C"
+   ]
+  },
+  {
+   "name": "Hissho Sushi",
+   "kind": "restaurant",
+   "tags": [
+    "Counter Service",
+    "Dessert",
+    "Grab & Go",
+    "SNAP/EBT",
+    "Vegan",
+    "Vegetarian"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse D"
+   ]
+  },
+  {
+   "name": "Hollywood Theatre",
+   "kind": "service",
+   "tags": [],
+   "security": "post",
+   "where": [
+    "Concourse C"
+   ],
+   "see": true
+  },
+  {
+   "name": "Hopworks",
+   "kind": "restaurant",
+   "tags": [
+    "Bar",
+    "Burgers",
+    "Dessert",
+    "Full Service",
+    "Grab & Go",
+    "Snacks & Beverages"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse E"
+   ]
+  },
+  {
+   "name": "InMotion Entertainment",
+   "kind": "shop",
+   "tags": [
+    "Technology"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse D"
+   ]
+  },
+  {
+   "name": "Jackson Shine Co.",
+   "kind": "service",
+   "tags": [],
+   "security": "post",
+   "where": [
+    "Concourse B"
+   ]
+  },
+  {
+   "name": "Jamba",
+   "kind": "restaurant",
+   "tags": [
+    "Breakfast",
+    "Counter Service",
+    "Dessert",
+    "Gluten Free",
+    "Grab & Go",
+    "Mobile Order",
+    "Snacks & Beverages",
+    "Vegetarian"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse E"
+   ]
+  },
+  {
+   "name": "Juliett",
+   "kind": "restaurant",
+   "tags": [
+    "Bar",
+    "Breakfast",
+    "Burgers",
+    "Full Service",
+    "Grab & Go",
+    "Snacks & Beverages"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse E"
+   ]
+  },
+  {
+   "name": "Kure Superfoods",
+   "kind": "restaurant",
+   "tags": [
+    "Breakfast",
+    "Counter Service",
+    "Gluten Free",
+    "Grab & Go",
+    "Snacks & Beverages",
+    "Vegan",
+    "Vegetarian"
+   ],
+   "security": "post",
+   "where": [
+    "South Concession Hall"
+   ]
+  },
+  {
+   "name": "Lola's Cafe",
+   "kind": "restaurant",
+   "tags": [
+    "Bar",
+    "Breakfast",
+    "Counter Service",
+    "Dessert",
+    "Gluten Free",
+    "Grab & Go",
+    "Snacks & Beverages",
+    "Vegan",
+    "Vegetarian"
+   ],
+   "security": "post",
+   "where": [
+    "South Concession Hall"
+   ]
+  },
+  {
+   "name": "Loyal Legion",
+   "kind": "restaurant",
+   "tags": [
+    "Bar",
+    "Breakfast",
+    "Burgers",
+    "Counter Service",
+    "Gluten Free",
+    "Snacks & Beverages",
+    "Vegan",
+    "Vegetarian"
+   ],
+   "security": "pre",
+   "where": [
+    "Mezzanine"
+   ]
+  },
+  {
+   "name": "Made in Oregon",
+   "kind": "shop",
+   "tags": [
+    "Gift & Specialty",
+    "Snacks & Beverages",
+    "Spirits & Wine"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse C"
+   ]
+  },
+  {
+   "name": "Mailsafe Express",
+   "kind": "service",
+   "tags": [
+    "Mailing Services"
+   ],
+   "security": "post",
+   "where": [
+    "North Concession Hall",
+    "South Concession Hall"
+   ]
+  },
+  {
+   "name": "Market 503",
+   "kind": "shop",
+   "tags": [
+    "Books & News",
+    "Grab & Go",
+    "Snacks & Beverages"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse C"
+   ]
+  },
+  {
+   "name": "McDonald's",
+   "kind": "restaurant",
+   "tags": [
+    "Breakfast",
+    "Burgers",
+    "Counter Service",
+    "Dessert",
+    "Mobile Order",
+    "Snacks & Beverages"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse C"
+   ]
+  },
+  {
+   "name": "Mikiko Mochi Donuts",
+   "kind": "restaurant",
+   "tags": [
+    "Breakfast",
+    "Counter Service",
+    "Dessert",
+    "Gluten Free",
+    "Snacks & Beverages"
+   ],
+   "security": "pre",
+   "where": [
+    "Ticket Hall"
+   ]
+  },
+  {
+   "name": "MOD Pizza",
+   "kind": "restaurant",
+   "tags": [
+    "Counter Service",
+    "Gluten Free",
+    "Mobile Order",
+    "Pizza",
+    "Vegan"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse C"
+   ]
+  },
+  {
+   "name": "Mo's Seafood & Chowder",
+   "kind": "restaurant",
+   "tags": [
+    "Breakfast",
+    "Counter Service"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse C"
+   ]
+  },
+  {
+   "name": "Oven and Shaker",
+   "kind": "restaurant",
+   "tags": [
+    "Bar",
+    "Breakfast",
+    "Burgers",
+    "Full Service",
+    "Grab & Go",
+    "Pizza",
+    "Snacks & Beverages",
+    "Vegan",
+    "Vegetarian"
+   ],
+   "security": "post",
+   "where": [
+    "South Concession Hall"
+   ]
+  },
+  {
+   "name": "Paper Epiphanies",
+   "kind": "shop",
+   "tags": [
+    "Books & News",
+    "Gift & Specialty",
+    "Mailing Services"
+   ],
+   "security": "pre",
+   "where": [
+    "Ticket Hall"
+   ]
+  },
+  {
+   "name": "Pendleton",
+   "kind": "shop",
+   "tags": [
+    "Clothing",
+    "Gift & Specialty"
+   ],
+   "security": "post",
+   "where": [
+    "North Concession Hall"
+   ]
+  },
+  {
+   "name": "Portland Coffee Roasters",
+   "kind": "restaurant",
+   "tags": [
+    "Breakfast",
+    "Coffee",
+    "Counter Service",
+    "Gluten Free",
+    "Grab & Go",
+    "Mobile Order",
+    "Snacks & Beverages",
+    "Vegan",
+    "Vegetarian"
+   ],
+   "security": "both",
+   "where": [
+    "North Concession Hall",
+    "Ticket Hall",
+    "Concourse C"
+   ]
+  },
+  {
+   "name": "Portland Gear",
+   "kind": "shop",
+   "tags": [
+    "Clothing",
+    "Gift & Specialty"
+   ],
+   "security": "post",
+   "where": [
+    "North Concession Hall"
+   ]
+  },
+  {
+   "name": "Potbelly Sandwich",
+   "kind": "restaurant",
+   "tags": [
+    "Breakfast",
+    "Counter Service",
+    "Dessert",
+    "Mobile Order",
+    "Snacks & Beverages"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse C"
+   ]
+  },
+  {
+   "name": "Powell's City of Books",
+   "kind": "shop",
+   "tags": [
+    "Books & News",
+    "Gift & Specialty"
+   ],
+   "security": "post",
+   "where": [
+    "South Concession Hall"
+   ]
+  },
+  {
+   "name": "Prineta ATM",
+   "kind": "service",
+   "tags": [
+    "Financial Services"
+   ],
+   "security": "both",
+   "where": [
+    "Ticket Hall",
+    "Concourse B",
+    "Concourse C",
+    "Concourse D",
+    "Concourse E"
+   ],
+   "show": false
+  },
+  {
+   "name": "Ready Station",
+   "kind": "service",
+   "tags": [
+    "Financial Services"
+   ],
+   "security": "pre",
+   "where": [
+    "Ticket Hall"
+   ],
+   "show": false
+  },
+  {
+   "name": "Rose City Market",
+   "kind": "shop",
+   "tags": [
+    "Books & News",
+    "Grab & Go",
+    "Snacks & Beverages"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse E"
+   ]
+  },
+  {
+   "name": "Screen Door",
+   "kind": "restaurant",
+   "tags": [
+    "Bar",
+    "Breakfast",
+    "Burgers",
+    "Full Service",
+    "Grab & Go",
+    "Snacks & Beverages"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse B"
+   ]
+  },
+  {
+   "name": "Sheridan Fruit Co.",
+   "kind": "shop",
+   "tags": [
+    "Books & News",
+    "Grab & Go",
+    "Snacks & Beverages"
+   ],
+   "security": "pre",
+   "where": [
+    "Ticket Hall"
+   ]
+  },
+  {
+   "name": "Sizzle Pie",
+   "kind": "restaurant",
+   "tags": [
+    "Breakfast",
+    "Counter Service",
+    "Pizza",
+    "Snacks & Beverages",
+    "Vegan",
+    "Vegetarian"
+   ],
+   "security": "post",
+   "where": [
+    "North Concession Hall"
+   ]
+  },
+  {
+   "name": "Smarte Carte",
+   "kind": "service",
+   "tags": [
+    "Travel Services"
+   ],
+   "security": "both",
+   "where": [
+    "Long-Term Garage P3",
+    "Short-Term Garage P1",
+    "Upper Roadway",
+    "Baggage Claim",
+    "Concourse C",
+    "Concourse D",
+    "Concourse E",
+    "South Tunnel"
+   ],
+   "show": false
+  },
+  {
+   "name": "Smith Tea",
+   "kind": "restaurant",
+   "tags": [
+    "Counter Service",
+    "Gift & Specialty",
+    "Grab & Go",
+    "Snacks & Beverages"
+   ],
+   "security": "post",
+   "where": [
+    "North Concession Hall"
+   ]
+  },
+  {
+   "name": "Starbucks Coffee",
+   "kind": "restaurant",
+   "tags": [
+    "Breakfast",
+    "Coffee",
+    "Counter Service",
+    "Grab & Go",
+    "Mobile Order",
+    "Snacks & Beverages"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse C",
+    "Concourse E"
+   ]
+  },
+  {
+   "name": "Straightaway",
+   "kind": "shop",
+   "tags": [
+    "Bar",
+    "Counter Service",
+    "Gluten Free",
+    "Snacks & Beverages",
+    "Spirits & Wine",
+    "Vegan",
+    "Vegetarian"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse B"
+   ]
+  },
+  {
+   "name": "Stumptown Coffee",
+   "kind": "restaurant",
+   "tags": [
+    "Breakfast",
+    "Coffee",
+    "Counter Service",
+    "Snacks & Beverages"
+   ],
+   "security": "post",
+   "where": [
+    "South Concession Hall",
+    "Concourse E",
+    "Concourse D"
+   ]
+  },
+  {
+   "name": "Tender Loving Empire",
+   "kind": "shop",
+   "tags": [
+    "Clothing",
+    "Gift & Specialty",
+    "Snacks & Beverages"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse D",
+    "Concourse E"
+   ]
+  },
+  {
+   "name": "The Country Cat",
+   "kind": "restaurant",
+   "tags": [
+    "Bar",
+    "Breakfast",
+    "Burgers",
+    "Full Service",
+    "Grab & Go",
+    "Mobile Order",
+    "Snacks & Beverages",
+    "Vegan",
+    "Vegetarian"
+   ],
+   "security": "pre",
+   "where": [
+    "Ticket Hall"
+   ]
+  },
+  {
+   "name": "The Skanner News",
+   "kind": "shop",
+   "tags": [
+    "Books & News",
+    "Grab & Go",
+    "Snacks & Beverages"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse B"
+   ]
+  },
+  {
+   "name": "Tillamook Market",
+   "kind": "restaurant",
+   "tags": [
+    "Breakfast",
+    "Burgers",
+    "Counter Service",
+    "Dessert",
+    "Grab & Go",
+    "Snacks & Beverages",
+    "Vegetarian"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse E"
+   ]
+  },
+  {
+   "name": "Timberline",
+   "kind": "shop",
+   "tags": [
+    "Clothing",
+    "Gift & Specialty"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse C"
+   ]
+  },
+  {
+   "name": "Topaz Farm",
+   "kind": "shop",
+   "tags": [
+    "Books & News",
+    "Grab & Go",
+    "Snacks & Beverages"
+   ],
+   "security": "pre",
+   "where": [
+    "Ticket Hall"
+   ]
+  },
+  {
+   "name": "Travel Oregon",
+   "kind": "service",
+   "tags": [
+    "Travel Services"
+   ],
+   "security": "pre",
+   "where": [
+    "Baggage Claim",
+    "Rental Car Center"
+   ]
+  },
+  {
+   "name": "USPS Mail Drop",
+   "kind": "service",
+   "tags": [
+    "Mailing Services"
+   ],
+   "security": "pre",
+   "where": [
+    "Baggage Claim"
+   ],
+   "show": false
+  },
+  {
+   "name": "Washington Park",
+   "kind": "shop",
+   "tags": [
+    "Books & News",
+    "Grab & Go",
+    "SNAP/EBT",
+    "Snacks & Beverages"
+   ],
+   "security": "post",
+   "where": [
+    "Concourse D"
+   ]
+  }
+ ]
+}

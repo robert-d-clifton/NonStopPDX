@@ -348,3 +348,14 @@ class InsidePdxTests(TestCase):
         self.assertTrue(all(g["ref"][0] in letters for g in terminal["gates"]))
         self.assertTrue(all(p["area"] in letters | {"main", "outside"} for p in terminal["places"]))
         self.assertEqual(gate_span(["C10", "C4", "C23", "C9"]), "C4 to C23")
+
+    def test_flypdx_places_land_in_the_right_cards(self):
+        resp = self.client.get("/inside/")
+        areas = {a["key"]: a for a in resp.context["areas"]}
+        names = lambda key: {n for _, ns, _ in areas[key]["groups"] for n in ns}
+        self.assertIn("Straightaway", names("B"))
+        self.assertIn("Hollywood Theatre", names("C"))
+        self.assertIn("Powell's City of Books", names("main"))
+        self.assertNotIn("Prineta ATM", names("C"))
+        halls = [label for label, _, _ in areas["main"]["groups"]]
+        self.assertEqual(halls[:2], ["Ticket Hall", "Mezzanine"])
