@@ -19,6 +19,14 @@
     {
      "slug": "frontier",
      "checked": true
+    },
+    {
+     "slug": "american",
+     "checked": true
+    },
+    {
+     "slug": "hawaiian",
+     "checked": true
     }
    ]
   },
@@ -30,6 +38,10 @@
     },
     {
      "slug": "sun-country",
+     "checked": true
+    },
+    {
+     "slug": "allegiant",
      "checked": true
     },
     {
@@ -70,7 +82,7 @@
     },
     {
      "slug": "air-canada",
-     "note": "gate E13A",
+     "note": "gate E13A, down the stairs at the end of E and out to the plane on foot",
      "checked": true
     }
    ]
