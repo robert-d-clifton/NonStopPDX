@@ -159,13 +159,39 @@
       const pts = PLANE.map(([x, y]) => [ctr[0] + (x * ca - y * sa) * k, ctr[1] + (x * sa + y * ca) * k]);
       const left = [h[1], -h[0]], doors = [1, -1].map(s => [ctr[0] + h[0] * 7 * k + left[0] * 2.6 * s, ctr[1] + h[1] * 7 * k + left[1] * 2.6 * s]);
       const door = doors.sort((p, q) => Math.hypot(p[0] - gate.p[0], p[1] - gate.p[1]) - Math.hypot(q[0] - gate.p[0], q[1] - gate.p[1]))[0];
-      walks.push({ area: c.letter, pts, path: [gate.p, [gate.p[0] + c.dir[0] * 10, gate.p[1] + c.dir[1] * 10], door] });
+      walks.push({ area: c.letter, c: ctr, pts, path: [gate.p, [gate.p[0] + c.dir[0] * 10, gate.p[1] + c.dir[1] * 10], door] });
+    });
+
+    /* long covered walkways (B's runs out along Airport Way): regional planes nose in along the airside edge,
+       away from the garages, with a short walk out to each */
+    const garages = shapes.filter(s => s.kind === "garage").map(s => centroid(s.pts));
+    shapes.filter(s => s.kind === "walkway").forEach(w => {
+      const ax = axis(w.pts), d = ax.dir;
+      const ts = w.pts.map(p => (p[0] - ax.mid[0]) * d[0] + (p[1] - ax.mid[1]) * d[1]);
+      const t0 = Math.min(...ts), t1 = Math.max(...ts);
+      if (t1 - t0 < 100) return;
+      let n = [-d[1], d[0]];
+      const g = garages.reduce((best, c) => !best || Math.hypot(c[0] - ax.mid[0], c[1] - ax.mid[1]) < Math.hypot(best[0] - ax.mid[0], best[1] - ax.mid[1]) ? c : best, null);
+      if (g && (g[0] - ax.mid[0]) * n[0] + (g[1] - ax.mid[1]) * n[1] > 0) n = [-n[0], -n[1]];
+      const half = Math.max(...w.pts.map(p => (p[0] - ax.mid[0]) * n[0] + (p[1] - ax.mid[1]) * n[1]));
+      const letter = (w.name.match(/Concourse (\w)/) || [])[1] || "";
+      const k = 0.8;
+      for (let t = t0 + 40; t <= t1 - 15; t += 44) {
+        const edge = [ax.mid[0] + d[0] * t + n[0] * half, ax.mid[1] + d[1] * t + n[1] * half];
+        const ctr = [edge[0] + n[0] * (18 * k + 10), edge[1] + n[1] * (18 * k + 10)];
+        if (planes.concat(walks).some(p => Math.hypot(p.c[0] - ctr[0], p.c[1] - ctr[1]) < 27)) continue;
+        const h = [-n[0], -n[1]], a = Math.atan2(h[1], h[0]), ca = Math.cos(a), sa = Math.sin(a);
+        const pts = PLANE.map(([x, y]) => [ctr[0] + (x * ca - y * sa) * k, ctr[1] + (x * sa + y * ca) * k]);
+        const door = [ctr[0] + h[0] * 9 * k + d[0] * 2.6, ctr[1] + h[1] * 9 * k + d[1] * 2.6];
+        walks.push({ area: letter, c: ctr, pts, path: [[edge[0] + d[0] * 6, edge[1] + d[1] * 6], [edge[0] + d[0] * 6 + n[0] * 4, edge[1] + d[1] * 6 + n[1] * 4], door] });
+      }
     });
 
     /* solids: buildings, plus a two car MAX train waiting at the station */
     const solids = shapes.filter(s => s.kind !== "canopy").map(s => ({
-      kind: s.kind, name: s.name, pts: s.pts, h: HEIGHT[s.name] || (s.kind === "terminal" ? 12 : 18),
-      area: s.name === "Main terminal" ? "main" : s.name.startsWith("Concourse") ? s.name.slice(-1) : "",
+      kind: s.kind === "walkway" ? "terminal" : s.kind, name: s.name, pts: s.pts,
+      h: HEIGHT[s.name] || (s.kind === "walkway" ? 4.5 : s.kind === "terminal" ? 12 : 18),
+      area: s.name === "Main terminal" ? "main" : s.name.startsWith("Concourse") ? s.name.charAt(10) : "",
     }));
     const rail = DATA.rail || [];
     if (rail.length) {
@@ -221,7 +247,7 @@
     const groups = {};
     solids.forEach(o => {
       const g = el("g", { class: o.area ? "tm-area" : o.kind === "train" ? "tm-max" : "", "data-area": o.area || null }, root);
-      if (o.area) groups[o.area] = g;
+      if (o.area && !groups[o.area]) groups[o.area] = g;
       if (o.kind === "train") {
         prism(g, o.pts, o.h, { wall: "tm-train", lit: "tm-train-lit", top: "tm-train-roof", stripe: "tm-train-stripe", windows: "tm-train-windows" }, o.z0);
         return;

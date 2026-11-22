@@ -29,6 +29,7 @@ QUERY = """[out:json][timeout:90];
   relation["aeroway"="terminal"](45.580,-122.610,45.600,-122.575);
   way["building"="parking"](45.583,-122.603,45.595,-122.580);
   way["building"]["name"~"Control Tower"](45.583,-122.603,45.595,-122.580);
+  way["building"="roof"](45.583,-122.603,45.595,-122.580);
   node["aeroway"="gate"](45.580,-122.610,45.600,-122.575);
   nwr["amenity"](45.584,-122.600,45.594,-122.583);
   nwr["shop"](45.584,-122.600,45.594,-122.583);
@@ -145,6 +146,8 @@ def build(osm: dict) -> dict:
             kind = "garage"
         elif name == "Control tower":
             kind = "tower"
+        elif tags.get("building") == "roof":
+            kind = "roof"  # sorted into walkways below
         else:
             continue
         if e["type"] == "way":
@@ -154,6 +157,7 @@ def build(osm: dict) -> dict:
         else:
             continue
         shapes.append({"kind": kind, "name": name, "pts": [[round(x), round(y)] for x, y in pts]})
+    shapes = walkways(shapes)
     shapes.sort(key=lambda s: (s["kind"], s["name"]))
 
     areas = [(s["name"][-1] if s["name"].startswith("Concourse") else "main", s["pts"])
@@ -185,6 +189,24 @@ def build(osm: dict) -> dict:
     places.sort(key=lambda pl: (pl["area"], pl["category"], pl["name"].lower()))
     return {"_source": "© OpenStreetMap contributors, ODbL. Built by tools/build_terminal.py; edit that, not this file.",
             "shapes": shapes, "gates": gates, "places": places, "rail": rail_lines(els, nodes)}
+
+
+def walkways(shapes: list[dict]) -> list[dict]:
+    """Keep roofs that run out from a concourse, like B's covered walkway to its ramp gates, and drop the rest."""
+    concourses = [s for s in shapes if s["kind"] == "terminal" and s["name"].startswith("Concourse")]
+
+    def gap(a, b):
+        return min(math.hypot(p[0] - q[0], p[1] - q[1]) for p in a for q in b)
+
+    out = []
+    for s in shapes:
+        if s["kind"] != "roof":
+            out.append(s)
+            continue
+        near = min(concourses, key=lambda c: gap(s["pts"], c["pts"]), default=None)
+        if near and gap(s["pts"], near["pts"]) < 15:
+            out.append({**s, "kind": "walkway", "name": f"{near['name']} walkway"})
+    return out
 
 
 def rail_lines(els: list, nodes: dict, reach: float = 1300) -> list[list[list[float]]]:
