@@ -124,9 +124,19 @@ The Inside PDX page (`/inside/`) draws the terminal as a raised model and lists 
 * `data/places.json`: shops, restaurants and services, copied by hand from FlyPDX's Shops, Dining & More list (never scraped), with an as of date shown on the page. Art, play areas and airline lounges still come from OpenStreetMap.
 * `data/concourses.json`: which airlines use each concourse, kept by hand. Mark an airline `checked` once it's confirmed against FlyPDX; unchecked ones show as unconfirmed.
 
-## Hosting (planned)
+## Hosting
 
-Nothing is hosted yet. Test hosting will be one Docker Compose project on a home server, with its own Cloudflare Tunnel and a Cloudflare Access login in front of it. That opens no router ports and keeps the site private while it's in testing. The site reads only from our own store, so it can move to another host later. Before going public, the data licenses need another look, especially OpenSky's noncommercial terms.
+Test hosting is this Docker Compose project on a home server, reached at nonstoppdx.com through its own Cloudflare Tunnel. The tunnel dials out from the `tunnel` container, so no router ports are open. Cloudflare Access sits in front of it as the login while the site is in testing (the free plan allows 50 people); Django's own invite only accounts will take over from Access later. The LAN address keeps working alongside the domain.
+
+To bring it up:
+
+1. In Cloudflare Zero Trust, create a tunnel named `nonstoppdx` and copy its token into `.env` as `CLOUDFLARE_TUNNEL_TOKEN`.
+2. Give the tunnel public hostnames `nonstoppdx.com` and `www.nonstoppdx.com`, both HTTP to `web:8000`.
+3. Add an Access application (self hosted) for both hostnames, with a policy that allows the testers' emails.
+4. In `.env`, add the domain to `DJANGO_ALLOWED_HOSTS` and `DJANGO_CSRF_TRUSTED_ORIGINS` (see `.env.example`) and set `DJANGO_DEBUG=0`.
+5. Start it: `docker compose up -d web && docker compose --profile tunnel up -d tunnel`.
+
+Before going public, the data licenses need another look, especially OpenSky's noncommercial terms.
 
 ## License and data credits
 

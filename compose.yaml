@@ -35,13 +35,26 @@ services:
 
   web:
     <<: *app
-    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2 --reload
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2 --threads 4 --reload
     ports:
       - "${WEB_BIND:-127.0.0.1:8000}:8000"
 
   scheduler:
     <<: *app
     command: python manage.py run_scheduler
+
+  # Cloudflare Tunnel to nonstoppdx.com: dials out to Cloudflare and hands requests to web, so no router
+  # ports open. Cloudflare Access in front of it decides who gets in. Started on its own with
+  # `docker compose --profile tunnel up -d tunnel`; needs CLOUDFLARE_TUNNEL_TOKEN in .env.
+  tunnel:
+    image: cloudflare/cloudflared:2026.10.7
+    profiles: [tunnel]
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN:-}
+    depends_on:
+      - web
+    restart: unless-stopped
 
   # FAA SWIM trial: keeps airline flights to and from PDX in data/swim. Started on its own with
   # `docker compose --profile swim up -d swim`; needs the SWIM_* settings in .env.

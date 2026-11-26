@@ -45,8 +45,12 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [BASE_DIR / "templates"],
-        "APP_DIRS": True,
+        # Template edits show up without a restart when DJANGO_TEMPLATE_RELOAD=1 (development);
+        # otherwise Django caches compiled templates.
+        "APP_DIRS": os.environ.get("DJANGO_TEMPLATE_RELOAD", "0") != "1",
         "OPTIONS": {
+            **({"loaders": ["django.template.loaders.filesystem.Loader", "django.template.loaders.app_directories.Loader"]}
+               if os.environ.get("DJANGO_TEMPLATE_RELOAD", "0") == "1" else {}),
             "context_processors": [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
@@ -95,6 +99,8 @@ WHITENOISE_AUTOREFRESH = DEBUG
 
 # Cloudflare Tunnel terminates HTTPS in front of the site.
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+# Cookies only over HTTPS. Leave off while the LAN address (plain HTTP) is still used to log in.
+SESSION_COOKIE_SECURE = CSRF_COOKIE_SECURE = os.environ.get("DJANGO_SECURE_COOKIES", "0") == "1"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
