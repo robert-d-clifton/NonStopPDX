@@ -1,0 +1,124 @@
+<title>Old Town Options</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one card per direction, each drawing shown large and at page size in its region circle.
+   Colors are the site's own tokens, which the drawings name. */
+:root {
+  --bg: #F3F5F5; --surface: #FFFFFF; --ink: #17242B; --muted: #56656D; --line: #D5DCDF; --land: #E9ECE8;
+  --teal: #0E7C80; --aqua: #5CC3CC; --violet: #6E58A3; --lime: #B3C63F; --glass: #2D6FA8; --steel: #7D8A91;
+  --fir: #2F5E4F; --moss: #7AA65A; --timber: #B98B5E; --signal: #E0582F; --lagoon: #2E9FB0; --snow: #FFFFFF;
+  --sand: #E3CFA4; --water: #8FC3D9;
+  --display: "Jost", "Futura", "Avenir Next", sans-serif; --body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0F181D; --surface: #162329; --ink: #E7EEF0; --muted: #9AABB2; --line: #2A3A42; --land: #24343B;
+  --teal: #3FB2B6; --aqua: #6FD0D8; --violet: #9C86D4; --lime: #C3D45A; --glass: #6EA6D8; --steel: #8E9BA2;
+  --fir: #6FA68E; --moss: #93BE72; --timber: #D0A577; --signal: #F07548; --lagoon: #5CC3CC; --snow: #F2F6F7;
+  --sand: #B9A37A; --water: #3F7891; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0F181D; --surface: #162329; --ink: #E7EEF0; --muted: #9AABB2; --line: #2A3A42; --land: #24343B;
+  --teal: #3FB2B6; --aqua: #6FD0D8; --violet: #9C86D4; --lime: #C3D45A; --glass: #6EA6D8; --steel: #8E9BA2;
+  --fir: #6FA68E; --moss: #93BE72; --timber: #D0A577; --signal: #F07548; --lagoon: #5CC3CC; --snow: #F2F6F7;
+  --sand: #B9A37A; --water: #3F7891; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.55; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2 { font-family: var(--display); font-weight: 400; line-height: 1.1; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+header { padding-block: 36px 20px; display: grid; gap: 12px; }
+header h1 { font-size: clamp(34px, 5vw, 46px); }
+header p { color: var(--muted); max-width: 62ch; font-size: 18px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: grid; gap: 10px; align-content: start; }
+.card.current { opacity: 0.85; }
+.stage { background: var(--land); border-radius: 8px; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 8px; padding: 8px; }
+.stage svg { display: block; width: 100%; height: auto; }
+.stage .small { width: 74px; display: grid; gap: 2px; justify-items: center; }
+.stage .small span { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+.card h2 { font-size: 26px; }
+.card p { font-size: 15px; color: var(--muted); }
+.fits { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; color: var(--teal); }
+.plan { padding-block: 36px 48px; display: grid; gap: 12px; max-width: 70ch; }
+.plan h2 { font-size: 28px; }
+.plan ul, .plan ol { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; color: var(--muted); }
+.plan strong { color: var(--ink); font-weight: 600; }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">NonStopPDX · Destination drawings</span>
+    <h1>Reworking Old Town</h1>
+    <p>Old Town stands in for Amsterdam, Frankfurt, Guadalajara, London and New Orleans. Three directions, drawn with the motif editor's own shapes and colors, each shown large and at the size it appears on a destination page.</p>
+  </header>
+  <section class="grid" id="grid" aria-label="Old Town directions"></section>
+  <section class="plan" aria-labelledby="plan-title">
+    <h2 id="plan-title">A way to use them</h2>
+    <p>One drawing can't really be all five cities. A split works better:</p>
+    <ul>
+      <li><strong>Rooftops</strong> becomes the shared Old Town motif, for any historic city without its own drawing.</li>
+      <li><strong>Canal row</strong> goes to Amsterdam, as a new shared motif or as its custom drawing.</li>
+      <li><strong>Bell towers</strong> goes to Guadalajara, and could suit New Orleans too.</li>
+      <li>London and Frankfurt keep Rooftops for now, and get their own custom drawings later if you want: the Elizabeth Tower, the half timbered Römer.</li>
+    </ul>
+    <p>Whichever you pick, I can load it into the motif editor so you can refine it shape by shape.</p>
+  </section>
+</div>
+
+<script>
+const DATA = /*DATA*/;
+const NS = "http://www.w3.org/2000/svg";
+const STROKED = new Set(["wave", "line"]);
+function smooth(pts) {
+  let d = `M${pts[0][0]},${pts[0][1]}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+    d += ` C${p1[0] + (p2[0] - p0[0]) / 6},${p1[1] + (p2[1] - p0[1]) / 6} ${p2[0] - (p3[0] - p1[0]) / 6},${p2[1] - (p3[1] - p1[1]) / 6} ${p2[0]},${p2[1]}`;
+  }
+  return d;
+}
+function el(name, attrs, parent) { const e = document.createElementNS(NS, name); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; }
+function drawShapes(g, shapes) {
+  shapes.forEach(s => {
+    let e;
+    if (s.t === "circle") e = el("circle", { cx: s.cx, cy: s.cy, r: s.r }, g);
+    else if (s.t === "ellipse") e = el("ellipse", { cx: s.cx, cy: s.cy, rx: s.rx, ry: s.ry }, g);
+    else if (s.t === "rect") e = el("rect", { x: s.x, y: s.y, width: s.w, height: s.h, rx: s.rx || 0 }, g);
+    else if (s.t === "poly") e = el("polygon", { points: s.pts.map(p => p.join(",")).join(" ") }, g);
+    else if (s.t === "wave") e = el("path", { d: smooth(s.pts) }, g);
+    else if (s.t === "line") e = el("polyline", { points: s.pts.map(p => p.join(",")).join(" ") }, g);
+    else return;
+    const color = `var(--${s.c || "ink"})`;
+    if (STROKED.has(s.t)) { e.style.fill = "none"; e.style.stroke = color; e.setAttribute("stroke-width", s.w || 2); e.setAttribute("stroke-linecap", "round"); e.setAttribute("stroke-linejoin", "round"); }
+    else e.style.fill = color;
+  });
+}
+function scene(shapes, wash, label) {
+  const svg = document.createElementNS(NS, "svg");
+  svg.setAttribute("viewBox", "-62 -62 124 124"); svg.setAttribute("role", "img"); svg.setAttribute("aria-label", label);
+  el("circle", { cx: 0, cy: 0, r: 54, style: `fill: var(--${wash}); opacity: 0.22` }, svg);
+  drawShapes(el("g", {}, svg), shapes);
+  return svg;
+}
+const grid = document.getElementById("grid");
+DATA.options.forEach(o => {
+  const card = document.createElement("article");
+  card.className = "card" + (o.id === "current" ? " current" : "");
+  const stage = document.createElement("div"); stage.className = "stage";
+  stage.appendChild(scene(DATA.shapes[o.id], "violet", o.name + " drawing, large"));
+  const small = document.createElement("div"); small.className = "small";
+  small.appendChild(scene(DATA.shapes[o.id], "violet", o.name + " at page size, international"));
+  small.appendChild(scene(DATA.shapes[o.id], "glass", o.name + " at page size, central and east"));
+  const lab = document.createElement("span"); lab.textContent = "page size"; small.appendChild(lab);
+  stage.appendChild(small);
+  card.appendChild(stage);
+  const h = document.createElement("h2"); h.textContent = o.name; card.appendChild(h);
+  const p = document.createElement("p"); p.textContent = o.note; card.appendChild(p);
+  const f = document.createElement("span"); f.className = "fits"; f.textContent = "Fits: " + o.fits; card.appendChild(f);
+  grid.appendChild(card);
+});
+</script>
