@@ -110,6 +110,67 @@
     plain(g, pts, h, ax) { skylights(g, pts, h, ax, [-36, -12, 12, 36], 26); },
   };
 
+  /* ---------- the control tower ---------- */
+  /* A ring of flat faces between two heights, wider or narrower at the top: the same flat sided language as the
+     buildings. "smooth" shades each face by how it turns from the light, so many faces read as round. */
+  function frustum(g, c, sides, r0, r1, z0, z1, cls, opt = {}) {
+    const off = opt.offset == null ? Math.PI / sides : opt.offset;
+    const ring = (r, z) => Array.from({ length: sides }, (_, i) => { const a = off + i * 2 * Math.PI / sides; return iso([c[0] + r * Math.cos(a), c[1] + r * Math.sin(a)], z); });
+    const lo = ring(r0, z0), hi = ring(r1, z1), faces = [];
+    for (let i = 0; i < sides; i++) {
+      const m = off + (i + 0.5) * 2 * Math.PI / sides, n = [Math.cos(m), Math.sin(m)];
+      if (n[0] * Math.sin(VIEW) + n[1] * Math.cos(VIEW) <= 0) continue;
+      const light = -n[0] * Math.cos(VIEW) + n[1] * Math.sin(VIEW); /* 1 faces the light, -1 faces away */
+      faces.push({ i, d: n[0] * Math.sin(VIEW) + n[1] * Math.cos(VIEW), light });
+    }
+    faces.sort((a, b) => a.d - b.d).forEach(({ i, light }) => {
+      const j = (i + 1) % sides, quad = [lo[i], lo[j], hi[j], hi[i]];
+      el("polygon", { points: pts2(quad), class: opt.smooth ? cls.lit : light > 0 ? cls.lit : cls.wall }, g);
+      if (opt.smooth) el("polygon", { points: pts2(quad), class: "tm-shade", "fill-opacity": (0.32 * (1 - light) / 2).toFixed(3) }, g);
+      if (opt.edges) el("line", { x1: lo[i][0], y1: lo[i][1], x2: hi[i][0], y2: hi[i][1], class: opt.edges }, g);
+    });
+    if (cls.top) el("polygon", { points: pts2(hi), class: cls.top }, g);
+  }
+  const CONCRETE = { lit: "tm-concrete", wall: "tm-concrete-shade", top: "tm-concrete-top" };
+  const GLASS = { lit: "tm-wall-lit", wall: "tm-wall", top: "tm-concrete-top" };
+  function mast(g, c, z0, parts) {
+    parts.forEach(([dx, dy, z]) => { const a = iso([c[0] + dx, c[1] + dy], z0), b = iso([c[0] + dx, c[1] + dy], z); el("line", { x1: a[0], y1: a[1], x2: b[0], y2: b[1], class: "tm-antenna" }, g); });
+  }
+  const TOWERS = {
+    /* square and plain, like the garages: a tapered block, a lower window level, a ledge, the glass cab, a flat cap */
+    block(g, c) {
+      frustum(g, c, 4, 7, 9.2, 8, 58, CONCRETE, { offset: Math.PI / 4 });
+      /* the lower window level, a little narrower than the cab, as in the photo */
+      frustum(g, c, 4, 10.6, 10.6, 58, 63.5, GLASS, { offset: Math.PI / 4, edges: "tm-mullion" });
+      frustum(g, c, 4, 12.6, 12.6, 63.5, 65.5, CONCRETE, { offset: Math.PI / 4 });
+      frustum(g, c, 4, 12, 12, 65.5, 74, GLASS, { offset: Math.PI / 4, edges: "tm-mullion" });
+      frustum(g, c, 4, 13.6, 13.6, 74, 76.5, CONCRETE, { offset: Math.PI / 4 });
+      mast(g, c, 76.5, [[0, 0, 84]]);
+    },
+    /* twelve faces shaded softly so it reads round: a thick shaft widening upward, platform, glass cab, cap */
+    faceted(g, c) {
+      frustum(g, c, 12, 5.4, 8, 8, 64, CONCRETE, { smooth: true });
+      frustum(g, c, 12, 9.6, 9.6, 64, 67.5, CONCRETE, { smooth: true });
+      frustum(g, c, 12, 9.1, 9.1, 67.5, 75, GLASS, { edges: "tm-mullion" });
+      frustum(g, c, 12, 10.4, 10.4, 75, 77, CONCRETE, { smooth: true });
+      frustum(g, c, 12, 3.2, 3.2, 77, 79.5, CONCRETE, { smooth: true });
+      mast(g, c, 79.5, [[0, 0, 87]]);
+    },
+    /* the faceted tower with the photo's details: a flare under the platform, a window band, a taller cab
+       with white frames, a deeper cap, an antenna cluster and a red beacon */
+    detailed(g, c) {
+      frustum(g, c, 16, 5.2, 7.4, 8, 58, CONCRETE, { smooth: true });
+      frustum(g, c, 16, 7.4, 9.2, 58, 63, CONCRETE, { smooth: true });
+      frustum(g, c, 16, 10, 10, 63, 66.5, CONCRETE, { smooth: true });
+      frustum(g, c, 16, 10.05, 10.05, 64.4, 65.6, { lit: "tm-cab-band", wall: "tm-cab-band" }, {});
+      frustum(g, c, 16, 9.4, 9.4, 66.5, 75.5, GLASS, { edges: "tm-cab-frame" });
+      frustum(g, c, 16, 10.8, 10.8, 75.5, 78, CONCRETE, { smooth: true });
+      frustum(g, c, 16, 4.6, 4.6, 78, 80.5, CONCRETE, { smooth: true });
+      mast(g, c, 80.5, [[-1.6, 0.6, 88], [0.8, -0.8, 90], [1.8, 1.2, 86]]);
+      const b = iso(c, 90.5); el("circle", { cx: b[0], cy: b[1], r: 1.1, class: "tm-beacon" }, g);
+    },
+  };
+
   /* ---------- the model ---------- */
   function draw(host, DATA, opts) {
     opts = opts || {};
@@ -212,7 +273,11 @@
     if (opts.crop !== "hall") planes.concat(walks).forEach(p => p.pts.forEach(q => grow(iso(q))));
     const tower = shapes.find(s => s.kind === "tower"), towerC = tower ? centroid(tower.pts) : null;
     if (towerC && opts.crop !== "hall") grow(iso(towerC, 92));
-    const pad = opts.crop === "hall" ? 10 : 24;
+    if (towerC && opts.crop === "tower") {
+      const b = iso(towerC), top = iso(towerC, 92);
+      minX = b[0] - 70; maxX = b[0] + 70; minY = top[1] - 4; maxY = b[1] + 26;
+    }
+    const pad = opts.crop === "hall" ? 10 : opts.crop === "tower" ? 0 : 24;
     const vb = [minX - pad, minY - pad, maxX - minX + pad * 2, maxY - minY + pad * 2].map(v => Math.round(v));
     const root = el("svg", { viewBox: vb.join(" "), role: "img", "aria-label": opts.label || "Raised model of the PDX terminal: the main terminal in the middle, Concourses C and D to the north, E to the east, B to the south, and the MAX station by B." });
     const defs = el("defs", {}, root);
@@ -265,27 +330,9 @@
     });
 
     if (towerC && opts.crop !== "hall") {
-      /* PDX's tower: a slim concrete shaft that flares out like a trumpet, a pale collar, the dark glass cab,
-         a pale roof ring, a small drum and antennas. Round, so each level is an ellipse in this view. */
       const t = el("g", { class: "tm-tower" }, root);
-      const cx = iso(towerC)[0], y = z => iso(towerC, z)[1];
-      const shaft = [[8, 2.8], [28, 2.9], [42, 3.3], [52, 4.0], [59, 5.0], [64, 6.2], [67, 7.4]];
-      const half = (side, cls) => el("polygon", {
-        points: pts2(shaft.map(([z, r]) => [cx + side * r, y(z)]).concat([[cx, y(67)], [cx, y(8)]])), class: cls }, t);
-      half(-1, "tm-concrete"); half(1, "tm-concrete-shade");
-      const band = (z0, z1, r, lit, shade, top) => {
-        el("ellipse", { cx, cy: y(z0), rx: r, ry: r * SQUASH, class: shade }, t);
-        el("rect", { x: cx - r, y: y(z1), width: r, height: y(z0) - y(z1), class: lit }, t);
-        el("rect", { x: cx, y: y(z1), width: r, height: y(z0) - y(z1), class: shade }, t);
-        el("ellipse", { cx, cy: y(z1), rx: r, ry: r * SQUASH, class: top }, t);
-      };
-      band(66.5, 69.5, 8.4, "tm-concrete", "tm-concrete-shade", "tm-concrete-top");
-      band(69.5, 76.5, 7.6, "tm-cab-glass", "tm-cab-glass-shade", "tm-concrete-top");
-      [-5.2, -2, 1.5, 4.8].forEach(dx => el("line", { x1: cx + dx, y1: y(69.8), x2: cx + dx, y2: y(76.2), class: "tm-cab-mullion" }, t));
-      band(76.5, 78.2, 8.8, "tm-concrete", "tm-concrete-shade", "tm-concrete-top");
-      band(78.2, 80.8, 4.4, "tm-concrete", "tm-concrete-shade", "tm-concrete-top");
-      [[-2.4, 87], [0.8, 89], [2.8, 85.5]].forEach(([dx, z]) => el("line", { x1: cx + dx, y1: y(80.6), x2: cx + dx, y2: y(z), class: "tm-antenna" }, t));
-      if (!opts.quiet) label(root, cx - 14, y(72) + 4, "Control tower", { class: "tm-note", "text-anchor": "end" });
+      (TOWERS[opts.tower] || TOWERS.block)(t, towerC);
+      if (!opts.quiet) label(root, iso(towerC)[0] - 16, iso(towerC, 70)[1] + 4, "Control tower", { class: "tm-note", "text-anchor": "end" });
     }
 
     if (!opts.quiet) {
@@ -309,7 +356,7 @@
     return { root, groups };
   }
 
-  window.NSPTerminal = { draw, roofs: Object.keys(ROOFS) };
+  window.NSPTerminal = { draw, roofs: Object.keys(ROOFS), towers: Object.keys(TOWERS) };
 
   /* ---------- the Inside PDX page ---------- */
   const host = document.getElementById("terminal-model");

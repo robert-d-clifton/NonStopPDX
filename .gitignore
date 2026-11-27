@@ -7,3 +7,5 @@ __pycache__/
 data/raw/
 staticfiles/
 data/swim/
+# Reference photos for design studies: not ours to publish, kept locally only
+design/studies/*/reference.*

@@ -1,0 +1,76 @@
+<title>Control Tower Options</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/*SITECSS*/
+/* Layout: the reference photo, then one card per tower option (a close up and the whole model), side by side. */
+.study-intro { padding-block: 36px 20px; display: grid; gap: 12px; }
+.study-intro h1 { font-size: clamp(34px, 5vw, 46px); }
+.study-intro p { color: var(--muted); max-width: 64ch; font-size: 18px; }
+.top-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 16px; align-items: start; }
+@media (max-width: 760px) { .top-row { grid-template-columns: minmax(0, 1fr); } }
+.photo { margin: 0; display: grid; gap: 6px; }
+.photo img { width: 100%; height: auto; border-radius: 10px; display: block; }
+.photo figcaption { font-size: 13px; color: var(--muted); }
+.notes { display: grid; gap: 8px; font-size: 16px; color: var(--muted); }
+.notes ul { margin: 0; padding-left: 1.1em; display: grid; gap: 4px; }
+.options { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 14px; padding-block: 24px 8px; }
+.option { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 10px 14px; display: grid; gap: 8px; align-content: start; }
+.option .tile { background: var(--apron); border-radius: 8px; overflow: hidden; }
+.option .tile svg { display: block; width: 100%; height: auto; }
+.option .whole { background: var(--apron); border-radius: 8px; overflow: hidden; }
+.option .whole svg { display: block; width: 100%; height: auto; }
+.option strong { font-family: var(--display); font-weight: 500; font-size: 22px; padding-inline: 4px; }
+.option span { font-size: 15px; color: var(--muted); padding-inline: 4px; }
+.study-foot { padding-block: 20px 40px; color: var(--muted); font-size: 14px; }
+</style>
+
+<header class="wrap top">
+  <span class="logo">Non<b>✕</b>Stop PDX</span>
+  <span class="eyebrow">Inside PDX · Control tower</span>
+</header>
+
+<section class="wrap study-intro">
+  <span class="eyebrow">Three towers for the model</span>
+  <h1>Drawing the PDX control tower</h1>
+  <div class="top-row">
+    <figure class="photo"><img src="/*PHOTO*/" alt="The PDX control tower: a thick concrete shaft widening toward the top, a pale platform, a dark glass cab and a white cap with antennas, beside a curved glass office building."><figcaption>Reference photo</figcaption></figure>
+    <div class="notes">
+      <p>What the photo shows, and what the model needs to keep:</p>
+      <ul>
+        <li>A thick concrete shaft that widens steadily toward the top, about half the cab's width at the base.</li>
+        <li>A pale platform under the cab, the dark glass cab with white frames, and a white cap with antennas.</li>
+        <li>The model draws everything as flat sided blocks with one lit side and one shaded side, so each option uses those same blocks and the terminal's own glass colors.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="wrap options" id="options" aria-label="Tower options"></section>
+
+<footer class="wrap study-foot">
+  <p>Building outlines from <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>, ODbL. Reference photo shared by Robert.</p>
+</footer>
+
+<script>
+/*MODELJS*/
+</script>
+<script>
+const DATA = /*DATA*/;
+const OPTIONS = [
+  ["block", "Block", "Square and plain, like the garages: a tapered block, a lower window level, a pale ledge, the glass cab and a flat cap, matching the two window levels in the photo. Fits the model most simply."],
+  ["faceted", "Faceted", "Twelve flat faces shaded softly so it reads round: the thick widening shaft, a platform, the glass cab, a cap and one mast. Still the model's block language."],
+  ["detailed", "Detailed", "The faceted tower with more from the photo: a flare under the platform, a dark window band, a taller cab with white frames, a deeper cap, three antennas and a red beacon."],
+];
+const box = document.getElementById("options");
+OPTIONS.forEach(([key, name, note]) => {
+  const card = document.createElement("article");
+  card.className = "option";
+  card.innerHTML = `<div class="tile"></div><strong>${name}</strong><span>${note}</span><div class="whole"></div>`;
+  NSPTerminal.draw(card.querySelector(".tile"), DATA, { tower: key, crop: "tower", quiet: true, label: name + " tower, close up" });
+  NSPTerminal.draw(card.querySelector(".whole"), DATA, { tower: key, quiet: true, label: name + " tower on the whole model" });
+  box.appendChild(card);
+});
+</script>

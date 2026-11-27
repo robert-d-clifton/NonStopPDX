@@ -11,6 +11,7 @@ The four design studies from the first design sessions, November 2026. Each one 
 | [5](studies/5/index.html) | Terminal map: a transit style diagram, a flat plan and a raised model, all from OpenStreetMap outlines, each with a destination inset | [Design Study 5](https://claude.ai/artifact/GPk22dPBdu5SBhoL9VNnFF) |
 | [6](studies/6/index.html) | Roof options for the Inside PDX model: grid, woven, cassettes, waves, plain | [Roof Options](https://claude.ai/artifact/FCEM1CsxG2rXgWSiDdGsPU) |
 | [7](studies/7/index.html) | Old Town redrawn: rooftops (the new Old Town), canal row (Amsterdam) and bell towers (Guadalajara) | [Old Town Options](https://claude.ai/artifact/Q14SbLZTjdYv3NjJbaKNrz) |
+| [8](studies/8/index.html) | The PDX control tower on the Inside PDX model: block (chosen), faceted, detailed, beside a reference photo | [Control Tower Options](https://claude.ai/artifact/BS8vv7ZK3rjxmRMYuWJgn4) |
 
 Study 5 is built from `studies/5/source.html` and `studies/5/terminal.json` (building outlines, gates and places from OpenStreetMap, © OpenStreetMap contributors, ODbL). Run `python3 design/studies/5/build.py` after editing either. Study 6 is built from the site's own `static/css/site.css`, `static/js/terminal-model.js` and `data/terminal.json` by `python3 design/studies/6/build.py`.
 
