@@ -11,6 +11,7 @@
   --ocean: #D3E4EC; --land: #E9ECE8; --lake: #D3E4EC; --grat: #A9C0CB; --spoke: #0E7C80;
   --apron: #E4E8E8; --apron-line: #CDD4D6; --wall-lit: #A9C6DA; --wall: #7FA6C2; --roof: #DCC29E; --roof-line: #A87C51;
   --con-roof: #C9D1D5; --block: #D9DEE0; --plane: #B5C0C5; --plane-edge: #8C999F;
+  --concrete: #E4E7E6; --concrete-shade: #C3CACC; --concrete-top: #F4F5F4; --concrete-edge: #8C999F; --cab-glass: #3A5A68; --cab-glass-shade: #263F4A;
   --roof-hi: #F1DFC2; --max-side: #E9EDEE; --max-lit: #FFFFFF; --max-roof: #C9D1D5; --max-edge: #7D8A91; --max-glass: #2E4652;
   --display: "Jost", "Futura", "Century Gothic", "Avenir Next", sans-serif;
   --body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
@@ -30,6 +31,7 @@
     --ocean: #14303C; --land: #24343B; --lake: #14303C; --grat: #2F5566; --spoke: #4FC0C4;
     --apron: #1B282E; --apron-line: #2A3A42; --wall-lit: #35566B; --wall: #284558; --roof: #7A6045; --roof-line: #B48A5E;
     --con-roof: #3A4A52; --block: #26343A; --plane: #4A5A62; --plane-edge: #6C7D85;
+    --concrete: #9AA6AB; --concrete-shade: #6F7C82; --concrete-top: #B5BFC3; --concrete-edge: #4E5D64; --cab-glass: #1E3540; --cab-glass-shade: #142730;
     --roof-hi: #A9865F; --max-side: #A9B4B9; --max-lit: #C9D1D5; --max-roof: #8E9BA2; --max-edge: #5A6A72; --max-glass: #14232A;
     color-scheme: dark;
   }
@@ -246,7 +248,13 @@ footer a { color: inherit; }
 .tm-roof-wave { stroke: var(--roof-line); stroke-width: 6; opacity: 0.22; }
 .tm-roof-crest { stroke: var(--roof-hi); stroke-width: 1.2; opacity: 0.7; transform: translateY(-3px); }
 .tm-skylight { fill: var(--aqua); opacity: 0.8; }
-.tm-cab { fill: var(--steel); }
+.tm-concrete { fill: var(--concrete); stroke: var(--concrete-edge); stroke-width: 0.3; }
+.tm-concrete-shade { fill: var(--concrete-shade); stroke: var(--concrete-edge); stroke-width: 0.3; }
+.tm-concrete-top { fill: var(--concrete-top); stroke: var(--concrete-edge); stroke-width: 0.3; }
+.tm-cab-glass { fill: var(--cab-glass); }
+.tm-cab-glass-shade { fill: var(--cab-glass-shade); }
+.tm-cab-mullion { stroke: var(--concrete-top); stroke-width: 0.5; opacity: 0.6; }
+.tm-antenna { stroke: var(--concrete-edge); stroke-width: 0.6; }
 .tm-note { font-family: var(--body); font-size: 13px; fill: var(--muted); }
 .tm-badge circle { fill: var(--ink); }
 .tm-badge text { font-family: var(--display); font-weight: 500; font-size: 21px; fill: var(--surface); text-anchor: middle; }

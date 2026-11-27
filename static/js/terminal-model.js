@@ -211,7 +211,7 @@
     framed.forEach(o => o.pts.forEach(p => { grow(iso(p)); grow(iso(p, o.h)); }));
     if (opts.crop !== "hall") planes.concat(walks).forEach(p => p.pts.forEach(q => grow(iso(q))));
     const tower = shapes.find(s => s.kind === "tower"), towerC = tower ? centroid(tower.pts) : null;
-    if (towerC && opts.crop !== "hall") grow(iso(towerC, 82));
+    if (towerC && opts.crop !== "hall") grow(iso(towerC, 92));
     const pad = opts.crop === "hall" ? 10 : 24;
     const vb = [minX - pad, minY - pad, maxX - minX + pad * 2, maxY - minY + pad * 2].map(v => Math.round(v));
     const root = el("svg", { viewBox: vb.join(" "), role: "img", "aria-label": opts.label || "Raised model of the PDX terminal: the main terminal in the middle, Concourses C and D to the north, E to the east, B to the south, and the MAX station by B." });
@@ -265,11 +265,27 @@
     });
 
     if (towerC && opts.crop !== "hall") {
-      const base = iso(towerC, 8), top = iso(towerC, 70), cab = iso(towerC, 76);
-      el("rect", { x: base[0] - 4, y: top[1], width: 8, height: base[1] - top[1], class: "tm-wall" }, root);
-      el("ellipse", { cx: cab[0], cy: cab[1] + 4, rx: 11, ry: 7, class: "tm-wall-lit" }, root);
-      el("ellipse", { cx: cab[0], cy: cab[1] - 1, rx: 12, ry: 5, class: "tm-cab" }, root);
-      if (!opts.quiet) label(root, cab[0] - 18, cab[1] + 4, "Control tower", { class: "tm-note", "text-anchor": "end" });
+      /* PDX's tower: a slim concrete shaft that flares out like a trumpet, a pale collar, the dark glass cab,
+         a pale roof ring, a small drum and antennas. Round, so each level is an ellipse in this view. */
+      const t = el("g", { class: "tm-tower" }, root);
+      const cx = iso(towerC)[0], y = z => iso(towerC, z)[1];
+      const shaft = [[8, 2.8], [28, 2.9], [42, 3.3], [52, 4.0], [59, 5.0], [64, 6.2], [67, 7.4]];
+      const half = (side, cls) => el("polygon", {
+        points: pts2(shaft.map(([z, r]) => [cx + side * r, y(z)]).concat([[cx, y(67)], [cx, y(8)]])), class: cls }, t);
+      half(-1, "tm-concrete"); half(1, "tm-concrete-shade");
+      const band = (z0, z1, r, lit, shade, top) => {
+        el("ellipse", { cx, cy: y(z0), rx: r, ry: r * SQUASH, class: shade }, t);
+        el("rect", { x: cx - r, y: y(z1), width: r, height: y(z0) - y(z1), class: lit }, t);
+        el("rect", { x: cx, y: y(z1), width: r, height: y(z0) - y(z1), class: shade }, t);
+        el("ellipse", { cx, cy: y(z1), rx: r, ry: r * SQUASH, class: top }, t);
+      };
+      band(66.5, 69.5, 8.4, "tm-concrete", "tm-concrete-shade", "tm-concrete-top");
+      band(69.5, 76.5, 7.6, "tm-cab-glass", "tm-cab-glass-shade", "tm-concrete-top");
+      [-5.2, -2, 1.5, 4.8].forEach(dx => el("line", { x1: cx + dx, y1: y(69.8), x2: cx + dx, y2: y(76.2), class: "tm-cab-mullion" }, t));
+      band(76.5, 78.2, 8.8, "tm-concrete", "tm-concrete-shade", "tm-concrete-top");
+      band(78.2, 80.8, 4.4, "tm-concrete", "tm-concrete-shade", "tm-concrete-top");
+      [[-2.4, 87], [0.8, 89], [2.8, 85.5]].forEach(([dx, z]) => el("line", { x1: cx + dx, y1: y(80.6), x2: cx + dx, y2: y(z), class: "tm-antenna" }, t));
+      if (!opts.quiet) label(root, cx - 14, y(72) + 4, "Control tower", { class: "tm-note", "text-anchor": "end" });
     }
 
     if (!opts.quiet) {
